@@ -21,7 +21,7 @@ import {
   import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
   import axios from 'axios';
   
-  export default function SignupCard() {
+  export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
     
     const [name, setName] = useState('');
@@ -51,9 +51,10 @@ import {
           if (response.status === 200){
               if(response.data.error){ 
                 setErrorMessage(response.data.error);
-                  // window.location.href = '/login';
               }
-              // window.location.href = '/login';
+              else{
+                window.location.href = '/login';
+              }
           }
       })
       .catch((error)=>{

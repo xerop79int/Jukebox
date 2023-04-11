@@ -29,13 +29,13 @@ class ManagerSigninView(ObtainAuthToken):
             if BandLeader.objects.filter(user__username=username, isactive=True).exists():
                 account_type = 'band_leader'
             else:
-                return Response({'error': 'Band leader is not active'}, status=400)      
+                return Response({'error': 'Band leader\'s account is not active'})      
         elif BandMember.objects.filter(user__username=username).exists():
             # check if band member is active
             if BandMember.objects.filter(user__username=username, isactive=True).exists():
                 account_type = 'band_member'
             else:
-                return Response({'error': 'Band member is not active'}, status=400)
+                return Response({'error': 'Band member\'s account is not active'})
 
         user = auth.authenticate(req, username=username, password=password)
         if user is not None:
@@ -44,7 +44,7 @@ class ManagerSigninView(ObtainAuthToken):
             
             return Response({'token': token.key, 'account_type': account_type})
         else:
-            return Response({'error': 'Invalid credentials'}, status=400)
+            return Response({'error': 'Invalid credentials'})
 
 class ManagerSignupView(ObtainAuthToken):
     authentication_classes = [TokenAuthentication]

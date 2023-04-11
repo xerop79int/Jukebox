@@ -11,10 +11,57 @@ import {
     Heading,
     Text,
     useColorModeValue,
+    Alert,
+    AlertIcon,
   } from '@chakra-ui/react';
+  import { useState } from 'react';
+  import axios from 'axios';
   
   export default function Login() {
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const data = {
+      'username': username,
+      'password': password,
+    }
+
+    const handleSubmit = () => {
+        axios.post('http://127.0.0.1:8000/login', data,{
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      }).then((response) => {
+          console.log(response);
+          if (response.status === 200){
+              if(response.data.error){ 
+                setErrorMessage(response.data.error);
+              }
+              else{
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('account_type', response.data.account_type);
+                window.location.href = '/';
+              }
+          }
+      })
+      .catch((error)=>{
+          console.error(error);
+      })
+    }
+
     return (
+      <div>
+        <Flex marginTop={'1.5'} bg={useColorModeValue('gray.50', 'gray.800')} >
+          <Box style={{margin: '0 auto'}}>
+        {errorMessage && <Alert maxW={'500px'} status="error">
+          <AlertIcon />
+          {errorMessage}
+        </Alert>}
+        </Box>
+        </Flex>
+
       <Flex
         minH={'100vh'}
         align={'center'}
@@ -35,11 +82,11 @@ import {
             <Stack spacing={4}>
               <FormControl id="email">
                 <FormLabel>Username</FormLabel>
-                <Input type="text" />
+                <Input onChange={e => setUsername(e.target.value)} type="text" />
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
-                <Input type="password" />
+                <Input onChange={e => setPassword(e.target.value)} type="password" />
               </FormControl>
               <Stack spacing={10}>
                 <Stack
@@ -49,6 +96,7 @@ import {
                   <Checkbox isChecked>Remember me</Checkbox>
                 </Stack>
                 <Button
+                  onClick={handleSubmit}
                   bg={'blue.400'}
                   color={'white'}
                   _hover={{
@@ -66,5 +114,6 @@ import {
           </Box>
         </Stack>
       </Flex>
+      </div>
     );
   }
