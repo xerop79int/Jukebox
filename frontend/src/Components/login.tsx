@@ -34,8 +34,8 @@ import {
             p={8}>
             <Stack spacing={4}>
               <FormControl id="email">
-                <FormLabel>Email address</FormLabel>
-                <Input type="email" />
+                <FormLabel>Username</FormLabel>
+                <Input type="text" />
               </FormControl>
               <FormControl id="password">
                 <FormLabel>Password</FormLabel>
@@ -46,7 +46,7 @@ import {
                   direction={{ base: 'column', sm: 'row' }}
                   align={'start'}
                   justify={'space-between'}>
-                  <Checkbox>Remember me</Checkbox>
+                  <Checkbox isChecked>Remember me</Checkbox>
                 </Stack>
                 <Button
                   bg={'blue.400'}
@@ -59,7 +59,7 @@ import {
               </Stack>
               <Stack pt={6}>
                 <Text align={'center'}>
-                  Don't have an account? <Link color={'blue.400'}>Register</Link>
+                  Don't have an account? <Link onClick={() => window.location.href = '/register'} color={'blue.400'}>Register</Link>
                 </Text>
               </Stack>
             </Stack>
