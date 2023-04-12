@@ -249,12 +249,12 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'Make a song request',
         subLabel: 'What do you want to hear?',
-        href: '#',
+        href: '/request',
       },
       {
         label: 'Your Song requests',
         subLabel: 'Manage your song requests',
-        href: '#',
+        href: '/requested',
       },
       {
         label: 'Other People Song requests',

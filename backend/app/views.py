@@ -109,9 +109,14 @@ class ManagerCustomerRequestView(APIView):
         return Response({'success': 'Request sent successfully.'})
 
     def get(self, req):
-        customer = Customer.objects.get(user=req.user)
-        customer_requests = CustomerRequest.objects.filter(customer=customer)
-        return Response({'customer_requests': customer_requests.values()})
+        view = req.GET.get('view')
+        if view == 'all':
+            customer_requests = CustomerRequest.objects.all()
+            return Response({'customer_requests': customer_requests.values()})
+        else:
+            customer = Customer.objects.get(user=req.user)
+            customer_requests = CustomerRequest.objects.filter(customer=customer)
+            return Response({'customer_requests': customer_requests.values()})
 
 
 
