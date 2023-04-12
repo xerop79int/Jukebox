@@ -32,6 +32,7 @@ class CustomerRequest(models.Model):
     song_artist = models.CharField(max_length=200)
     song_genre = models.CharField(max_length=200)
     song_dedicated_to = models.CharField(max_length=200, null=True, blank=True)
+    request_accepted = models.BooleanField(default=False)
     request_denied = models.BooleanField(default=False)
     request_denied_reason = models.CharField(max_length=200, null=True, blank=True)  
 

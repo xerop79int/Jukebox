@@ -259,16 +259,16 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'Other People Song requests',
         subLabel: 'See what other people want to hear',
-        href: '#',
+        href: '/allrequests',
       },
     ],
   },
   {
-    label: 'Find Work',
+    label: 'All Songs That Band will play',
     children: [
       {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
+        label: 'See all songs',
+        subLabel: 'Find songs that band will play',
         href: '#',
       },
       {

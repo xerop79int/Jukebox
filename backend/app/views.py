@@ -104,14 +104,33 @@ class ManagerCustomerRequestView(APIView):
         song_genre = req.data.get('song_genre')
         song_dedicated_to = req.data.get('song_dedicated_to')
 
+
         customer_request = CustomerRequest(customer=customer, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_dedicated_to=song_dedicated_to)
         customer_request.save()
         return Response({'success': 'Request sent successfully.'})
 
+    def put(self, req):
+        song_id = req.data.get('song_id')
+        customer = Customer.objects.get(user=req.user)
+        request = CustomerRequest.objects.get(id=song_id)
+
+        if request.customer.user == req.user:
+            return Response({'error': 'You cannot request a song that you have already requested.'})
+
+        # Check if the song has already been requested
+        if CustomerRequest.objects.filter(customer=customer, song_name=request.song_name, song_artist=request.song_artist, song_genre=request.song_genre).exists():
+            return Response({'error': 'You have already requested this song.'})
+        
+        customer_request = CustomerRequest(customer=customer, song_name=request.song_name, song_artist=request.song_artist, song_genre=request.song_genre)
+        customer_request.save()
+        return Response({'success': 'Request sent successfully.'})
+
+
     def get(self, req):
         view = req.GET.get('view')
         if view == 'all':
-            customer_requests = CustomerRequest.objects.all()
+            # Get all customer requests except for the current user
+            customer_requests = CustomerRequest.objects.exclude(customer__user=req.user)
             return Response({'customer_requests': customer_requests.values()})
         else:
             customer = Customer.objects.get(user=req.user)

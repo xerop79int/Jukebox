@@ -6,6 +6,9 @@ import {
     Text,
     Stack,
     Button,
+    Alert,
+    AlertIcon,
+    useColorModeValue
   } from '@chakra-ui/react';
 import Sidenav from './Sidenav';
 import axios from 'axios';
@@ -21,32 +24,62 @@ interface Song {
   
 const SongList: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
-        let URL = `http://localhost:8000/customerrequest`;
+        let URL = `http://localhost:8000/customerrequest?view=all`;
     
         axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
             .then(res => {
-              console.log(res.data.customer_requests)
-              setSongs(res.data.customer_requests);
+                    setSongs(res.data.customer_requests);
             })
             .catch(err => console.log(err))
       }, []);
 
+    const handlerequest = (event: React.MouseEvent<HTMLButtonElement>, id: number) => {
+        event.preventDefault();
+        let URL = `http://localhost:8000/customerrequest`;
+        
+        const data = {
+            "song_id": id,
+        }
+
+        axios.put(URL, data, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+            .then(res => {
+                if (res.data.error){
+                    console.log(res.data)
+                    setErrorMessage(res.data.error);
+                }
+                else{
+                    console.log(res.data);
+                }
+            })
+            .catch(err => console.log(err))
+    }
+
 
 
     return (
-        <div>
-            <Sidenav />
-
+      <div>
+        <Sidenav />
+        <Flex marginTop={'1.5'} bg={useColorModeValue('gray.50', 'gray.800')} >
+            <Box style={{margin: '0 auto'}}>
+            {errorMessage && <Alert maxW={'500px'} status="error">
+            <AlertIcon />
+            {errorMessage}
+            </Alert>}
+            </Box>
+        </Flex>
         <Flex direction={'row'} wrap={'wrap'} p={6} justifyContent={'center'}>
         { songs.map((song) => (
         <Stack
           style={{width: '270px'}}
-          key={song.id}
           boxShadow={'2xl'}
+          key={song.id}
           m={2}
           rounded={'md'}
           overflow={'hidden'}
@@ -84,7 +117,9 @@ const SongList: React.FC = () => {
   
             <Button
               w={'full'}
+              onClick={e => handlerequest(e, song.id)}
               mt={8}
+              id="rqstbtn"
               backgroundColor={'#151f21'}
               color={'white'}
               rounded={'md'}
@@ -92,7 +127,7 @@ const SongList: React.FC = () => {
                 transform: 'translateY(-2px)',
                 boxShadow: 'lg',
               }}>
-              Follow
+              Request this song
             </Button>
           </Box>
         </Stack>
