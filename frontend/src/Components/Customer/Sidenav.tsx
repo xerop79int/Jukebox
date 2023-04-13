@@ -269,7 +269,7 @@ const NAV_ITEMS: Array<NavItem> = [
       {
         label: 'See all songs',
         subLabel: 'Find songs that band will play',
-        href: '#',
+        href: '/allsongs',
       },
       {
         label: 'Freelance Projects',

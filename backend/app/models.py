@@ -50,3 +50,11 @@ class BandSongsList(models.Model):
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name
+
+class LikedBandSongsList(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+    liked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.customer.name + ' - ' + self.band_song.song_name

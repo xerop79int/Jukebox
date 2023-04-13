@@ -136,6 +136,30 @@ class ManagerCustomerRequestView(APIView):
             customer = Customer.objects.get(user=req.user)
             customer_requests = CustomerRequest.objects.filter(customer=customer)
             return Response({'customer_requests': customer_requests.values()})
+    
+class ManagerLikedBandSongsListView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        customer = Customer.objects.get(user=req.user)
+        song_id = req.data.get('song_id')
+        band_song = BandSongsList.objects.get(id=song_id)
+        if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+            return Response({'error': 'You have already liked this song.'})
+        liked_band_song = LikedBandSongsList(customer=customer, band_song=band_song)
+        # check if the song is liked or not
+        if liked_band_song.liked:
+            liked_band_song.liked = False
+        else:
+            liked_band_song.liked = True
+        liked_band_song.save()
+        return Response({'success': 'Song liked successfully.'})
+
+    # def get(self, req):
+    #     customer = Customer.objects.get(user=req.user)
+    #     liked_band_songs = LikedBandSongsList.objects.filter(customer=customer)
+    #     return Response({'liked_band_songs': liked_band_songs.values()})
 
 
 
@@ -160,7 +184,31 @@ class ManagerBandSongsListView(APIView):
         return Response({'success': 'Song added successfully.'})
 
     def get(self, req):
-        band_leader = BandLeader.objects.get(user=req.user)
-        band_songs = BandSongsList.objects.filter(band_leader=band_leader)
-        return Response({'band_songs': band_songs.values()})
+        sort = req.GET.get('sort')
+        customer = Customer.objects.get(user=req.user)
+        if sort == 'name':
+            band_songs = BandSongsList.objects.all().order_by('song_name')
+        elif sort == 'artist':
+            band_songs = BandSongsList.objects.all().order_by('song_artist')
+        elif sort == 'genre':
+            band_songs = BandSongsList.objects.all().order_by('song_genre')
+        else:
+            band_songs = BandSongsList.objects.all()
+       
+        data = []
+        for band_song in band_songs:
+            if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+                liked = True
+            else:
+                liked = False
+            song_data = {
+                'id': band_song.id,
+                'song_name': band_song.song_name,
+                'song_artist': band_song.song_artist,
+                'song_genre': band_song.song_genre,
+                'liked': liked
+            }
+            data.append(song_data)
+                
+        return Response({'band_songs': data})
 
