@@ -99,15 +99,22 @@ class ManagerCustomerRequestView(APIView):
 
     def post(self, req):
         customer = Customer.objects.get(user=req.user)
-        song_name = req.data.get('song_name')
-        song_artist = req.data.get('song_artist')
-        song_genre = req.data.get('song_genre')
-        song_dedicated_to = req.data.get('song_dedicated_to')
+        song = req.data.get('song_id')
+        band_song = BandSongsList.objects.get(id=song)
 
-
-        customer_request = CustomerRequest(customer=customer, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_dedicated_to=song_dedicated_to)
+        # check if the object already exist
+        customer_request = CustomerRequest(customer=customer, song=band_song)
         customer_request.save()
         return Response({'success': 'Request sent successfully.'})
+        
+        # song_name = req.data.get('song_name')
+        # song_artist = req.data.get('song_artist')
+        # song_genre = req.data.get('song_genre')
+        # song_dedicated_to = req.data.get('song_dedicated_to')
+
+
+        # customer_request = CustomerRequest(customer=customer, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_dedicated_to=song_dedicated_to)
+        # customer_request.save()
 
     def put(self, req):
         song_id = req.data.get('song_id')
@@ -185,6 +192,7 @@ class ManagerBandSongsListView(APIView):
 
     def get(self, req):
         sort = req.GET.get('sort')
+        view = req.GET.get('view')
         customer = Customer.objects.get(user=req.user)
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
@@ -195,20 +203,43 @@ class ManagerBandSongsListView(APIView):
         else:
             band_songs = BandSongsList.objects.all()
        
-        data = []
-        for band_song in band_songs:
-            if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
-                liked = True
-            else:
-                liked = False
-            song_data = {
-                'id': band_song.id,
-                'song_name': band_song.song_name,
-                'song_artist': band_song.song_artist,
-                'song_genre': band_song.song_genre,
-                'liked': liked
-            }
-            data.append(song_data)
+        if view == 'likes':
+            data = []
+            for band_song in band_songs:
+                if LikedBandSongsList.objects.filter(band_song=band_song).exists():
+                    count = LikedBandSongsList.objects.filter(band_song=band_song).count()
+                else:
+                    count = 0
+                song_data = {
+                    'id': band_song.id,
+                    'song_number': band_song.song_number,
+                    'song_name': band_song.song_name,
+                    'song_artist': band_song.song_artist,
+                    'song_genre': band_song.song_genre,
+                    'song_durations': band_song.song_durations,
+                    'count': count
+                }
+                data.append(song_data)
+        else:
+            data = []
+            for band_song in band_songs:
+                if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+                    count = LikedBandSongsList.objects.filter(band_song=band_song).count()
+                    liked = True
+                else:
+                    count = 0
+                    liked = False
+                song_data = {
+                    'id': band_song.id,
+                    'song_number': band_song.song_number,
+                    'song_name': band_song.song_name,
+                    'song_artist': band_song.song_artist,
+                    'song_genre': band_song.song_genre,
+                    'song_durations': band_song.song_durations,
+                    'count': count,
+                    'liked': liked
+                }
+                data.append(song_data)
                 
         return Response({'band_songs': data})
 

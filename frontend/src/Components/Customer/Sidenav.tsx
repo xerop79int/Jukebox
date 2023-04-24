@@ -279,8 +279,8 @@ const NAV_ITEMS: Array<NavItem> = [
     ],
   },
   {
-    label: 'Learn Design',
-    href: '#',
+    label: 'See Likes',
+    href: '/likes',
   },
   {
     label: 'Hire Designers',

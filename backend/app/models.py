@@ -26,23 +26,11 @@ class BandMember(models.Model):
     def __str__(self):
         return self.name
 
-class CustomerRequest(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    song_name = models.CharField(max_length=200)
-    song_artist = models.CharField(max_length=200)
-    song_genre = models.CharField(max_length=200)
-    song_dedicated_to = models.CharField(max_length=200, null=True, blank=True)
-    request_accepted = models.BooleanField(default=False)
-    request_denied = models.BooleanField(default=False)
-    request_denied_reason = models.CharField(max_length=200, null=True, blank=True)  
-
-
-    def __str__(self):
-        return self.customer.name + ' - ' + self.song_name
-
 
 class BandSongsList(models.Model):
     band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
+    song_cover = models.ImageField(upload_to='band_covers', null=True, blank=True)
+    song_number = models.CharField(max_length=200, null=True, blank=True)
     song_name = models.CharField(max_length=200)
     song_artist = models.CharField(max_length=200)
     song_genre = models.CharField(max_length=200)
@@ -50,6 +38,14 @@ class BandSongsList(models.Model):
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name
+
+class CustomerRequest(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  
+    song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return self.customer.name + ' - ' + self.BandSongsList.song_name
 
 class LikedBandSongsList(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
