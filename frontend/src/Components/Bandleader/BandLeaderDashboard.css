@@ -1,0 +1,365 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Poppins", sans-serif;
+  }
+
+  h1 {
+    font-size: 2em; /* or another size value */
+    font-weight: bold !important;
+  }
+  
+  h2 {
+    font-size: 1.5em; /* or another size value */
+    font-weight: bold !important;
+  }
+  
+  h3 {
+    font-size: 1.17em; /* or another size value */
+    font-weight: bold !important;
+  }
+  
+  h4 {
+    font-size: 1em; /* or another size value */
+    font-weight: bold !important;
+  }
+  
+  h5 {
+    font-size: 0.83em; /* or another size value */
+    font-weight: bold !important;
+  }
+  
+  h6 {
+    font-size: 0.67em; /* or another size value */
+    font-weight: bold !important;
+  }
+
+  .main {
+    position: relative;
+    background-color: #303030;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+  .sub-main {
+    position: absolute;
+    width: 97%;
+    height: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1c1c1c;
+    z-index: 1;
+    border-radius: 10px;
+  }
+  nav {
+    position: absolute;
+    top: 0;
+    min-height: 86px;
+    width: 100%;
+    background-color: #353935;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+  }
+  .nav-child1 {
+    height: auto;
+    width: 50rem;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin: 10px;
+    color: #fff;
+    padding-left: 15px;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-child1 h3 {
+    color: whitesmoke;
+    margin-right: 10px;
+  }
+  .nav-child1 h4 {
+    display: inline-block;
+  }
+  .nav-child1 h6 {
+    display: inline-block;
+  }
+  .nav-child1 .songtitle-queue {
+    display: inline-block;
+  }
+  .nav-child1 .songdetail-queue {
+    display: inline-block;
+  }
+  .nav-child1:hover {
+    background-color: whitesmoke;
+    color: black;
+    cursor: pointer;
+  }
+  .nav-child1:hover h3 {
+    color: #808080;
+  }
+  .nav-child2 {
+    height: auto;
+    width: 50rem;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin: 10px;
+    color: #fff;
+    color: #fff;
+    padding-left: 15px;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .nav-child2 h3 {
+    color: whitesmoke;
+    margin-right: 10px;
+  }
+  .nav-child2 h4 {
+    display: inline-block;
+  }
+  .nav-child2 h6 {
+    display: inline-block;
+  }
+  .nav-child2 .songtitle-queue {
+    display: inline-block;
+  }
+  .nav-child2 .songdetail-queue {
+    display: inline-block;
+  }
+  .nav-child2:hover {
+    background-color: whitesmoke;
+    color: black;
+    cursor: pointer;
+  }
+  .nav-child2:hover h3 {
+    color: #808080;
+  }
+  .verse-sec {
+    position: absolute;
+    bottom: 0;
+    height: 614px;
+    width: 100%;
+    background-color: #23242a;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #fff;
+  }
+  .verse-sec-scroll {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #23242a;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #fff;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .verse-sec-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .slider-section {
+    position: absolute;
+    width: 600px;
+    height: 700px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #808080;
+    z-index: 1;
+    border-radius: 10px;
+    right: -600px;
+    transition: 0.5s ease-in-out;
+  }
+  .right-position {
+    right: 20px;
+    width: 50%;
+  }
+  .nav {
+    position: absolute;
+    top: 0;
+    height: 86px;
+    min-height: 10%;
+    width: 100%;
+    background-color: #353935;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  .dropdown {
+    position: absolute;
+    display: inline-block;
+    top: 25px;
+    left: 20px;
+    border: white 1px solid;
+    border-radius: 20px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 20px;
+  }
+  .dropdown option {
+    background-color: #fff;
+    color: #555;
+    border-radius: 10px;
+  }
+  .search-container {
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    z-index: 1;
+    border: white 1px solid;
+    border-radius: 20px;
+  }
+  .search-button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 100px;
+  }
+  .search-bar {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -100px;
+    background-color: grey;
+    width: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  .search-bar input[type="text"] {
+    width: 100%;
+    border: none;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  .search-bar .search-submit {
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border-radius: 10px;
+  }
+  .search-container:hover .search-bar {
+    display: block;
+  }
+  .search-bar .search-submit:hover {
+    background-color: black;
+    opacity: 0.5;
+  }
+  .button {
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    top: 50%;
+    transform: translate(-50);
+    background-color: #606060;
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+    left: -60px;
+    cursor: pointer;
+  }
+  .fa-circle {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: #1c1c1c;
+  }
+  .fa-circle:hover{
+      color: black;
+  }
+  .songlist {
+    position: absolute;
+    bottom: 0;
+    height: 614px;
+    width: 100%;
+    background-color: #606060;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    color: #fff;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .sub-songlist {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .songlist::-webkit-scrollbar {
+    width: 10px;
+  }
+  .songlist::-webkit-scrollbar-track {
+    background-color: black;
+  }
+  .songlist::-webkit-scrollbar-thumb {
+    background-color: #303030;
+    border-radius: 10px;
+  }
+  .songlist::-webkit-scrollbar-thumb:hover {
+    background-color: #727272;
+  }
+  .song-dummy {
+    height: 70px;
+    width: 90%;
+    border: 1px solid white;
+    border-radius: 5px;
+    margin: 10px;
+    color: #fff;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    overflow: hidden;
+    flex-wrap: nowrap;
+  }
+  .song-dummy h3 {
+    color: whitesmoke;
+    margin-right: 20px;
+  }
+  .song-dummy h4 {
+    display: inline-block;
+  }
+  .song-dummy h6 {
+    display: inline-block;
+  }
+  .song-dummy .songtitle-queue {
+    display: inline-block;
+  }
+  .song-dummy .songdetail-queue {
+    display: inline-block;
+  }
+  .song-dummy:hover {
+    background-color: whitesmoke;
+    color: black;
+    cursor: pointer;
+  }
+  .song-dummy:hover h3 {
+    color: #808080;
+  }

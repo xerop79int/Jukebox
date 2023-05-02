@@ -42,10 +42,12 @@ class BandSongsList(models.Model):
 class CustomerRequest(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  
     song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+    song_decicated_to = models.CharField(max_length=200, null=True, blank=True)
+    song_decicated_by = models.CharField(max_length=200, null=True, blank=True)
 
 
     def __str__(self):
-        return self.customer.name + ' - ' + self.BandSongsList.song_name
+        return self.customer.name + ' - ' + self.song.song_name
 
 class LikedBandSongsList(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)

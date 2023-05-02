@@ -11,32 +11,32 @@ body {
 
   h1 {
     font-size: 2em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   h2 {
     font-size: 1.5em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   h3 {
     font-size: 1.17em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   h4 {
     font-size: 1em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   h5 {
     font-size: 0.83em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   h6 {
     font-size: 0.67em; /* or another size value */
-    font-weight: bold;
+    font-weight: bold !important;
   }
   
   
@@ -214,7 +214,7 @@ body {
     color: whitesmoke;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding-right: 50px;
     padding-left: 50px;
     margin-top: 5px;
@@ -231,6 +231,9 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .song-title-queue{
+    padding-left: 2rem;
   }
   .song-queue:hover {
     background-color: whitesmoke;
@@ -379,7 +382,7 @@ body {
     color: whitesmoke;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding-right: 50px;
     padding-left: 50px;
     margin-top: 5px;
@@ -405,6 +408,9 @@ body {
     background-color: whitesmoke;
     color: black;
   }
+  .song-title-list{
+    padding-left: 2rem;
+  }
   .songtitle-list h3{
     display: inline;
   }
@@ -414,4 +420,41 @@ body {
   }
   .songdetail-list{
     font-weight: 200;
+  }
+
+
+
+
+  /* Alert BOX */
+
+  .alert-box {
+    display: none;
+    margin: 0 auto;
+    width: 20rem;
+    position: relative;
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 4px;
+    z-index: 9999;
+  }
+  
+  .green {
+    background-color: #DFF2BF;
+    border-color: #B2D3C2;
+    color: #4F8A10;
+  }
+  
+  .alert-box p {
+    margin: 0;
+    /* padding-right: 30px; */
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    color: #4F8A10;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
   }

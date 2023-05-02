@@ -102,7 +102,10 @@ class ManagerCustomerRequestView(APIView):
         song = req.data.get('song_id')
         band_song = BandSongsList.objects.get(id=song)
 
-        # check if the object already exist
+        # check if the song has already been requested
+        if CustomerRequest.objects.filter(customer=customer, song=band_song).exists():
+            return Response({'error': 'You have already requested this song.'})
+    
         customer_request = CustomerRequest(customer=customer, song=band_song)
         customer_request.save()
         return Response({'success': 'Request sent successfully.'})
@@ -133,16 +136,16 @@ class ManagerCustomerRequestView(APIView):
         return Response({'success': 'Request sent successfully.'})
 
 
-    def get(self, req):
-        view = req.GET.get('view')
-        if view == 'all':
-            # Get all customer requests except for the current user
-            customer_requests = CustomerRequest.objects.exclude(customer__user=req.user)
-            return Response({'customer_requests': customer_requests.values()})
-        else:
-            customer = Customer.objects.get(user=req.user)
-            customer_requests = CustomerRequest.objects.filter(customer=customer)
-            return Response({'customer_requests': customer_requests.values()})
+    # def get(self, req):
+    #     view = req.GET.get('view')
+    #     if view == 'all':
+    #         # Get all customer requests except for the current user
+    #         customer_requests = CustomerRequest.objects.exclude(customer__user=req.user)
+    #         return Response({'customer_requests': customer_requests.values()})
+    #     else:
+    #         customer = Customer.objects.get(user=req.user)
+    #         customer_requests = CustomerRequest.objects.filter(customer=customer)
+    #         return Response({'customer_requests': customer_requests.values()})
     
 class ManagerLikedBandSongsListView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -163,14 +166,15 @@ class ManagerLikedBandSongsListView(APIView):
         liked_band_song.save()
         return Response({'success': 'Song liked successfully.'})
 
-    # def get(self, req):
-    #     customer = Customer.objects.get(user=req.user)
-    #     liked_band_songs = LikedBandSongsList.objects.filter(customer=customer)
-    #     return Response({'liked_band_songs': liked_band_songs.values()})
+    def get(self, req):
+        customer = Customer.objects.get(user=req.user)
+        liked_band_songs = LikedBandSongsList.objects.filter(customer=customer)
+        return Response({'liked_band_songs': liked_band_songs.values()})
 
 
 
 # BAND LEADER VIEWS
+# 
 
 class ManagerBandSongsListView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -193,6 +197,7 @@ class ManagerBandSongsListView(APIView):
     def get(self, req):
         sort = req.GET.get('sort')
         view = req.GET.get('view')
+        search = req.GET.get('search')
         customer = Customer.objects.get(user=req.user)
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
@@ -220,6 +225,27 @@ class ManagerBandSongsListView(APIView):
                     'count': count
                 }
                 data.append(song_data)
+        elif search:
+            data = []
+            for band_song in band_songs:
+                if search.lower() in band_song.song_name.lower():
+                    if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+                        count = LikedBandSongsList.objects.filter(band_song=band_song).count()
+                        liked = True
+                    else:
+                        count = 0
+                        liked = False
+                    song_data = {
+                        'id': band_song.id,
+                        'song_number': band_song.song_number,
+                        'song_name': band_song.song_name,
+                        'song_artist': band_song.song_artist,
+                        'song_genre': band_song.song_genre,
+                        'song_durations': band_song.song_durations,
+                        'count': count,
+                        'liked': liked
+                    }
+                    data.append(song_data)
         else:
             data = []
             for band_song in band_songs:

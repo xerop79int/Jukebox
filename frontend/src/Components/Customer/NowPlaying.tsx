@@ -30,6 +30,7 @@ const SongList: React.FC = () => {
     const [currentSong, setCurrentSong] = useState<CurrentSong>();
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [displaynow, setdDisplayNow] = useState<boolean | null> (true);
+    const [search, setSearch] = useState<string>("");
 
     useEffect(() => {
         let URL = `http://localhost:8000/songslist?view=likes`;
@@ -38,12 +39,43 @@ const SongList: React.FC = () => {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
             .then(res => {
+              // check if the status code is 401
+              if(res.data.status === 401){
+                window.location.href = '/login';
+              }
               console.log(res.data)
               setdDisplayNow(true)
               setSongs(res.data.band_songs);
+
+            })
+            .catch(err => {if(err.response.status === 401){ window.location.href = '/login'; console.log(err) } else {console.log(err)}})
+      }, []);
+
+      const handleCurrentSong = (song: CurrentSong, index: number) => {
+        setCurrentSong(song);
+        setActiveIndex(index);
+        setdDisplayNow(false);
+        const heading = document.querySelector('.p-heading') as HTMLDivElement;
+        heading.textContent = "Request Line";
+
+      }
+
+      const handleRefresh = (id: number) => {
+        let URL = `http://localhost:8000/songslist`;
+
+        axios.get(URL, {
+          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+            .then(res => {
+              console.log(res.data)
+              setSongs(res.data.band_songs);
+              // match the id with the current song id and set the current song
+              const song = res.data.band_songs.find((song: Song) => song.id === id);
+              setCurrentSong(song);
+
             })
             .catch(err => console.log(err))
-      }, []);
+      }
 
       const handleSorting = (sort: string) =>{
         let URL = `http://localhost:8000/songslist?sort=${sort}`;
@@ -58,27 +90,6 @@ const SongList: React.FC = () => {
             .catch(err => console.log(err))
       }
 
-      const handleCurrentSong = (song: CurrentSong, index: number) => {
-        setCurrentSong(song);
-        setActiveIndex(index);
-        setdDisplayNow(false);
-        const heading = document.querySelector('.p-heading') as HTMLDivElement;
-        heading.textContent = "Request Line";
-
-      }
-
-      const handleRefresh = () => {
-        let URL = `http://localhost:8000/songslist`;
-
-        axios.get(URL, {
-          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-        })
-            .then(res => {
-              console.log(res.data)
-              setSongs(res.data.band_songs);
-            })
-            .catch(err => console.log(err))
-      }
 
       const handleLike = (id: number) =>{
         let URL = `http://localhost:8000/likedbandsongslist`;
@@ -92,7 +103,17 @@ const SongList: React.FC = () => {
         })
             .then(res => {
               console.log(res.data)
-              handleRefresh();
+              const alert = document.querySelector('.alert-box') as HTMLDivElement;
+              alert.style.display = "block";
+              if (res.data.error){
+                const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
+                alertMessage.textContent = res.data.error;
+              }
+              else{
+                const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
+                alertMessage.textContent = res.data.success;
+                handleRefresh(id);
+              }
             })
             .catch(err => console.log(err))
       }
@@ -109,13 +130,47 @@ const SongList: React.FC = () => {
           })
               .then(res => {
                 console.log(res.data)
+                const alert = document.querySelector('.alert-box') as HTMLDivElement;
+                alert.style.display = "block";
+                if (res.data.error){
+                  const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
+                  alertMessage.textContent = res.data.error;
+                }
+                else{
+                  const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
+                  alertMessage.textContent = res.data.success;
+                }
               })
               .catch(err => console.log(err))
+    }
+
+    const handleSearch = () => {
+      const URL = `http://localhost:8000/songslist?search=${search}`
+      axios.get(URL, {
+        headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+      })
+      .then(res => {  
+        console.log(res.data)
+        setSongs(res.data.band_songs);
+        setSearch("");
+        const search = document.querySelector('.search') as HTMLInputElement;
+        search.value = "";
+      })
+      .catch(err => console.log(err))
+    }
+
+    const handleAlertClose = () => {
+      const alert = document.querySelector('.alert-box') as HTMLDivElement;
+      alert.style.display = "none";
     }
 
       return (
         <div>
           <Sidenav />
+            <div className="alert-box green">
+                <p className='alert-message'></p>
+                <span onClick={handleAlertClose} className="close-btn">&times;</span>
+            </div>
            <div className="main">
             {/* <!-- Player Section --> */}
             <div className="player">
@@ -228,8 +283,8 @@ const SongList: React.FC = () => {
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </button>
                   <div className="search-bar">
-                    <input type="text" placeholder="Search..." />
-                    <button className="search-submit">Submit</button>
+                    <input className='search' type="text" onChange={e => setSearch(e.target.value)}  placeholder="Search..." />
+                    <button onClick={handleSearch} className="search-submit">Submit</button>
                   </div>
                 </div>
               </div>
