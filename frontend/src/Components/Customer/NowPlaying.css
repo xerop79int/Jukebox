@@ -40,7 +40,7 @@ body {
   }
   
   
-  .main {
+  .customer-main {
     height: 90vh;
     width: 100%;
     margin-top: 0.7rem;
@@ -50,7 +50,7 @@ body {
   }
   
   /* Player Section */
-  .player {
+  .customer-player {
     position: relative;
     min-height: 670px;
     width: 49%;

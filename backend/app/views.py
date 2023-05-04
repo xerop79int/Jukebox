@@ -198,7 +198,6 @@ class ManagerBandSongsListView(APIView):
         sort = req.GET.get('sort')
         view = req.GET.get('view')
         search = req.GET.get('search')
-        customer = Customer.objects.get(user=req.user)
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
         elif sort == 'artist':
@@ -229,7 +228,7 @@ class ManagerBandSongsListView(APIView):
             data = []
             for band_song in band_songs:
                 if search.lower() in band_song.song_name.lower():
-                    if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+                    if LikedBandSongsList.objects.filter(band_song=band_song).exists():
                         count = LikedBandSongsList.objects.filter(band_song=band_song).count()
                         liked = True
                     else:
@@ -247,9 +246,10 @@ class ManagerBandSongsListView(APIView):
                     }
                     data.append(song_data)
         else:
+
             data = []
             for band_song in band_songs:
-                if LikedBandSongsList.objects.filter(customer=customer, band_song=band_song).exists():
+                if LikedBandSongsList.objects.filter(band_song=band_song).exists():
                     count = LikedBandSongsList.objects.filter(band_song=band_song).count()
                     liked = True
                 else:
@@ -268,4 +268,40 @@ class ManagerBandSongsListView(APIView):
                 data.append(song_data)
                 
         return Response({'band_songs': data})
+
+class ManagerSongsSetView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        song_id = req.data.get('song_id')
+        band_song = BandSongsList.objects.get(id=song_id)
+        if SongsSet.objects.filter(song=band_song).exists():
+            return Response({'error': 'Song already added.'})
+        song_set = SongsSet(song=band_song, band_leader=band_leader)
+        song_set.save()
+        return Response({'success': 'Song added successfully.'}, status=200)
+
+    def get(self, req):
+        song_sets = SongsSet.objects.all()
+        data = []
+        for song_set in song_sets:
+            band_song = BandSongsList.objects.get(id=song_set.song.id)
+            song_data = {
+                    'id': band_song.id,
+                    'song_number': band_song.song_number,
+                    'song_name': band_song.song_name,
+                    'song_artist': band_song.song_artist,
+                    'song_genre': band_song.song_genre,
+                    'song_durations': band_song.song_durations
+            }
+            data.append(song_data)
+        
+        return Response({'song_sets': data})
+    
+
 

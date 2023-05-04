@@ -49,6 +49,13 @@ class CustomerRequest(models.Model):
     def __str__(self):
         return self.customer.name + ' - ' + self.song.song_name
 
+class SongsSet(models.Model):
+    band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
+    song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.band_leader.name + ' - ' + self.song.song_name
+
 class LikedBandSongsList(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)

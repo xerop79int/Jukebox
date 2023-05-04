@@ -352,8 +352,18 @@
   .song-dummy .songtitle-queue {
     display: inline-block;
   }
-  .song-dummy .songdetail-queue {
+  .songdetail-queue {
     display: inline-block;
+    padding-left: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .songtitle-queue p {
+    display: inline-flex;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding-left: 0.2rem;
   }
   .song-dummy:hover {
     background-color: whitesmoke;

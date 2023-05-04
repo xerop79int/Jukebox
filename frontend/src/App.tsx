@@ -15,7 +15,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
   const [customer, setCustomer] = React.useState(true);
-  const [bandleader, setBandleader] = React.useState(false);
+  const [bandleader, setBandleader] = React.useState(true);
   return (
     <ChakraProvider>
     <Router>
@@ -23,7 +23,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         { customer ? <Route path='/' element={<NowPlaying />} /> : null }
-        {/* { bandleader ? <Route path='/' element={<BandLeaderDashboard />} /> : null } */}
+        { bandleader ? <Route path='/bandleader' element={<BandLeaderDashboard />} /> : null }
         {/* <Route path='/request' element={<CustomerRequest />} />
         <Route path='/requested' element={<CustomerRequestedSongs />} />
         <Route path='/allrequests' element={<AllCustomersRequests />} />

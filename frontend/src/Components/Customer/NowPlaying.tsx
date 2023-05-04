@@ -171,9 +171,9 @@ const SongList: React.FC = () => {
                 <p className='alert-message'></p>
                 <span onClick={handleAlertClose} className="close-btn">&times;</span>
             </div>
-           <div className="main">
+           <div className="customer-main">
             {/* <!-- Player Section --> */}
-            <div className="player">
+            <div className="customer-player">
               <div className="p-heading">Now Playing</div>
               <div className="player-thumbnail">
                 <img
