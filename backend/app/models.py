@@ -29,12 +29,13 @@ class BandMember(models.Model):
 
 class BandSongsList(models.Model):
     band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
-    song_cover = models.ImageField(upload_to='band_covers', null=True, blank=True)
     song_number = models.CharField(max_length=200, null=True, blank=True)
     song_name = models.CharField(max_length=200)
     song_artist = models.CharField(max_length=200)
     song_genre = models.CharField(max_length=200)
     song_durations = models.CharField(max_length=200)
+    song_year = models.CharField(max_length=200, null=True, blank=True)
+    song_cover = models.ImageField(upload_to='band_covers', null=True, blank=True)
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name

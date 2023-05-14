@@ -274,7 +274,7 @@ body {
   .dropdown {
     position: absolute;
     display: inline-block;
-    top: 15px;
+    top: 15px !important;
     left: 20px;
     border: white 1px solid;
     border-radius: 20px;
@@ -293,7 +293,7 @@ body {
   .search-container {
     position: absolute;
     right: 20px;
-    top: 15px;
+    top: 15px !important;
     z-index: 1;
     border: white 1px solid;
     border-radius: 20px;

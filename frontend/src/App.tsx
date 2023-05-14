@@ -4,6 +4,7 @@ import Login from './Components/login';
 import Register from './Components/Register';
 import NowPlaying from './Components/Customer/NowPlaying';
 import BandLeaderDashboard from './Components/Bandleader/BandLeaderDashboard';
+import Upload from './Components/Bandleader/Upload';
 // import Customer from './Components/Customer/Customer';
 // import CustomerRequest from './Components/Customer/CustomerRequest';
 // import CustomerRequestedSongs from './Components/Customer/CustomerRequestedSongs';
@@ -22,6 +23,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/upload' element={<Upload />} />
         { customer ? <Route path='/' element={<NowPlaying />} /> : null }
         { bandleader ? <Route path='/bandleader' element={<BandLeaderDashboard />} /> : null }
         {/* <Route path='/request' element={<CustomerRequest />} />

@@ -303,5 +303,52 @@ class ManagerSongsSetView(APIView):
         
         return Response({'song_sets': data})
     
+class ManagerUploadSongsListView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        file = req.FILES.get('file')
+        if not file:
+            return Response({'error': 'No file found.'})
+        else:
+            file_content = file.read().decode('utf-8')
+            for line in file_content.split('\n'):
+                data = line.strip().split('-')
+                try:
+                    number = data[0].strip()
+                    name = data[1].strip()
+                    artist = data[2].strip()
+                    year = data[4].strip()
+                    genre = data[5].strip()
+                    duration = data[9].strip()
+                    cover = data[-1].strip()
+                    band_song = BandSongsList(band_leader=band_leader, song_number=number, song_name=name, song_artist=artist, song_year=year, song_genre=genre, song_durations=duration)
+                    band_song.save()
+                    print(number, name, artist, year, genre, duration, cover)
+                    print('saved')
+                except Exception as e:
+                    print(e)
+
+
+            return Response({'success': 'File uploaded successfully.'}, status=200)
+        # try:
+        #     band_leader = BandLeader.objects.get(user=req.user)
+        # except:
+        #     return Response({'error': 'You are not a band leader.'})
+        # songs_list = req.data.get('songs_list')
+        # for song in songs_list:
+        #     song_name = song.get('song_name')
+        #     song_artist = song.get('song_artist')
+        #     song_genre = song.get('song_genre')
+        #     song_durations = song.get('song_durations')
+        #     band_song = BandSongsList(band=band_leader.band, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_durations=song_durations)
+        #     band_song.save()
+        # return Response({'success': 'Songs uploaded successfully.'}, status=200)
+    
 
 

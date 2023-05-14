@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+.upload{
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    background-color: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 150px;
+}
+.upload-list-heading{
+    color: lightgrey;
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin-bottom: 50px;
+}
+.main-upload-div{
+    position: relative;
+    min-width: 500px;
+    width: 50%;
+    height: 300px;
+    background-color: #23242a;
+    border-radius: 10px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.fa-download{
+    color: white;
+}
+.file-select{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    top: 229px;
+    cursor: pointer;
+    z-index: 1;
+}
+.uplaod-file-lable{
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+.uplaod-file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.uplaod-file{
+    z-index: 9;
+    height: 40px;
+    width: 100px;
+    display: inline-block;
+    border: white 1px solid;
+    border-radius: 20px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+.submit-file{
+    width: 150px;
+    height: 40px;
+    margin-top: 50px;
+    background-color: #727272;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+}
+.submit-file:active{
+    opacity: 0.5;
+}
