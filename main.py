@@ -1,23 +1,65 @@
-import pytube
+# import pytube
+# import requests
+from time import sleep
+# from pytube import YouTube
+import requests
+# import youtube_dl
 
-def download_thumbnail(url):
-    # Create a YouTube object with the video URL
-    youtube = pytube.YouTube(url)
+# from pythumb import Thumbnail
 
-    # Get the video thumbnail URL
-    thumbnail_url = youtube.thumbnail_url
 
-    # Download the thumbnail
-    pytube.request.urlopen(thumbnail_url)
-    thumbnail_data = pytube.request.urlopen(thumbnail_url).read()
 
-    # Save the thumbnail to a file
-    with open('thumbnail.jpg', 'wb') as file:
-        file.write(thumbnail_data)
+
+
+
+# def download_youtube_thumbnail(video_url, video_id):
+#     # Extract video ID from the URL
+#     # video_id = video_url.split("v=")[1]
+
+#     # # Construct the thumbnail URL
+#     # thumbnail_url = f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+
+#     # Send a GET request to download the thumbnail
+#     response = requests.get(video_url)
+
+#     if response.status_code == 200:
+#         filename = video_id + '.jpg'
+
+#         # Save the thumbnail to disk
+#         with open('./thumbnail/'+filename, "wb") as f:
+#             f.write(response.content)
+        
+#         print("Thumbnail downloaded successfully!")
+#     else:
+#         print("Failed to download thumbnail.")
+
+def download_youtube_music_thumbnail(video_url, output_file):
+    output_file = "./thumbnail/" + output_file + '.jpg'
+    try:
+        video_id = video_url.split("=")[-1]
+        thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        response = requests.get(thumbnail_url)
+        response.raise_for_status()
+        with open(output_file, "wb") as file:
+            file.write(response.content)
+        print("Thumbnail downloaded successfully!")
+    except Exception as e:
+        print("Error:", str(e))
+
+# def download_youtube_thumbnail(video_url, output_file):
+#     try:
+#         yt = YouTube(video_url)
+#         thumbnail_url = yt.thumbnail_url
+#         yt.streams.first().download(output_path=".", filename=output_file)
+#         print("Thumbnail downloaded successfully!")
+#     except Exception as e:
+#         print("Error:", str(e))
+
 
 with open('set_list.txt', 'r') as f:
+    count = 0
     for line in f:
-        data = line.strip().split('-')
+        data = line.strip().split(' - ')
         try:
             number = data[0]
             name = data[1]
@@ -25,13 +67,15 @@ with open('set_list.txt', 'r') as f:
             year = data[4]
             genre = data[5]
             duration = data[9]
-            cover = data[-1]
-            print(number, name, artist, year, genre, duration, cover)
+            cover = data[10].strip()
 
-        except:
+            video_id = cover.split('=')[1]
+
+            download_youtube_music_thumbnail(cover, video_id)
+
+        except Exception as e:
+            print(e)
             pass
 
-video_url = 'https://music.youtube.com/watch?v=xC6MrVhnxCA'
-download_thumbnail(video_url)
 
 

@@ -113,22 +113,22 @@ const SongList: React.FC = () => {
           <nav>
             <div className="nav-child1">
               <h3>Now</h3>
-              <div className="song-title-queue">
+              <div className="band-song-title-queue">
                 <div className="songtitle-queue">
                   <h4>123 - Lorem ipsum dolor sit - </h4>
                   <p>Lorem, ipsum</p>
                 </div>
-                <p className="songdetail-queue"> 1984 - lorem - 7:14</p>
+                <p className="songdetail-queue"> 1984 - in C - 120 - 7:14</p>
               </div>
             </div>
             <div className="nav-child2">
               <h3>Next</h3>
-              <div className="song-title-queue">
+              <div className="band-song-title-queue">
                 <div className="songtitle-queue">
                   <h4>123 - Lorem ipsum dolor sit - </h4>
                   <p>Lorem, ipsum - </p>
                 </div>
-                <p className="songdetail-queue"> 1984 - lorem - 7:14</p>
+                <p className="songdetail-queue"> 1984 - in A - 80 - 7:14</p>
               </div>
             </div>
           </nav>
@@ -166,14 +166,15 @@ const SongList: React.FC = () => {
               { option === 'queue' ?
               songs.map((song: Song) => (
               <div className="song-dummy" key={song.id} onClick={e => handleSet(song.id)}>
-                <h3>{song.id}</h3>
-                <div className="song-title-queue">
+                <h3>{song.song_number}</h3>
+                <div className="band-song-title-queue">
                   <div className="songtitle-queue">
                     <h4>{song.song_number} - {song.song_name} - </h4>
                     <p> {song.song_artist} - </p>
                   </div>
                   <p className="songdetail-queue"> 1984 - {song.song_genre} - {song.song_durations}</p>
                 </div>
+                <p style={{alignItems: "flex-end"}}></p>
               </div>
               ))
               :
@@ -183,7 +184,7 @@ const SongList: React.FC = () => {
               searchedSongs.map((song: Song) => (
               <div className="song-dummy" key={song.id}>
                 <h3>{song.id}</h3>
-                <div className="song-title-queue">
+                <div className="band-song-title-queue">
                   <div className="songtitle-queue">
                     <h4>{song.song_number} - {song.song_name} - </h4>
                     <p> {song.song_artist} - </p>
@@ -199,7 +200,7 @@ const SongList: React.FC = () => {
               SongsSet.map((song: Song) => (
                 <div className="song-dummy" key={song.id}>
                   <h3>{song.id}</h3>
-                  <div className="song-title-queue">
+                  <div className="band-song-title-queue">
                     <div className="songtitle-queue">
                       <h4>{song.song_number} - {song.song_name} - </h4>
                       <p> {song.song_artist} - </p>

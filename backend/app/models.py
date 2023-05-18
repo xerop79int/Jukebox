@@ -35,7 +35,9 @@ class BandSongsList(models.Model):
     song_genre = models.CharField(max_length=200)
     song_durations = models.CharField(max_length=200)
     song_year = models.CharField(max_length=200, null=True, blank=True)
-    song_cover = models.ImageField(upload_to='band_covers', null=True, blank=True)
+    song_cover = models.ImageField(upload_to='band_covers', default='default.jpeg', null=True, blank=True)
+    cortes = models.CharField(max_length=200, null=True, blank=True)
+    bpm = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name

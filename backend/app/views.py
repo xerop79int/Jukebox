@@ -9,7 +9,11 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from time import sleep
+import requests
 from .models import *
+from django.core.files.base import ContentFile
+
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -221,7 +225,11 @@ class ManagerBandSongsListView(APIView):
                     'song_artist': band_song.song_artist,
                     'song_genre': band_song.song_genre,
                     'song_durations': band_song.song_durations,
-                    'count': count
+                    'count': count,
+                    'cortes': band_song.cortes,
+                    'song_year': band_song.song_year,
+                    'bpm': band_song.bpm,
+                    'img': 'http://localhost:8000'+ str(band_song.song_cover.url)
                 }
                 data.append(song_data)
         elif search:
@@ -242,7 +250,11 @@ class ManagerBandSongsListView(APIView):
                         'song_genre': band_song.song_genre,
                         'song_durations': band_song.song_durations,
                         'count': count,
-                        'liked': liked
+                        'song_year': band_song.song_year,
+                        'liked': liked,
+                        'cortes': band_song.cortes,
+                        'bpm': band_song.bpm,
+                        'img': 'http://localhost:8000'+ str(band_song.song_cover.url)
                     }
                     data.append(song_data)
         else:
@@ -263,7 +275,11 @@ class ManagerBandSongsListView(APIView):
                     'song_genre': band_song.song_genre,
                     'song_durations': band_song.song_durations,
                     'count': count,
-                    'liked': liked
+                    'liked': liked,
+                    'song_year': band_song.song_year,
+                    'cortes': band_song.cortes,
+                    'bpm': band_song.bpm,
+                    'img': 'http://localhost:8000'+ str(band_song.song_cover.url)
                 }
                 data.append(song_data)
                 
@@ -307,6 +323,7 @@ class ManagerUploadSongsListView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
+
     def post(self, req):
         try:
             band_leader = BandLeader.objects.get(user=req.user)
@@ -318,37 +335,41 @@ class ManagerUploadSongsListView(APIView):
         else:
             file_content = file.read().decode('utf-8')
             for line in file_content.split('\n'):
-                data = line.strip().split('-')
+                data = line.strip().split(' - ')
                 try:
-                    number = data[0].strip()
-                    name = data[1].strip()
-                    artist = data[2].strip()
-                    year = data[4].strip()
-                    genre = data[5].strip()
-                    duration = data[9].strip()
-                    cover = data[-1].strip()
-                    band_song = BandSongsList(band_leader=band_leader, song_number=number, song_name=name, song_artist=artist, song_year=year, song_genre=genre, song_durations=duration)
+                    # number = data[0].strip()
+                    # name = data[1].strip()
+                    # artist = data[2].strip()
+                    # cortes = data[3].strip()
+                    # year = data[4].strip()
+                    # genre = data[5].strip()
+                    # bpm = data[7].strip() 
+                    # duration = data[9].strip()
+                    # cover = data[10].strip()
+
+                    [number, name, artist, cortes, year, genre, _, bpm, _, duration, cover] = [item.strip() for item in data[:11]]
+
+
+                    video_id = cover.split("=")[-1]
+                    thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+                    response = requests.get(thumbnail_url)
+                    response.raise_for_status()
+                    thumbnail = response.content
+
+                    
+
+                    
+                    band_song = BandSongsList(band_leader=band_leader, song_number=number, song_name=name, cortes=cortes, bpm=bpm, song_artist=artist, song_year=year, song_genre=genre, song_durations=duration)
+                    band_song.song_cover.save(f"{video_id}.jpg", ContentFile(thumbnail), save=True)
                     band_song.save()
-                    print(number, name, artist, year, genre, duration, cover)
-                    print('saved')
+                    print("saved")
                 except Exception as e:
                     print(e)
+                    pass
 
 
             return Response({'success': 'File uploaded successfully.'}, status=200)
-        # try:
-        #     band_leader = BandLeader.objects.get(user=req.user)
-        # except:
-        #     return Response({'error': 'You are not a band leader.'})
-        # songs_list = req.data.get('songs_list')
-        # for song in songs_list:
-        #     song_name = song.get('song_name')
-        #     song_artist = song.get('song_artist')
-        #     song_genre = song.get('song_genre')
-        #     song_durations = song.get('song_durations')
-        #     band_song = BandSongsList(band=band_leader.band, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_durations=song_durations)
-        #     band_song.save()
-        # return Response({'success': 'Songs uploaded successfully.'}, status=200)
+
     
 
 

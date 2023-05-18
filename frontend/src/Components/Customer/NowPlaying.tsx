@@ -12,6 +12,8 @@ interface Song {
     count: number;
     song_number: number;
     song_durations: string;
+    img: string;
+    song_year: string;
 }
 
 interface CurrentSong {
@@ -22,6 +24,8 @@ interface CurrentSong {
     count: number;
     song_number: number;
     song_durations: string;
+    img: string;
+    song_year: string;
 }
 
 const SongList: React.FC = () => {
@@ -177,7 +181,7 @@ const SongList: React.FC = () => {
               <div className="p-heading">Now Playing</div>
               <div className="player-thumbnail">
                 <img
-                  src="https://picsum.photos/id/231/250/250"
+                  src={currentSong?.img}
                   alt="Thumbnail"
                   className="thumbnail"
                 />
@@ -214,7 +218,7 @@ const SongList: React.FC = () => {
                   <h5>{currentSong?.song_artist}</h5>
                 </div>
                 <div className="songdetail">
-                  1984 - {currentSong?.song_genre} - {currentSong?.song_durations}
+                  {currentSong?.song_year} - {currentSong?.song_genre} - {currentSong?.song_durations}
                 </div>
                 <br />
                 <div className="songbox1">
@@ -299,7 +303,7 @@ const SongList: React.FC = () => {
                   >
                     <div className="song-img-list">
                       <img
-                        src="https://picsum.photos/id/239/250/300"
+                        src={song.img}
                         alt="song-img"
                         className="song-image-list"
                       />
@@ -312,7 +316,7 @@ const SongList: React.FC = () => {
                         </h5>
                       </div>
                       <div className="songdetail-list">
-                        1984 - {song.song_genre} - {song.song_durations}
+                        {song.song_year} - {song.song_genre} - {song.song_durations}
                       </div>
                     </div>
                   </div>

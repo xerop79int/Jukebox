@@ -12,8 +12,7 @@ const Upload: React.FC = () => {
         }
     }
 
-    const handlesubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const handlesubmit = () => {
         if(file){
             const formData = new FormData();
             formData.append('file', file);
