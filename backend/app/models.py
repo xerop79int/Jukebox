@@ -66,3 +66,16 @@ class LikedBandSongsList(models.Model):
 
     def __str__(self):
         return self.customer.name + ' - ' + self.band_song.song_name
+    
+class Sets(models.Model):
+    Setname = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.Setname
+
+class SongsInSet(models.Model):
+    song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+    set = models.ForeignKey(Sets, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.song.song_name + ' - ' + self.set.Setname

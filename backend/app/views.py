@@ -199,6 +199,7 @@ class ManagerBandSongsListView(APIView):
         return Response({'success': 'Song added successfully.'})
 
     def get(self, req):
+        print(req.user)
         sort = req.GET.get('sort')
         view = req.GET.get('view')
         search = req.GET.get('search')
@@ -303,6 +304,7 @@ class ManagerSongsSetView(APIView):
         return Response({'success': 'Song added successfully.'}, status=200)
 
     def get(self, req):
+        print(req.user)
         song_sets = SongsSet.objects.all()
         data = []
         for song_set in song_sets:
@@ -369,6 +371,81 @@ class ManagerUploadSongsListView(APIView):
 
 
             return Response({'success': 'File uploaded successfully.'}, status=200)
+
+
+# Have to check why the authorizations are not working on post request
+class ManagerSetsView(APIView):
+    authentication_classes = [TokenAuthentication]
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        print(req.user)
+        # try:
+        #     band_leader = BandLeader.objects.get(user=req.user)
+        # except:
+        #     return Response({'error': 'You are not a band leader.'})
+        count = Sets.objects.all().count()
+        name = req.data.get('name') + str(count + 1)
+        if not name:
+            return Response({'error': 'No name found.'})
+        else:
+            sets = Sets(Setname=name)
+            sets.save()
+            return Response({'success': 'Set created successfully.'}, status=200)
+    
+    def get(self, req):
+        
+        sets = Sets.objects.all()
+        data = []
+        for set in sets:
+            set_data = {
+                'id': set.id,
+                'set_name': set.Setname
+            }
+            data.append(set_data)
+        return Response({'sets': data})
+
+class ManagerSongsInSetView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        
+        set_id = req.data.get('set_id')
+        song_id = req.data.get('song_id')
+
+        # Check if the song is already in the set
+        if SongsInSet.objects.filter(set__id=set_id, song__id=song_id).exists():
+            return Response({'success': 'Song already added.'}, status=200)
+        else:
+            print(set_id, song_id)
+            set = Sets.objects.get(id=set_id)
+            song = BandSongsList.objects.get(id=song_id)
+            songs_in_set = SongsInSet(set=set, song=song)
+            songs_in_set.save()
+            return Response({'success': 'Song added successfully to ' + set.Setname}, status=200)
+
+    def get(self, req):
+        set_id = req.GET.get('set_id')
+        songs_in_set = SongsInSet.objects.filter(set__id=set_id)
+        data = []
+        for song_in_set in songs_in_set:
+            song = BandSongsList.objects.get(id=song_in_set.song.id)
+            song_data = {
+                'id': song.id,
+                'song_number': song.song_number,
+                'song_name': song.song_name,
+                'song_artist': song.song_artist,
+                'song_genre': song.song_genre,
+                'song_durations': song.song_durations
+            }
+            data.append(song_data)
+
+        return Response({'songs_in_set': data})
 
     
 
