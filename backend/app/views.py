@@ -286,40 +286,40 @@ class ManagerBandSongsListView(APIView):
                 
         return Response({'band_songs': data})
 
-class ManagerSongsSetView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+# class ManagerSongsSetView(APIView):
+#     authentication_classes = [TokenAuthentication]
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, req):
-        try:
-            band_leader = BandLeader.objects.get(user=req.user)
-        except:
-            return Response({'error': 'You are not a band leader.'})
-        song_id = req.data.get('song_id')
-        band_song = BandSongsList.objects.get(id=song_id)
-        if SongsSet.objects.filter(song=band_song).exists():
-            return Response({'error': 'Song already added.'})
-        song_set = SongsSet(song=band_song, band_leader=band_leader)
-        song_set.save()
-        return Response({'success': 'Song added successfully.'}, status=200)
+#     def post(self, req):
+#         try:
+#             band_leader = BandLeader.objects.get(user=req.user)
+#         except:
+#             return Response({'error': 'You are not a band leader.'})
+#         song_id = req.data.get('song_id')
+#         band_song = BandSongsList.objects.get(id=song_id)
+#         if SongsSet.objects.filter(song=band_song).exists():
+#             return Response({'error': 'Song already added.'})
+#         song_set = SongsSet(song=band_song, band_leader=band_leader)
+#         song_set.save()
+#         return Response({'success': 'Song added successfully.'}, status=200)
 
-    def get(self, req):
-        print(req.user)
-        song_sets = SongsSet.objects.all()
-        data = []
-        for song_set in song_sets:
-            band_song = BandSongsList.objects.get(id=song_set.song.id)
-            song_data = {
-                    'id': band_song.id,
-                    'song_number': band_song.song_number,
-                    'song_name': band_song.song_name,
-                    'song_artist': band_song.song_artist,
-                    'song_genre': band_song.song_genre,
-                    'song_durations': band_song.song_durations
-            }
-            data.append(song_data)
+#     def get(self, req):
+#         print(req.user)
+#         song_sets = SongsSet.objects.all()
+#         data = []
+#         for song_set in song_sets:
+#             band_song = BandSongsList.objects.get(id=song_set.song.id)
+#             song_data = {
+#                     'id': band_song.id,
+#                     'song_number': band_song.song_number,
+#                     'song_name': band_song.song_name,
+#                     'song_artist': band_song.song_artist,
+#                     'song_genre': band_song.song_genre,
+#                     'song_durations': band_song.song_durations
+#             }
+#             data.append(song_data)
         
-        return Response({'song_sets': data})
+#         return Response({'song_sets': data})
     
 class ManagerUploadSongsListView(APIView):
     authentication_classes = [TokenAuthentication]

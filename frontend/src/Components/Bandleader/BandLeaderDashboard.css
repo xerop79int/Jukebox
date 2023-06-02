@@ -504,6 +504,7 @@
     color: #fff;
   }
   .bandleader-verse-sec-scroll {
+
     position: absolute;
     height: 100%;
     width: 100%;
@@ -517,6 +518,11 @@
     letter-spacing: 3px;
     line-height: 1.5;
     font-size: 1.2rem;
+  }
+
+  .bandleader-lyric{
+    font-size: 32px;
+    font-family: monospace;
   }
   .bandleader-verse-sec-scroll::-webkit-scrollbar {
     display: none;

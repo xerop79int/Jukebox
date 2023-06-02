@@ -37,81 +37,102 @@ const SongList: React.FC = () => {
   const [SongsSet, setSetSongs] = useState<Song[]>([]);
   const [Sets, setSets] = useState<Sets[]>([]);
   const [currentSet, setCurrentSet] = useState<number>(0);
+  const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
 
   const [lyric, setLyric]= useState<string>( 
-  `D                 A              D 
+  `
+  [Verse]
+
+  D                 A              D 
   Ridin'  on the City of  New Orleans 
+  
   Bm                G              D 
   Illinois  Central Monday  mornin' rail 
+  
   D                 A                D 
   There's  15 cars, and  15 restless riders 
-  Bm               A               D 
   
+  Bm               A               D 
   3 conductors  and 25 sacks of  mail 
   
   Bm                                 F#m 
   All along a  southbound oddyssey,  and the train pulls  out of Kankakee 
+  
   A                                            E 
   And rolls along  past the houses,  farms and fields 
+  
   Bm                                 F#m 
   Passin' trains  that have no name,  and freightyards  full of old black  men 
-  A                   A7                  D 
   
+  A                   A7                  D 
   The graveyards of the rusted automobiles 
   
   [Chorus] 
+  
   G              A7                D 
   Good mornin'  America, how  are you? 
+  
          Bm                   G                D      A7 
   Sayin' don't  you know me?,  I'm your native  son 
-          D                     A            Bm A E7 
   
+          D                     A            Bm A E7 
   I'm the train  they call the City of  New Orleans 
   
          C     G   A                      D 
   I'll be gone  50@ miles when  the day is done. 
   
   [Verse] 
+  
   D                    A                             D 
   Dealin’  card games with  the old men  in the club car. 
+  
   Bm               G                       D 
   Penny a  point, ain’t  no one keepin'  score 
+  
   D                A                       D 
   Pass the  paper bag that  holds that bottle. 
-  Bm               A                     D 
   
+  Bm               A                     D 
   Hear the wheels  rumblin'  ‘neath the floor. 
   
   Bm                                         F#m 
   And the sons of  Pullman Porters, and  the sons of engineers 
+  
   A                                          E 
   Ride their father's  magic carpet made  of steel 
+  
   Bm                                    F#m 
   Mothers with their  babes asleep are  rockin’ to the gentle  beat 
-  A                      A7                 D 
   
+  A                      A7                 D 
   And the rhythm  of the rails  is all they feel. 
   
-   [Chorus] 
+  [Chorus] 
   
   G             A7                D 
   Good mornin'  America, how are  you? 
+  
          Bm              G              D      A7 
   Sayin' don't  you know me?,  I'm your native  son 
-                    D                     A           Bm A  E7 
+  
+          D                     A           Bm A  E7 
   I'm the train  they call the  City of New Orleans 
-                   c      G   A                      D 
+  
+         c      G   A                      D 
   I'll be gone  50@ miles when  the day is done. 
   
-   [Break] 
+  [Break] 
   
-  G  A7 D  Bm G  D  A7 D  A  BHAE7V  C GA    D 
+   A7 D  Bm G  D  A7 D  A  BHAE7V  C GA    D 
   
   [Verse] 
+  
   D                 A            D 
   Nighttime on  the City of New  Orleans. 
+  
   Bm                G              D 
   Changin’ cars  in Memphis, Tennessee 
+  
   D                   A                  D 
   Half way home,  and we'll be  there by mornin’ 
   
@@ -126,45 +147,51 @@ const SongList: React.FC = () => {
   
           Bm                               F#m 
   The conductor sings  his songs again the passengers  will please  refrain 
-                    A                   A7                 D 
   
+          A                   A7                 D 
   This train has  got the disappearin’  railroad blues 
   
   [Chorus] 
+  
   G             A7                D 
   Good mornin'  America, how  are you? 
+  
          Bm              G              D       A7 
   Sayin' don't  you know me?,  I'm your native  son 
-          D                     A            Bm A E7 
   
+          D                     A            Bm A E7 
   I'm the train  they call the City of  New Orleans 
   
-   [Outro] 
+  [Outro] 
   
          G    G    A                      D 
   I'll be gone 50@  miles when the day  is done 
+  
          c     G    A                      D 
   I'll be gone 50@  miles when the day  is done 
+  
          C    G    A                      D 
-  I'll be gone 50@  miles when the day  is done`);
+  I'll be gone 50@  miles when the day  is done 
+  
+  `);
 
   const handlestyling = () => {
     // lyric.replaceAll('G', "<span className='alphabet'> G </span>")
-    let updatedlyric= lyric.replaceAll(' A ', '<span style="color: #00468b"> A </span>')
-    updatedlyric = updatedlyric.replaceAll(' D ', '<span style="color: #00468b"> D </span>')
-    updatedlyric = updatedlyric.replaceAll('D ', '<span style="color: #00468b"> D </span>')
-    updatedlyric = updatedlyric.replaceAll(' G ', '<span style="color: #00468b"> G </span>')
-    updatedlyric = updatedlyric.replaceAll('Bm', '<span style="color: #00468b"> Bm </span>')
-    updatedlyric = updatedlyric.replaceAll('A7', '<span style="color: #00468b"> A7 </span>')
-    updatedlyric = updatedlyric.replaceAll(' E ', '<span style="color: #00468b"> E </span>')
-    updatedlyric = updatedlyric.replaceAll(' E7 ', '<span style="color: #00468b"> E7 </span>')
-    updatedlyric = updatedlyric.replaceAll('E7', '<span style="color: #00468b"> E7 </span>')
-    updatedlyric = updatedlyric.replaceAll(' C ', '<span style="color: #00468b"> C </span>')
-    updatedlyric = updatedlyric.replaceAll('F#m', '<span style="color: #00468b"> F#m </span>')
-    updatedlyric = updatedlyric.replaceAll('[Break]', '<span style="color: Yellow">Break </span>')
-    updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse </span>')
-    updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus </span>')
-    updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro </span>')
+    let updatedlyric= lyric.replaceAll(' A ', '<span style="color: #00468b"> A</span>')
+    updatedlyric = updatedlyric.replaceAll(' D ', '<span style="color: #00468b"> D</span>')
+    updatedlyric = updatedlyric.replaceAll('D ', '<span style="color: #00468b">D</span>')
+    updatedlyric = updatedlyric.replaceAll(' G ', '<span style="color: #00468b"> G</span>')
+    updatedlyric = updatedlyric.replaceAll(' Bm ', '<span style="color: #00468b">  Bm</span>')
+    updatedlyric = updatedlyric.replaceAll('A7', '<span style="color: #00468b"> A7</span>')
+    updatedlyric = updatedlyric.replaceAll(' E ', '<span style="color: #00468b"> E</span>')
+    updatedlyric = updatedlyric.replaceAll(' E7 ', '<span style="color: #00468b"> E7</span>')
+    updatedlyric = updatedlyric.replaceAll('E7', '<span style="color: #00468b"> E7</span>')
+    updatedlyric = updatedlyric.replaceAll(' C ', '<span style="color: #00468b"> C</span>')
+    updatedlyric = updatedlyric.replaceAll('F#m', '<span style="color: #00468b"> F#m</span>')
+    updatedlyric = updatedlyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
+    updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse</span>')
+    updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus</span>')
+    updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro</span>')
     setLyric(updatedlyric)
     // setLyric(lyric.replaceAll(' G ', '<span style="color: #00468b"> G </span>'))
     // setLyric(lyric.replaceAll(' Bm ', '<span style="color: #00468b"> Bm </span>'))
@@ -209,38 +236,51 @@ const SongList: React.FC = () => {
     .catch(err => console.log(err))
   }
 
-  const handleSet = (id: number) => {
-    const URL = `http://localhost:8000/songsset`
+  const handleGettingSongsInSet = (id: number) => {
+    const URL = `http://localhost:8000/songsinset?set_id=${id}`
 
-    const data = {
-      "song_id": id
-    }
-
-    axios.post(URL, data, {
-      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-    })
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch(err => console.log(err))
-  }
-
-  const handleSetGet = () => {
-    const URL = `http://localhost:8000/songsset`
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {
       console.log(res.data)
-      setSetSongs(res.data.song_sets);
+      setSelectedSetSongs(res.data.songs_in_set);
     })
     .catch(err => console.log(err))
   }
 
+  // const handleSetGet = () => {
+  //   const URL = `http://localhost:8000/songsset`
+
+  //   axios.get(URL, {
+  //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+  //   })
+  //   .then(res => {
+  //     console.log(res.data)
+  //     setSetSongs(res.data.song_sets);
+  //   })
+  //   .catch(err => console.log(err))
+  // }
+
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    console.log(e.target.value)
-    setOption(e.target.value);
+
+    // check if the e.target.value has a substring of 'set'
+    if(e.target.value.includes('Set')){
+      // split the string
+      const splitString = e.target.value.split(' ')[1];
+      // convert the string to a number
+      const id = parseInt(splitString);
+      // call the handleSet function
+      handleGettingSongsInSet(id);
+
+      setOption(e.target.value);
+    }
+    else{
+      setOption(e.target.value);
+    }
+
+    
   }
 
 
@@ -367,8 +407,8 @@ const SongList: React.FC = () => {
         </nav>
         <div className="bandleader-verse-sec">
           <div className="bandleader-verse-sec-scroll">
-            <pre>
-            <div dangerouslySetInnerHTML={{ __html: lyric }} />
+            <pre dangerouslySetInnerHTML={{ __html: lyric }} >
+            {/* <div className='bandleader-lyric' /> */}
             </pre>
           </div>
         </div>
@@ -384,7 +424,7 @@ const SongList: React.FC = () => {
             <option value='search'>Search</option>
             <option value="editset">Edit Set</option>
             {  Sets.map((set, index) => ( 
-            <option value={set.id}>{set.set_name}</option>
+            <option value={`Set ` + set.id}>{set.set_name}</option>
             ))}
           </select>
 
@@ -463,7 +503,7 @@ const SongList: React.FC = () => {
 
           { option === 'queue' ?
               songs.map((song: Song) => (
-                <div className="bandleader-song-dummy">
+                <div key={song.id} className="bandleader-song-dummy">
                 <h3>{song.song_number}</h3>
                 <div className="bandleader-song-title-queue">
                   <div className="bandleader-songtitle-queue">
@@ -485,7 +525,7 @@ const SongList: React.FC = () => {
             
             { option === 'editset' && currentSet != 0 ?
               songs.map((song: Song) => (
-                <div className="bandleader-song-dummy">
+                <div key={song.id} className="bandleader-song-dummy">
                 <h3>{song.song_number}</h3>
                 <div className="bandleader-song-title-queue">
                   <div className="bandleader-songtitle-queue">
@@ -504,6 +544,28 @@ const SongList: React.FC = () => {
               ))
               :
               null}
+
+             { option.includes('Set') ? 
+             selectedSetSongs.map((song: Song) => (
+              <div key={song.id} className="bandleader-song-dummy">
+              <h3>{song.song_number}</h3>
+              <div className="bandleader-song-title-queue">
+                <div className="bandleader-songtitle-queue">
+                  <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>
+                  <p style={{textTransform: 'capitalize'}}>{song.song_artist} </p>
+                </div>
+                <div className="bandleader-songdetail">
+                <h5 className="bandleader-songdetail-queue"> - {song.song_year} - {song.song_genre} </h5>
+                <h5> - in A </h5> 
+                <p> - {song.song_durations}</p>
+                </div>
+              </div>
+              <i className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
+              <i className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
+            </div>
+            ))
+            :
+            null}
 
             {/* <div className="bandleader-song-dummy">
               <h3>12</h3>
