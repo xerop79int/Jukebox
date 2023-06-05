@@ -11,11 +11,19 @@ interface Song {
     song_number: number;
     song_durations: string;
     song_year: string;
+    number: number;
 }
 
 interface Sets {
     id: number;
     set_name: string;
+}
+
+interface SongRequest{
+    customer_name: string;
+    song_name: string;
+    song_artist: string;
+    song_durations: string;
 }
 
 // interface CurrentSong {
@@ -38,163 +46,177 @@ const SongList: React.FC = () => {
   const [Sets, setSets] = useState<Sets[]>([]);
   const [currentSet, setCurrentSet] = useState<number>(0);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
+  const [SongRequestid, setSongRequestid] = useState<number>(0);
+  const [playlist, setPlaylist] = useState<Song[]>([]);
+  const [nowSong, setNowSong] = useState<Song[]>([]);
+  const [nextSong, setNextSong] = useState<Song[]>([]);
 
   const [lyric, setLyric]= useState<string>( 
   `
-  [Verse]
+[Verse]
 
-  D                 A              D 
-  Ridin'  on the City of  New Orleans 
+D                 A              D
+Ridin'  on the City of  New Orleans
   
-  Bm                G              D 
-  Illinois  Central Monday  mornin' rail 
+Bm                G              D 
+Illinois  Central Monday  mornin' rail
   
-  D                 A                D 
-  There's  15 cars, and  15 restless riders 
+D                 A                D 
+There's  15 cars, and  15 restless riders
   
-  Bm               A               D 
-  3 conductors  and 25 sacks of  mail 
+Bm               A               D 
+3 conductors  and 25 sacks of  mail 
   
-  Bm                                 F#m 
-  All along a  southbound oddyssey,  and the train pulls  out of Kankakee 
+Bm                                 F#m 
+All along a  southbound oddyssey,  and the train pulls  out of Kankakee 
   
-  A                                            E 
-  And rolls along  past the houses,  farms and fields 
+A                                            E 
+And rolls along  past the houses,  farms and fields 
   
-  Bm                                 F#m 
-  Passin' trains  that have no name,  and freightyards  full of old black  men 
+Bm                                 F#m 
+Passin' trains  that have no name,  and freightyards  full of old black  men 
   
-  A                   A7                  D 
-  The graveyards of the rusted automobiles 
+A                   A7                  D 
+The graveyards of the rusted automobiles 
   
-  [Chorus] 
+[Chorus] 
   
-  G              A7                D 
-  Good mornin'  America, how  are you? 
+G              A7                D 
+Good mornin'  America, how  are you? 
   
-         Bm                   G                D      A7 
-  Sayin' don't  you know me?,  I'm your native  son 
+        Bm                   G                D      A7 
+Sayin' don't  you know me?,  I'm your native  son 
   
-          D                     A            Bm A E7 
-  I'm the train  they call the City of  New Orleans 
+        D                     A            Bm A E7 
+I'm the train  they call the City of  New Orleans 
   
-         C     G   A                      D 
-  I'll be gone  50@ miles when  the day is done. 
+        C     G   A                      D 
+I'll be gone  50@ miles when  the day is done. 
   
-  [Verse] 
+[Verse] 
   
-  D                    A                             D 
-  Dealin’  card games with  the old men  in the club car. 
+D                    A                             D 
+Dealin’  card games with  the old men  in the club car. 
   
-  Bm               G                       D 
-  Penny a  point, ain’t  no one keepin'  score 
+Bm               G                       D 
+Penny a  point, ain’t  no one keepin'  score 
   
-  D                A                       D 
-  Pass the  paper bag that  holds that bottle. 
+D                A                       D 
+Pass the  paper bag that  holds that bottle. 
   
-  Bm               A                     D 
-  Hear the wheels  rumblin'  ‘neath the floor. 
+Bm               A                     D 
+Hear the wheels  rumblin'  ‘neath the floor. 
   
-  Bm                                         F#m 
-  And the sons of  Pullman Porters, and  the sons of engineers 
+Bm                                         F#m 
+And the sons of  Pullman Porters, and  the sons of engineers 
   
-  A                                          E 
-  Ride their father's  magic carpet made  of steel 
+A                                          E 
+Ride their father's  magic carpet made  of steel 
   
-  Bm                                    F#m 
-  Mothers with their  babes asleep are  rockin’ to the gentle  beat 
+Bm                                    F#m 
+Mothers with their  babes asleep are  rockin’ to the gentle  beat 
   
-  A                      A7                 D 
-  And the rhythm  of the rails  is all they feel. 
+A                      A7                 D 
+And the rhythm  of the rails  is all they feel. 
   
-  [Chorus] 
+[Chorus] 
   
-  G             A7                D 
-  Good mornin'  America, how are  you? 
+G             A7                D 
+Good mornin'  America, how are  you? 
   
-         Bm              G              D      A7 
-  Sayin' don't  you know me?,  I'm your native  son 
+        Bm              G              D      A7 
+Sayin' don't  you know me?,  I'm your native  son 
   
-          D                     A           Bm A  E7 
-  I'm the train  they call the  City of New Orleans 
+        D                     A           Bm A  E7 
+I'm the train  they call the  City of New Orleans 
   
-         c      G   A                      D 
-  I'll be gone  50@ miles when  the day is done. 
+        c      G   A                      D 
+I'll be gone  50@ miles when  the day is done. 
   
-  [Break] 
+[Break] 
   
-   A7 D  Bm G  D  A7 D  A  BHAE7V  C GA    D 
+  A7 D  Bm G  D  A7 D  A  BHAE7V  C GA    D 
   
-  [Verse] 
+[Verse] 
   
-  D                 A            D 
-  Nighttime on  the City of New  Orleans. 
+D                 A            D 
+Nighttime on  the City of New  Orleans. 
   
-  Bm                G              D 
-  Changin’ cars  in Memphis, Tennessee 
+Bm                G              D 
+Changin’ cars  in Memphis, Tennessee 
   
-  D                   A                  D 
-  Half way home,  and we'll be  there by mornin’ 
+D                   A                  D 
+Half way home,  and we'll be  there by mornin’ 
   
-               Bm                    A                    D 
-  Through the  Mississippi darkness  rollin’ down  to the sea. 
+              Bm                    A                    D 
+Through the  Mississippi darkness  rollin’ down  to the sea. 
   
-          Bm                             F#m 
-  And all the towns  and people seem to  fade into a bad dream 
+        Bm                             F#m 
+And all the towns  and people seem to  fade into a bad dream 
   
-          A                                    E 
-  And the  steel rails still  ain't heard the  news 
+        A                                    E 
+And the  steel rails still  ain't heard the  news 
   
-          Bm                               F#m 
-  The conductor sings  his songs again the passengers  will please  refrain 
+        Bm                               F#m 
+The conductor sings  his songs again the passengers  will please  refrain 
   
-          A                   A7                 D 
-  This train has  got the disappearin’  railroad blues 
+        A                   A7                 D 
+This train has  got the disappearin’  railroad blues 
   
-  [Chorus] 
+[Chorus] 
   
-  G             A7                D 
-  Good mornin'  America, how  are you? 
+G             A7                D 
+Good mornin'  America, how  are you? 
   
-         Bm              G              D       A7 
-  Sayin' don't  you know me?,  I'm your native  son 
+        Bm              G              D       A7 
+Sayin' don't  you know me?,  I'm your native  son 
   
-          D                     A            Bm A E7 
-  I'm the train  they call the City of  New Orleans 
+        D                     A            Bm A E7 
+I'm the train  they call the City of  New Orleans 
   
-  [Outro] 
+[Outro] 
   
-         G    G    A                      D 
-  I'll be gone 50@  miles when the day  is done 
+        G    G    A                      D 
+I'll be gone 50@  miles when the day  is done 
   
-         c     G    A                      D 
-  I'll be gone 50@  miles when the day  is done 
+        c     G    A                      D 
+I'll be gone 50@  miles when the day  is done 
   
-         C    G    A                      D 
-  I'll be gone 50@  miles when the day  is done 
+        C    G    A                      D 
+I'll be gone 50@  miles when the day  is done 
   
   `);
 
+  
+
   const handlestyling = () => {
+    // const lyricsArray = lyric.split('\n');
+    // lyricsArray.map((line) => {
+    //   if(line.includes("   "))
+    //   {
+    //     console.log(line)
+    //   }
+    // })
     // lyric.replaceAll('G', "<span className='alphabet'> G </span>")
-    let updatedlyric= lyric.replaceAll(' A ', '<span style="color: #00468b"> A</span>')
-    updatedlyric = updatedlyric.replaceAll(' D ', '<span style="color: #00468b"> D</span>')
-    updatedlyric = updatedlyric.replaceAll('D ', '<span style="color: #00468b">D</span>')
-    updatedlyric = updatedlyric.replaceAll(' G ', '<span style="color: #00468b"> G</span>')
-    updatedlyric = updatedlyric.replaceAll(' Bm ', '<span style="color: #00468b">  Bm</span>')
-    updatedlyric = updatedlyric.replaceAll('A7', '<span style="color: #00468b"> A7</span>')
-    updatedlyric = updatedlyric.replaceAll(' E ', '<span style="color: #00468b"> E</span>')
-    updatedlyric = updatedlyric.replaceAll(' E7 ', '<span style="color: #00468b"> E7</span>')
-    updatedlyric = updatedlyric.replaceAll('E7', '<span style="color: #00468b"> E7</span>')
-    updatedlyric = updatedlyric.replaceAll(' C ', '<span style="color: #00468b"> C</span>')
-    updatedlyric = updatedlyric.replaceAll('F#m', '<span style="color: #00468b"> F#m</span>')
-    updatedlyric = updatedlyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
+    // let updatedlyric= lyric.replaceAll('A', '<span style="color: #00468b">A</span>')
+    // updatedlyric= lyric.replaceAll('A ', '<span style="color: #00468b">A </span>')
+    // updatedlyric = updatedlyric.replaceAll('Bm', '<span style="color: #00468b">Bm</span>')
+    // updatedlyric = updatedlyric.replaceAll('D', '<span style="color: #00468b">D</span>')
+    // // updatedlyric = updatedlyric.replaceAll('D ', '<span style="color: #00468b">D </span>')
+    // // updatedlyric = updatedlyric.replaceAll(' D', '<span style="color: #00468b"> D</span>')
+    // updatedlyric = updatedlyric.replaceAll(' G ', '<span style="color: #00468b"> G </span>')
+    // updatedlyric = updatedlyric.replaceAll('G ', '<span style="color: #00468b">G </span>')
+    // updatedlyric = updatedlyric.replaceAll('A7', '<span style="color: #00468b">A7</span>')
+    // updatedlyric = updatedlyric.replaceAll(' E ', '<span style="color: #00468b"> E </span>')
+    // updatedlyric = updatedlyric.replaceAll(' E7 ', '<span style="color: #00468b"> E7 </span>')
+    // updatedlyric = updatedlyric.replaceAll('E7', '<span style="color: #00468b">E7</span>')
+    // updatedlyric = updatedlyric.replaceAll(' C ', '<span style="color: #00468b"> C </span>')
+    // updatedlyric = updatedlyric.replaceAll('F#m', '<span style="color: #00468b">F#m</span>')
+    let updatedlyric = lyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
     updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse</span>')
     updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus</span>')
     updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro</span>')
     setLyric(updatedlyric)
-    // setLyric(lyric.replaceAll(' G ', '<span style="color: #00468b"> G </span>'))
-    // setLyric(lyric.replaceAll(' Bm ', '<span style="color: #00468b"> Bm </span>'))
   }
 
   useEffect(() => {
@@ -217,8 +239,49 @@ const SongList: React.FC = () => {
         .catch(err => {if(err.response.status === 401){ window.location.href = '/login'; console.log(err) } else {console.log(err)}})
 
         handleGetSets()
+        handleGettingPlaylist()
   }, []);
 
+  const handleGettingPlaylist = () => {
+    let URL = `http://localhost:8000/playlist`;
+
+    axios.get(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+        .then(res => {
+          console.log(res.data.playlist[0])
+          setNowSong(res.data.playlist[0])
+          setNextSong(res.data.playlist[1])
+
+        })
+        .catch(err => {console.log(err)})
+  }
+
+  const socket = new WebSocket('ws://localhost:8000/ws/bandleadercustomerrequests/');
+
+  socket.onopen = function(e) {
+    console.log('WebSocket connection established');
+
+    socket.send('WebSocket connection established');
+  };
+
+  socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    const name = document.querySelector('.customer-name') as HTMLInputElement;
+    name.textContent = " " + data.customer_name;
+
+    const song_number_name = document.querySelector('.number-song-name') as HTMLInputElement;
+    song_number_name.textContent = " " + data.song_number + " - " + data.song_name + " - ";
+    
+    const artist = document.querySelector('.artist-durations') as HTMLInputElement;
+    artist.textContent = " " + data.song_artist + " - " + data.song_durations;
+    
+    const popup = document.querySelector('#popup') as HTMLInputElement;
+    popup.style.right = '0px';
+    popup.style.display = 'flex';
+
+    setSongRequestid(data.id);
+  };
 
   const handleSearch = () => {
     const URL = `http://localhost:8000/songslist?search=${search}`
@@ -372,7 +435,74 @@ const SongList: React.FC = () => {
     .catch(err => console.log(err))
   }
 
+  const handleCustomerRequestUpdate = (status: string, approved: boolean, number: number) => {
 
+    const URL = `http://localhost:8000/customerrequest`
+
+    const data = {
+      "request_id": SongRequestid,
+      "status": status,
+      "approved": approved
+    }
+
+    axios.put(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      const popup = document.querySelector('#popup') as HTMLInputElement;
+      popup.style.right = '-350px';
+      
+    })
+    .catch(err => console.log(err))
+
+    if (number !== 0) {
+
+    const SonginsetURL = `http://localhost:8000/songsinset`
+
+    const songinsetdata = {
+      "request_id": SongRequestid,
+      "place": number
+    }
+
+    axios.put(SonginsetURL, songinsetdata, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+    }
+    )
+    .catch(err => console.log(err))
+    }
+
+
+    // window.location.reload();
+
+
+  }
+
+  const handleScrolledToTop = () => {
+    const scroll = document.querySelector('.bandleader-verse-sec') as HTMLElement;
+    scroll.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+  }
+
+
+  const handleChangingSong = (movement: string) => {
+    const URL = `http://localhost:8000/playlist`
+
+    const data = {
+      "movement": movement
+    }
+
+    axios.post(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+    }
+    )
+    .catch(err => console.log(err))
+  }
 
 
 
@@ -382,13 +512,67 @@ const SongList: React.FC = () => {
                 <p className='bandleader-alert-message'></p>
                 {/* <span onClick={handleAlertClose} className="close-btn">&times;</span> */}
        </div>
+
+       <div id="popup" className="">
+          <button id="closeButton">X</button>
+          <div className="pop-up-div1 p-d">
+            <div className="text-upper" >
+              <div className="t1">
+                New Request From 
+              </div>
+              <div className="customer-name t2">
+                Lorem, ipsum dolor
+              </div>
+            </div>
+            <div className="text-lower" >
+              <div className="number-song-name t1">
+                25 - Lorem, ipsum
+              </div>
+              <div className="artist-durations t2">
+                - Lorem, ipsum - 4:20
+              </div>
+            </div>
+          </div>
+          <div className="pop-up-div2 p-d">
+            <button className="sub-pop-div1 spd" onClick={e => handleCustomerRequestUpdate('Approved Next in Que!', true, 1)}>1 - Play Next</button>
+            <button className="sub-pop-div2 spd" onClick={e => handleCustomerRequestUpdate("Delined, Sorry, but we already played this one", false, 0)}>Declined - Already Played</button>
+          </div>
+          <div className="pop-up-div3 p-d">
+            <button className="sub-pop-div1 spd" onClick={e => handleCustomerRequestUpdate('Approved number in Que!', true, 2)}>2 - Play After Next</button>
+            <button className="sub-pop-div2 spd" onClick={e => handleCustomerRequestUpdate("Delined, Sorry, but there isn't enough time left!", false, 0)}>Declined - Not Enough Time</button>
+          </div>
+          <div className="pop-up-div4 p-d">
+            <button className="sub-pop-div1 spd" onClick={e => handleCustomerRequestUpdate('Approved number in Que', true, 3)}>? - Next Available</button>
+            <div className="sub-pop-div2 spd" >
+              <div className="tip-icon icon">
+                <div className="tip">
+                  <img className="tip-jar" src="./img/tip jar.png" alt="tip-jar-icon" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
       <div className="bandleader-sub-main">
+        <div className="bandleader-main-buttons">
+          <i className="fa-solid fa-arrow-left fa-2x" onClick={e => handleChangingSong('previous')}></i>
+          <i className="fa-solid fa-play fa-2x"></i>
+          <i className="fa-solid fa-pause fa-2x"></i>
+          <i className="fa-solid fa-stop fa-2x"></i>
+          <i className="fa-solid fa-arrow-rotate-left fa-2x" onClick={handleScrolledToTop}></i>
+          <i className="fa-solid fa-arrow-right fa-2x" onClick={e => handleChangingSong('next')}></i>
+          <i className="fa-solid fa-1 fa-2x"></i>
+          <i className="fa-solid fa-2 fa-2x"></i>
+          <i className="fa-solid fa-3 fa-2x"></i>
+          <i className="fa-solid fa-4 fa-2x"></i>
+        </div>
         <nav>
           <div className="bandleader-nav-child1">
             <h3>Now</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
-                <h4>123 - Lorem ipsum dolor sit -</h4>
+                <h4>{nowSong.number} - Lorem ipsum dolor sit -</h4>
                 <h6>Lorem, ipsum</h6>
               </div>
               <h5 className="bandleader-songdetail-queue">1984 - lorem - 7:14</h5>
@@ -548,7 +732,7 @@ const SongList: React.FC = () => {
              { option.includes('Set') ? 
              selectedSetSongs.map((song: Song) => (
               <div key={song.id} className="bandleader-song-dummy">
-              <h3>{song.song_number}</h3>
+              <h3>{song.number}</h3>
               <div className="bandleader-song-title-queue">
                 <div className="bandleader-songtitle-queue">
                   <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>

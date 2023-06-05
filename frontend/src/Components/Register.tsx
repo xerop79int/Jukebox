@@ -113,7 +113,6 @@ import {
               <FormControl id="role" isRequired>
               <FormLabel>Account Type</FormLabel>
               <Select onChange={e => setAccountType(e.target.value)} placeholder='Select option'>
-                <option value='customer'>Customer</option>
                 <option value='band_leader'>Band Leader</option>
                 <option value='band_member'>Band Member</option>
               </Select>

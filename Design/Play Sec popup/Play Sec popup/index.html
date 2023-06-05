@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Play</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body>
+    <div class="main">
+      <!-- Open Pop-up -->
+      <button id="mainButton">
+        <i class="fa-solid fa-arrow-down fa-2x"></i>
+      </button>
+      <!-- Open pop-up -->
+      <!-- Popup section -->
+            <div id="popup" class="">
+              <button id="closeButton">X</button>
+              <div class="pop-up-div1 p-d">
+                <div class="text-upper" >
+                  <div class="t1">
+                    New Request From
+                  </div>
+                  <div class="t2">
+                    Lorem, ipsum dolor
+                  </div>
+                </div>
+                <div class="text-lower" >
+                  <div class="t1">
+                    25 - Lorem, ipsum
+                  </div>
+                  <div class="t2">
+                    - Lorem, ipsum - 4:20
+                  </div>
+                </div>
+              </div>
+              <div class="pop-up-div2 p-d">
+                <button class="sub-pop-div1 spd">1 - Play Next</button>
+                <button class="sub-pop-div2 spd">Declined - Already Played</button>
+              </div>
+              <div class="pop-up-div3 p-d">
+                <button class="sub-pop-div1 spd">2 - Play After Next</button>
+                <button class="sub-pop-div2 spd">Declined - Not Enough Time</button>
+              </div>
+              <div class="pop-up-div4 p-d">
+                <button class="sub-pop-div1 spd">? - Next Available</button>
+                <div class="sub-pop-div2 spd" >
+                  <div class="tip-icon icon">
+                    <div class="tip">
+                      <img class="tip-jar" src="./img/tip jar.png" alt="tip-jar-icon" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End of Popup section -->
+      <div class="sub-main">
+        <nav>
+          <div class="nav-child1">
+            <h3>Now</h3>
+            <div class="song-title-queue">
+              <div class="songtitle-queue">
+                <h4>123 - Lorem ipsum dolor sit -</h4>
+                <h6>Lorem, ipsum</h6>
+              </div>
+              <h5 class="songdetail-queue">1984 - lorem - 7:14</h5>
+            </div>
+          </div>
+          <div class="nav-child2">
+            <h3>Next</h3>
+            <div class="song-title-queue">
+              <div class="songtitle-queue">
+                <h4>123 - Lorem ipsum dolor sit -</h4>
+                <h6>Lorem, ipsum</h6>
+              </div>
+              <h5 class="songdetail-queue">1984 - lorem - 7:14</h5>
+            </div>
+          </div>
+          
+        </nav>
+        <div class="verse-sec">
+          <div class="verse-sec-scroll">
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-section" id="mySection">
+        <div class="button">
+          <i class="fa-solid fa-circle fa-3x" id="moveButton"></i>
+        </div>
+        <div class="nav">
+          <select class="dropdown">
+            <option value="option1">opt 1</option>
+            <option value="option2">opt 2</option>
+            <option value="option3">opt 3</option>
+          </select>
+          <div class="search-container">
+            <button class="search-button">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <div class="search-bar">
+              <input type="text" placeholder="Search..." />
+              <button class="search-submit">Submit</button>
+            </div>
+          </div>
+        </div>
+        <div class="songlist">
+          <div class="sub-songlist">
+            <!-- dummy -->
+
+            <div class="song-dummy">
+              <h3>12</h3>
+              <div class="song-title-queue">
+                <div class="songtitle-queue">
+                  <h4>123 - Lorem ipsum dolor sit -</h4>
+                  <h6>Lorem, ipsum</h6>
+                </div>
+                <h5 class="songdetail-queue">1984 - lorem - 7:14</h5>
+              </div>
+            </div>
+            <div class="song-dummy">
+              <h3>12</h3>
+              <div class="song-title-queue">
+                <div class="songtitle-queue">
+                  <h4>123 - Lorem ipsum dolor sit -</h4>
+                  <h6>Lorem, ipsum</h6>
+                </div>
+                <h5 class="songdetail-queue">1984 - lorem - 7:14</h5>
+              </div>
+            </div>
+
+            <!-- dummy -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -3,7 +3,7 @@ from django.conf import settings
 
 
 class Customer(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     phone_number = models.CharField(max_length=200, null=True, blank=True)
 
@@ -43,14 +43,15 @@ class BandSongsList(models.Model):
         return self.band_leader.name + ' - ' + self.song_name
 
 class CustomerRequest(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  
+    customer_name = models.CharField(max_length=200, null=True, blank=True) 
     song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     song_decicated_to = models.CharField(max_length=200, null=True, blank=True)
-    song_decicated_by = models.CharField(max_length=200, null=True, blank=True)
+    is_approved = models.BooleanField(default=False)
+    status = models.CharField(max_length=200, null=True, blank=True)
 
 
     def __str__(self):
-        return self.customer.name + ' - ' + self.song.song_name
+        return self.customer_name + ' - ' + self.song.song_name
 
 class SongsSet(models.Model):
     band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
@@ -60,12 +61,12 @@ class SongsSet(models.Model):
         return self.band_leader.name + ' - ' + self.song.song_name
 
 class LikedBandSongsList(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     liked = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.customer.name + ' - ' + self.band_song.song_name
+        return self.band_song.song_name
     
 class Sets(models.Model):
     Setname = models.CharField(max_length=200)
@@ -74,8 +75,19 @@ class Sets(models.Model):
         return self.Setname
 
 class SongsInSet(models.Model):
+    number = models.CharField(max_length=200, null=True, blank=True)
     song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     set = models.ForeignKey(Sets, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.song.song_name + ' - ' + self.set.Setname
+    
+class Playlist(models.Model):
+    SongsInSet = models.ForeignKey(SongsInSet, on_delete=models.CASCADE, null=True, blank=True)
+    status = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.SongsInSet.number + ' - ' + self.SongsInSet.song.song_name + ' - ' + self.SongsInSet.set.Setname
+
+class ShowStatus(models.Model):
+    has_show_started = models.BooleanField(default=False)

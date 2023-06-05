@@ -35,24 +35,19 @@ const SongList: React.FC = () => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [displaynow, setdDisplayNow] = useState<boolean | null> (true);
     const [search, setSearch] = useState<string>("");
+    const [likedtiming, setLikedTiming] = useState<boolean>(false);
 
     useEffect(() => {
-        let URL = `http://localhost:8000/songslist?view=likes`;
+        let URL = `http://localhost:8000/customersongslist?view=likes`;
     
-        axios.get(URL, {
-          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-        })
+        axios.get(URL)
             .then(res => {
-              // check if the status code is 401
-              if(res.data.status === 401){
-                window.location.href = '/login';
-              }
               console.log(res.data)
               setdDisplayNow(true)
               setSongs(res.data.band_songs);
 
             })
-            .catch(err => {if(err.response.status === 401){ window.location.href = '/login'; console.log(err) } else {console.log(err)}})
+            .catch(err => {console.log(err) })
       }, []);
 
       const handleCurrentSong = (song: CurrentSong, index: number) => {
@@ -82,11 +77,9 @@ const SongList: React.FC = () => {
       }
 
       const handleSorting = (sort: string) =>{
-        let URL = `http://localhost:8000/songslist?sort=${sort}`;
+        let URL = `http://localhost:8000/customersongslist?sort=${sort}`;
     
-        axios.get(URL, {
-          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-        })
+        axios.get(URL)
             .then(res => {
               console.log(res.data)
               setSongs(res.data.band_songs);
@@ -96,28 +89,42 @@ const SongList: React.FC = () => {
 
 
       const handleLike = (id: number) =>{
+        const alert = document.querySelector('.alert-box') as HTMLDivElement;
+        const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
+
+        if (likedtiming){
+          alertMessage.textContent = "You have already liked the song"
+          alert.style.display = "block"; 
+          
+          setTimeout(function() {
+            alert.style.display = 'none';
+          }, 2000);
+
+          return;
+        }
+        
         let URL = `http://localhost:8000/likedbandsongslist`;
     
         const data = {
             "song_id": id,
         }
 
-        axios.post(URL, data, {
-            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-        })
+        axios.post(URL, data)
             .then(res => {
               console.log(res.data)
-              const alert = document.querySelector('.alert-box') as HTMLDivElement;
-              alert.style.display = "block";
-              if (res.data.error){
-                const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
-                alertMessage.textContent = res.data.error;
-              }
-              else{
-                const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
-                alertMessage.textContent = res.data.success;
-                handleRefresh(id);
-              }
+              alertMessage.textContent = res.data.success;
+              alert.style.display = "block";  
+              handleRefresh(id);
+              setLikedTiming(true);
+
+              setTimeout(function() {
+                alert.style.display = 'none';
+              }, 2000);
+
+              setTimeout(function() {
+                setLikedTiming(false);
+              }, 1000 * 10);
+              
             })
             .catch(err => console.log(err))
       }
@@ -127,23 +134,26 @@ const SongList: React.FC = () => {
 
         const data = {
             "song_id": currentSong?.id,
+            'customer_name': "Steve"
         }
 
-        axios.post(URL, data, {
-            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-          })
+        axios.post(URL, data)
               .then(res => {
-                console.log(res.data)
                 const alert = document.querySelector('.alert-box') as HTMLDivElement;
+                const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
                 alert.style.display = "block";
                 if (res.data.error){
-                  const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
                   alertMessage.textContent = res.data.error;
                 }
                 else{
                   const alertMessage = document.querySelector('.alert-message') as HTMLParagraphElement;
                   alertMessage.textContent = res.data.success;
                 }
+
+                setTimeout(function() {
+                  alert.style.display = 'none';
+                }, 2000);
+
               })
               .catch(err => console.log(err))
     }
@@ -163,17 +173,11 @@ const SongList: React.FC = () => {
       .catch(err => console.log(err))
     }
 
-    const handleAlertClose = () => {
-      const alert = document.querySelector('.alert-box') as HTMLDivElement;
-      alert.style.display = "none";
-    }
-
       return (
         <div>
           <Sidenav />
             <div className="alert-box green">
                 <p className='alert-message'></p>
-                <span onClick={handleAlertClose} className="close-btn">&times;</span>
             </div>
            <div className="customer-main">
             {/* <!-- Player Section --> */}
