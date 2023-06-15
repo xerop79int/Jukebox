@@ -10,5 +10,13 @@ admin.site.register(BandSongsList)
 admin.site.register(LikedBandSongsList)
 admin.site.register(SongsSet)
 admin.site.register(Sets)
-admin.site.register(SongsInSet)
-admin.site.register(Playlist)
+# admin.site.register(SongsInSet)
+# admin.site.register(Playlist)
+
+@admin.register(SongsInSet)
+class SongsInSet(admin.ModelAdmin):
+    ordering = ['number']
+
+@admin.register(Playlist)
+class Playlist(admin.ModelAdmin):
+    ordering = ['SongsInSet__number']

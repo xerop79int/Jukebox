@@ -75,19 +75,19 @@ class Sets(models.Model):
         return self.Setname
 
 class SongsInSet(models.Model):
-    number = models.CharField(max_length=200, null=True, blank=True)
+    number = models.IntegerField(null=True, blank=True)
     song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     set = models.ForeignKey(Sets, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.song.song_name + ' - ' + self.set.Setname
+        return str(self.number) + ' - ' + self.song.song_name + ' - ' + self.set.Setname
     
 class Playlist(models.Model):
     SongsInSet = models.ForeignKey(SongsInSet, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
-        return self.SongsInSet.number + ' - ' + self.SongsInSet.song.song_name + ' - ' + self.SongsInSet.set.Setname
+        return str(self.SongsInSet.number) + ' - ' + self.SongsInSet.song.song_name + ' - ' + self.SongsInSet.set.Setname
 
 class ShowStatus(models.Model):
     has_show_started = models.BooleanField(default=False)

@@ -6,7 +6,7 @@ import NowPlaying from './Components/Customer/NowPlaying';
 import BandLeaderDashboard from './Components/Bandleader/BandLeaderDashboard';
 import Upload from './Components/Bandleader/Upload';
 // import Customer from './Components/Customer/Customer';
-// import CustomerRequest from './Components/Customer/CustomerRequest';
+import CustomerRequest from './Components/Customer/CustomerRequest';
 // import CustomerRequestedSongs from './Components/Customer/CustomerRequestedSongs';
 // import AllCustomersRequests from './Components/Customer/AllCustomersRequests';
 // import DisplaySongsList from './Components/Customer/DisplaySongsList';
@@ -26,8 +26,8 @@ function App() {
         <Route path='/upload' element={<Upload />} />
         { customer ? <Route path='/' element={<NowPlaying />} /> : null }
         { bandleader ? <Route path='/bandleader' element={<BandLeaderDashboard />} /> : null }
-        {/* <Route path='/request' element={<CustomerRequest />} />
-        <Route path='/requested' element={<CustomerRequestedSongs />} />
+        <Route path='/request' element={<CustomerRequest />} /> 
+        {/* <Route path='/requested' element={<CustomerRequestedSongs />} />
         <Route path='/allrequests' element={<AllCustomersRequests />} />
         <Route path='/allsongs' element={<DisplaySongsList />} />
         <Route path='/likes' element={<DisplayLikesCount />} /> */}

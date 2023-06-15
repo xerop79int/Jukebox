@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './BandLeaderDashboard.css';
 import axios from 'axios';
+import { m } from 'framer-motion';
 
 interface Song {
     id: number;
@@ -20,21 +21,15 @@ interface Sets {
 }
 
 interface SongRequest{
-    customer_name: string;
-    song_name: string;
-    song_artist: string;
-    song_durations: string;
+  customer_name: string;
+  song_number: number;
+  song_name: string;
+  song_artist: string;
+  song_durations: string;
+  id: number;
 }
+// Create a queue to store the requests
 
-// interface CurrentSong {
-//     id: number;
-//     song_name: string;
-//     song_artist: string;
-//     song_genre: string;
-//     count: number;
-//     song_number: number;
-//     song_durations: string;
-// }
 
 const SongList: React.FC = () => {
 
@@ -42,14 +37,18 @@ const SongList: React.FC = () => {
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
   const [search, setSearch] = useState<string>("");
-  const [SongsSet, setSetSongs] = useState<Song[]>([]);
+  // const [SongsSet, setSetSongs] = useState<Song[]>([]);
   const [Sets, setSets] = useState<Sets[]>([]);
   const [currentSet, setCurrentSet] = useState<number>(0);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
   const [SongRequestid, setSongRequestid] = useState<number>(0);
-  const [playlist, setPlaylist] = useState<Song[]>([]);
-  const [nowSong, setNowSong] = useState<Song[]>([]);
-  const [nextSong, setNextSong] = useState<Song[]>([]);
+  const [nowSong, setNowSong] = useState<Song>();
+  const [nextSong, setNextSong] = useState<Song>();
+
+  const [movesong, setMovesong] = useState<number>(0);
+
+  const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
+  const socket = new WebSocket('ws://localhost:8000/ws/bandleadercustomerrequests/');
 
   const [lyric, setLyric]= useState<string>( 
   `
@@ -190,13 +189,14 @@ I'll be gone 50@  miles when the day  is done
   
 
   const handlestyling = () => {
-    // const lyricsArray = lyric.split('\n');
-    // lyricsArray.map((line) => {
-    //   if(line.includes("   "))
-    //   {
-    //     console.log(line)
-    //   }
-    // })
+    const lyricsArray = lyric.split('\n');
+    lyricsArray.map((line) => {
+      if(line.includes("   "))
+      {
+        console.log(line)
+      }
+    })
+    
     // lyric.replaceAll('G', "<span className='alphabet'> G </span>")
     // let updatedlyric= lyric.replaceAll('A', '<span style="color: #00468b">A</span>')
     // updatedlyric= lyric.replaceAll('A ', '<span style="color: #00468b">A </span>')
@@ -219,6 +219,18 @@ I'll be gone 50@  miles when the day  is done
     setLyric(updatedlyric)
   }
 
+  const handleGetSets = () => {
+    const URL = `http://localhost:8000/sets`
+
+    axios.get(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      setSets(res.data.sets);
+    })
+    .catch(err => console.log(err))
+  }
+
   useEffect(() => {
     let URL = `http://localhost:8000/songslist?view=likes`;
 
@@ -232,7 +244,6 @@ I'll be gone 50@  miles when the day  is done
           if(res.data.status === 401){
             window.location.href = '/login';
           }
-          console.log(res.data)
           setSongs(res.data.band_songs);
 
         })
@@ -240,6 +251,16 @@ I'll be gone 50@  miles when the day  is done
 
         handleGetSets()
         handleGettingPlaylist()
+
+
+        socket.onopen = function(e) {
+          console.log("[open] Connection established");
+          // Perform actions after the WebSocket connection is established
+          // For example, send an initial request
+          socket.send('WebSocket connection established');
+        };
+
+
   }, []);
 
   const handleGettingPlaylist = () => {
@@ -249,7 +270,6 @@ I'll be gone 50@  miles when the day  is done
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
         .then(res => {
-          console.log(res.data.playlist[0])
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
 
@@ -257,32 +277,50 @@ I'll be gone 50@  miles when the day  is done
         .catch(err => {console.log(err)})
   }
 
-  const socket = new WebSocket('ws://localhost:8000/ws/bandleadercustomerrequests/');
 
-  socket.onopen = function(e) {
-    console.log('WebSocket connection established');
-
-    socket.send('WebSocket connection established');
-  };
-
-  socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
+  const processRequest = (currentRequest: any) => {
+  
+    // Display the request data on the frontend
     const name = document.querySelector('.customer-name') as HTMLInputElement;
-    name.textContent = " " + data.customer_name;
-
+    name.textContent = " " + currentRequest.customer_name;
+  
     const song_number_name = document.querySelector('.number-song-name') as HTMLInputElement;
-    song_number_name.textContent = " " + data.song_number + " - " + data.song_name + " - ";
-    
+    song_number_name.textContent = " " + currentRequest.song_number + " - " + currentRequest.song_name + " - ";
+  
     const artist = document.querySelector('.artist-durations') as HTMLInputElement;
-    artist.textContent = " " + data.song_artist + " - " + data.song_durations;
-    
+    artist.textContent = " " + currentRequest.song_artist + " - " + currentRequest.song_duration;
+  
     const popup = document.querySelector('#popup') as HTMLInputElement;
     popup.style.right = '0px';
     popup.style.display = 'flex';
-
-    setSongRequestid(data.id);
+  
+    setSongRequestid(currentRequest.id);
+  
+    // Process the request by sending the response
+    // ...
+  
+    // Remove the processed request from the queue
+    
   };
 
+  useEffect(() => {
+    if(requestQueue.length !== 0){
+      const currentRequest = requestQueue[0];
+      processRequest(currentRequest);
+    }
+  }, [requestQueue]);
+  
+
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data); 
+      console.log(data)
+      setRequestQueue([data]);
+    };
+  
+  
+  // if (requestQueue.length === 0) {
+  //   processRequest();
+  // }
   const handleSearch = () => {
     const URL = `http://localhost:8000/songslist?search=${search}`
     axios.get(URL, {
@@ -338,9 +376,20 @@ I'll be gone 50@  miles when the day  is done
       handleGettingSongsInSet(id);
 
       setOption(e.target.value);
-    }
+
+      const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
+      updown_arrow.style.position = 'absolute';
+      const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
+      songlist.style.alignItems = 'flex-start';
+      songlist.style.padding = '0 2rem';
+    } 
     else{
       setOption(e.target.value);
+      const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
+      updown_arrow.style.position = '';
+      const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
+      songlist.style.alignItems = 'center';
+      songlist.style.padding = '';
     }
 
     
@@ -392,18 +441,7 @@ I'll be gone 50@  miles when the day  is done
   
   }
 
-  const handleGetSets = () => {
-    const URL = `http://localhost:8000/sets`
-
-    axios.get(URL, {
-      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-    })
-    .then(res => {
-      console.log(res.data)
-      setSets(res.data.sets);
-    })
-    .catch(err => console.log(err))
-  }
+ 
 
   const handleEditSet = (id: number) => {
     setOption('editset');
@@ -450,8 +488,18 @@ I'll be gone 50@  miles when the day  is done
     })
     .then(res => {
       console.log(res.data)
+      if (requestQueue.length !== 0) {
       const popup = document.querySelector('#popup') as HTMLInputElement;
       popup.style.right = '-350px';
+      setRequestQueue(prevQueue => prevQueue.slice(1));
+      // const currentRequest = requestQueue[0];
+      // processRequest(currentRequest);
+      }
+      else{
+        
+      }
+
+      
       
     })
     .catch(err => console.log(err))
@@ -476,9 +524,6 @@ I'll be gone 50@  miles when the day  is done
     }
 
 
-    // window.location.reload();
-
-
   }
 
   const handleScrolledToTop = () => {
@@ -499,6 +544,47 @@ I'll be gone 50@  miles when the day  is done
     })
     .then(res => {
       console.log(res.data)
+      handleGettingPlaylist()
+    }
+    )
+    .catch(err => console.log(err))
+  }
+
+  const handleSelectedSongForMovement = (id: number) => {
+    setMovesong(id);
+    const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+    const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+    alertMessage.innerHTML = "Song Selected"
+    alert.style.display = "block";
+
+    setTimeout(function() {
+      alert.style.display = 'none';
+    }, 2000);
+  }
+
+  const handlemovement = (movement: string) => {
+    let place = 0;
+    if( movement === 'up'){
+      place = 4;
+    }
+    else if(movement === 'down'){
+      place = 5;
+    }
+
+    const URL = `http://localhost:8000/songsinset`
+
+    const data = {
+      "request_id": movesong,
+      "place": place
+    }
+
+    axios.put(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      const id = parseInt(option.split(' ')[1]);
+      handleGettingSongsInSet(id)
     }
     )
     .catch(err => console.log(err))
@@ -568,26 +654,31 @@ I'll be gone 50@  miles when the day  is done
           <i className="fa-solid fa-4 fa-2x"></i>
         </div>
         <nav>
+          { nowSong ? (
           <div className="bandleader-nav-child1">
             <h3>Now</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
-                <h4>{nowSong.number} - Lorem ipsum dolor sit -</h4>
-                <h6>Lorem, ipsum</h6>
+                <h4>{nowSong?.number} - {nowSong?.song_name} -</h4>
+                <p style={{textTransform: 'capitalize'}}>{nowSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue">1984 - lorem - 7:14</h5>
+              <h5 className="bandleader-songdetail-queue"> 1984 - {nowSong?.song_genre} - {nowSong?.song_durations}</h5>
             </div>
           </div>
+          ): null}
+
+          { nextSong ? (
           <div className="bandleader-nav-child2">
             <h3>Next</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
-                <h4>123 - Lorem ipsum dolor sit -</h4>
-                <h6>Lorem, ipsum</h6>
+                <h4>{nextSong?.number} - {nextSong?.song_name} -</h4>
+                <p style={{textTransform: 'capitalize'}}>{nextSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue">1984 - lorem - 7:14</h5>
+              <h5 className="bandleader-songdetail-queue">1984 - {nextSong?.song_genre} - {nextSong?.song_durations}</h5>
             </div>
           </div>
+          ): null}
         </nav>
         <div className="bandleader-verse-sec">
           <div className="bandleader-verse-sec-scroll">
@@ -598,7 +689,15 @@ I'll be gone 50@  miles when the day  is done
         </div>
       </div>
 
-      <div className="bandleader-slider-section" id="mySection">
+      <div className="bandleader-slider-section bandleader-right-position" id="mySection">
+      <div className="bandleader-buttons-updown arrowww">
+          <div className="bandleader-uparrow" onClick={e => handlemovement('up')}>
+            <i className="fa-solid fa-arrow-up fa-3x"></i>
+          </div>
+          <div className="bandleader-downarrow arrowww" onClick={e => handlemovement('down')}>
+            <i className="fa-solid fa-arrow-down fa-3x"></i>
+          </div>
+        </div>
         <div className="bandleader-button" onClick={handleToggle}>
           <i className="fa-solid fa-circle fa-3x" id="moveButton"></i>
         </div>
@@ -608,7 +707,7 @@ I'll be gone 50@  miles when the day  is done
             <option value='search'>Search</option>
             <option value="editset">Edit Set</option>
             {  Sets.map((set, index) => ( 
-            <option value={`Set ` + set.id}>{set.set_name}</option>
+            <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
             ))}
           </select>
 
@@ -731,7 +830,7 @@ I'll be gone 50@  miles when the day  is done
 
              { option.includes('Set') ? 
              selectedSetSongs.map((song: Song) => (
-              <div key={song.id} className="bandleader-song-dummy">
+              <div key={song.id} className="bandleader-song-dummy" onClick={e => handleSelectedSongForMovement(song.id)}>
               <h3>{song.number}</h3>
               <div className="bandleader-song-title-queue">
                 <div className="bandleader-songtitle-queue">
@@ -784,120 +883,6 @@ I'll be gone 50@  miles when the day  is done
     </div>
   )
 
-    // return (
-    //     <div className="main">
-    //     <div className="sub-main">
-    //       <nav>
-    //         <div className="nav-child1">
-    //           <h3>Now</h3>
-    //           <div className="band-song-title-queue">
-    //             <div className="songtitle-queue">
-    //               <h4>123 - Lorem ipsum dolor sit - </h4>
-    //               <p>Lorem, ipsum</p>
-    //             </div>
-    //             <p className="songdetail-queue"> 1984 - in C - 120 - 7:14</p>
-    //           </div>
-    //         </div>
-    //         <div className="nav-child2">
-    //           <h3>Next</h3>
-    //           <div className="band-song-title-queue">
-    //             <div className="songtitle-queue">
-    //               <h4>123 - Lorem ipsum dolor sit - </h4>
-    //               <p>Lorem, ipsum - </p>
-    //             </div>
-    //             <p className="songdetail-queue"> 1984 - in A - 80 - 7:14</p>
-    //           </div>
-    //         </div>
-    //       </nav>
-    //       <div className="verse-sec">
-    //         <div className="verse-sec-scroll">
-              
-    //         </div>
-    //       </div>
-    //     </div>
-  
-    //     <div className="slider-section" id="mySection">
-    //       <div className="button" onClick={handleToggle}>
-    //         <i className="fa-solid fa-circle fa-3x" id="moveButton"></i>
-    //       </div>
-    //       <div className="nav">
-    //         <select className="dropdown" value={option} onChange={handleOptions}>
-    //           <option value="queue">Queue</option>
-    //           <option value='search'>Search</option>
-    //           <option value="set">Set</option>
-    //           <option value="option3">opt 3</option>
-    //         </select>
-    //         <div className="search-container">
-    //           <button className="search-button">
-    //             <i className="fa-solid fa-magnifying-glass"></i>
-    //           </button>
-    //           <div className="search-bar">
-    //             <input className='search' type="text" onChange={e => setSearch(e.target.value)} placeholder="Search..." />
-    //             <button onClick={handleSearch} className="search-submit">Submit</button>
-    //           </div>
-    //         </div>
-    //       </div>
-    //       <div className="songlist">
-    //         <div className="sub-songlist">
-    //           {/* <!-- dummy --> */}
-    //           { option === 'queue' ?
-    //           songs.map((song: Song) => (
-    //           <div className="song-dummy" key={song.id} onClick={e => handleSet(song.id)}>
-    //             <h3>{song.song_number}</h3>
-    //             <div className="band-song-title-queue">
-    //               <div className="songtitle-queue">
-    //                 <h4>{song.song_number} - {song.song_name} - </h4>
-    //                 <p> {song.song_artist} - </p>
-    //               </div>
-    //               <p className="songdetail-queue"> 1984 - {song.song_genre} - {song.song_durations}</p>
-    //             </div>
-    //             <p style={{alignItems: "flex-end"}}></p>
-    //           </div>
-    //           ))
-    //           :
-    //           null}
-
-    //           { option === 'search' ?
-    //           searchedSongs.map((song: Song) => (
-    //           <div className="song-dummy" key={song.id}>
-    //             <h3>{song.id}</h3>
-    //             <div className="band-song-title-queue">
-    //               <div className="songtitle-queue">
-    //                 <h4>{song.song_number} - {song.song_name} - </h4>
-    //                 <p> {song.song_artist} - </p>
-    //               </div>
-    //               <p className="songdetail-queue"> 1984 - {song.song_genre} - {song.song_durations}</p>
-    //             </div>
-    //           </div>
-    //           ))
-    //           :
-    //           null}
-
-    //           { option === 'set' ?
-    //           SongsSet.map((song: Song) => (
-    //             <div className="song-dummy" key={song.id}>
-    //               <h3>{song.id}</h3>
-    //               <div className="band-song-title-queue">
-    //                 <div className="songtitle-queue">
-    //                   <h4>{song.song_number} - {song.song_name} - </h4>
-    //                   <p> {song.song_artist} - </p>
-    //                 </div>
-    //                 <p className="songdetail-queue"> 1984 - {song.song_genre} - {song.song_durations}</p>
-    //               </div>
-    //             </div>
-    //           ))
-    //           :
-    //           null}
-  
-    //           {/* <!-- dummy --> */}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-
-
-
-    // )
 }
 
 export default SongList;

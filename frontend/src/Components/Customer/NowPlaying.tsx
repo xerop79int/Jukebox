@@ -28,27 +28,124 @@ interface CurrentSong {
     song_year: string;
 }
 
+interface SongResponse{
+  id: number;
+  customer_name: string;
+  song_artist: string;
+  song_durations: string;
+  song_number: number;
+  song_name: string;
+  is_approved: boolean;
+  status: string;
+}
+
 const SongList: React.FC = () => {
 
     const [songs, setSongs] = useState<Song[]>([]);
-    const [currentSong, setCurrentSong] = useState<CurrentSong>();
+    const [currentSong, setCurrentSong] = useState<CurrentSong | null>();
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const [displaynow, setdDisplayNow] = useState<boolean | null> (true);
     const [search, setSearch] = useState<string>("");
     const [likedtiming, setLikedTiming] = useState<boolean>(false);
+    const [nowSong, setNowSong] = useState<Song>();
+    const [nextSong, setNextSong] = useState<Song>();
+    const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);
+
+    const socket = new WebSocket('ws://localhost:8000/ws/customerrequestsresponse/');
 
     useEffect(() => {
         let URL = `http://localhost:8000/customersongslist?view=likes`;
     
+        const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
             .then(res => {
               console.log(res.data)
-              setdDisplayNow(true)
               setSongs(res.data.band_songs);
-
+              if(!checknowplaylistsong){
+                setdDisplayNow(true)
+                handleCurrentSong(res.data.band_songs[0], res.data.band_songs[0].id);
+              }
             })
             .catch(err => {console.log(err) })
+
+
+            
+
+            socket.onopen = () => {
+              console.log('connected to websocket');
+              socket.send("Websocket is connected");
+            };
+        
       }, []);
+
+      const processRequest = (currentRequest: any) => {
+
+        const container = document.querySelector("#nowPlayingPopup") as HTMLInputElement;
+        container.style.right = "0px"
+  
+        // Display the request data on the frontend
+        const name = document.querySelector('.customer-name') as HTMLInputElement;
+        name.textContent = " " + currentRequest.customer_name;
+      
+        const song_number_name = document.querySelector('.number-song-name') as HTMLInputElement;
+        song_number_name.textContent = " " + currentRequest.song_number + " - " + currentRequest.song_name + " - ";
+      
+        const artist = document.querySelector('.artist-durations') as HTMLInputElement;
+        artist.textContent = " " + currentRequest.song_artist + " - " + currentRequest.song_duration;
+      
+        const box = document.querySelector('.nowplaying-pop-up-green') as HTMLInputElement;
+        box.textContent = currentRequest.status
+        if (currentRequest.is_approved){
+          box.style.background = "rgba(62, 249, 5, 0.581)"
+        }
+
+
+        setTimeout(function() {
+          setResponseQueue(prevQueue => prevQueue.slice(1));
+          container.style.right = "-350px"
+        }, 2000);
+        
+      };
+
+      useEffect(() => {
+        if(responseQueue.length !== 0){
+          const currentResponse = responseQueue[0];
+          processRequest(currentResponse);
+        }
+      }, [responseQueue]);
+
+      socket.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        if(data.playlist){
+          setCurrentSong(data.playlist[0])
+          setNowSong(data.playlist[0])
+          setNextSong(data.playlist[1])
+        }
+        else{
+          setResponseQueue([data]);
+        }
+        // setRequestQueue([data]);
+      };
+
+      const handleGettingPlaylist = () : Promise<boolean> => {
+        let URL = `http://localhost:8000/playlist`;
+    
+        return axios.get(URL, {
+          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+            .then(res => {
+              setCurrentSong(res.data.playlist[0])
+              setNowSong(res.data.playlist[0])
+              setNextSong(res.data.playlist[1])
+              return true
+  
+            })
+            .catch(err => {
+              console.log(err)
+              return false
+            }) as Promise<boolean>
+
+      };
 
       const handleCurrentSong = (song: CurrentSong, index: number) => {
         setCurrentSong(song);
@@ -179,6 +276,28 @@ const SongList: React.FC = () => {
             <div className="alert-box green">
                 <p className='alert-message'></p>
             </div>
+
+            <div id="nowPlayingPopup" className="">
+              <div className="nowplaying-pp-text">
+                <div className="text-upper" >
+                  <div className="t1">
+                    New Request From
+                  </div>
+                  <div className="customer-name t2">
+                  </div>
+                </div>
+                <div className="text-lower" >
+                  <div className="number-song-name t1">
+                  </div>
+                  <div className=" artist-durations t2">
+                  </div>
+                </div>
+              </div>
+              <button className="nowplaying-pop-up-green">
+                <p><span>Declined</span> Sorry We Already Played This One!</p>
+              </button>
+            </div>
+
            <div className="customer-main">
             {/* <!-- Player Section --> */}
             <div className="customer-player">
@@ -192,7 +311,7 @@ const SongList: React.FC = () => {
               </div>
               { displaynow ? (
                 <div className="icons" style={{height: "150px", marginTop: "20px"}}>
-                <div className="like-icon icon" onClick={e => handleLike(currentSong?.id)}>
+                <div className="like-icon icon" onClick={e => currentSong?.id && handleLike(currentSong?.id)}>
                   <i className="fa-solid fa-thumbs-up fa-2x like-btn"></i>
                 </div>
                 <div className="tip-icon icon">
@@ -203,7 +322,7 @@ const SongList: React.FC = () => {
               </div>
               ) : (
               <div className="icons">
-                <div onClick={e => handleLike(currentSong?.id)} className="like-icon icon">
+                <div onClick={e => currentSong?.id && handleLike(currentSong?.id)} className="like-icon icon">
                   <i className="fa-solid fa-thumbs-up fa-2x like-btn"></i>
                 </div>
                 <div className="play-icon icon" onClick={handleSubmit}>
@@ -242,6 +361,8 @@ const SongList: React.FC = () => {
                   <h5> 1566</h5>
                 </div>
               </div>
+
+              { nextSong ? (
               <div className="player-queue">
                 <div className="p-queue-box">
                   <div className="heading">
@@ -252,26 +373,27 @@ const SongList: React.FC = () => {
                   <div className="song-queue">
                     <div className="song-img">
                       <img
-                        src="https://picsum.photos/id/234/250/300"
+                        src={nextSong.img}
                         alt="song-img"
                         className="song-image"
                       />
                     </div>
                     <div className="song-title-queue">
                       <div className="songtitle-queue">
-                        <h3>123 - Lorem ipsum dolor sit -</h3>
+                        <h3>{nextSong.song_number} - {nextSong.song_name} -</h3>
                         <h5>
-                          Lorem, ipsum
+                          {nextSong.song_artist}
                         </h5>
                       </div>
                       <div className="songdetail-queue">
-                        1984 - lorem - 7:14
+                        {nextSong.song_year} - {nextSong.song_genre} - {nextSong.song_durations}
                       </div>
                     </div>
                   </div>
                   {/* <!-- Dummy Song for Queue --> */}
                 </div>
               </div>
+              ) : null}
             </div>
 
 

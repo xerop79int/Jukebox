@@ -1,6 +1,6 @@
 const mainButton = document.getElementById('mainButton');
 const closeButton = document.getElementById('closeButton');
-const popup = document.getElementById('popup');
+const popup = document.getElementById('nowPlayingPopup');
 
 mainButton.addEventListener('click', () => {
   popup.style.right = '0px';

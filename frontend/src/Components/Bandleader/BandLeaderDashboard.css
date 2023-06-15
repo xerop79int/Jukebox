@@ -428,6 +428,10 @@
     padding-top: 10px;
     padding-bottom: 10px;
   }
+  .bandleader-songdetail-queue{
+    display: inline-flex;
+    margin-left: 0.2rem;
+  }
   .bandleader-nav-child1 h3 {
     color: whitesmoke;
     margin-right: 10px;
@@ -723,6 +727,7 @@
     border: 1px solid white;
     border-radius: 5px;
     margin: 10px;
+    margin-left: 0;
     color: #fff;
     padding-left: 10px;
     padding-right: 10px;
@@ -1212,8 +1217,7 @@
 }
 
 
-
-.bandleader-main-buttons{
+ .bandleader-main-buttons{
   position: absolute;
   width: 550px;
   height: 50px;
@@ -1238,3 +1242,36 @@
   opacity: 1;
   cursor: pointer;
 }
+
+
+
+.bandleader-buttons-updown{
+  /* display: none; */
+  /* position: absolute; */
+  height: 514px;
+  width: 10%;
+  right: 30px;
+  bottom: 0px;
+  background-color: transparent;
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.bandleader-buttons-updown i{
+  padding: 20px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border: white 1px solid;
+  border-radius: 10%;
+  color: white;
+}
+.bandleader-uparrow:hover{  
+  background-color: rgb(0, 0, 0);
+  border-radius: 10%;
+}
+.bandleader-downarrow:hover{  
+  border-radius: 10%;
+  background-color: rgb(0, 0, 0);
+} 
