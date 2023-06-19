@@ -47,7 +47,6 @@ const SongList: React.FC = () => {
     const [displaynow, setdDisplayNow] = useState<boolean | null> (true);
     const [search, setSearch] = useState<string>("");
     const [likedtiming, setLikedTiming] = useState<boolean>(false);
-    const [nowSong, setNowSong] = useState<Song>();
     const [nextSong, setNextSong] = useState<Song>();
     const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);
 
@@ -71,10 +70,7 @@ const SongList: React.FC = () => {
 
             
 
-            socket.onopen = () => {
-              console.log('connected to websocket');
-              socket.send("Websocket is connected");
-            };
+            
         
       }, []);
 
@@ -114,11 +110,15 @@ const SongList: React.FC = () => {
         }
       }, [responseQueue]);
 
+      socket.onopen = () => {
+        console.log('connected to websocket');
+        socket.send("Websocket is connected");
+      };
+
       socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
         if(data.playlist){
           setCurrentSong(data.playlist[0])
-          setNowSong(data.playlist[0])
           setNextSong(data.playlist[1])
         }
         else{
@@ -135,7 +135,7 @@ const SongList: React.FC = () => {
         })
             .then(res => {
               setCurrentSong(res.data.playlist[0])
-              setNowSong(res.data.playlist[0])
+              // setNowSong(res.data.playlist[0])
               setNextSong(res.data.playlist[1])
               return true
   

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './BandLeaderDashboard.css';
 import axios from 'axios';
-import { m } from 'framer-motion';
 
 interface Song {
     id: number;
@@ -189,34 +188,34 @@ I'll be gone 50@  miles when the day  is done
   
 
   const handlestyling = () => {
-    const lyricsArray = lyric.split('\n');
-    lyricsArray.map((line) => {
-      if(line.includes("   "))
-      {
-        console.log(line)
-      }
-    })
+
+    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA']
+    const styledWords = ['[Break]', 'Verse', 'Chorus'];
+
+    const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
+    const wordRegex = new RegExp(
+      `\\[(${styledWords.join('|')})\\]`,
+      'g'
+    );
+
+    let replacelyric = lyric.replace(regex, '<span class="styled-char">$&</span>');
+    replacelyric = replacelyric.replace(wordRegex, '<span class="styled-word">$&</span>');
+    replacelyric = replacelyric.replace(
+      /\[|\]/g,
+      ''
+    );
+    setLyric(replacelyric)
+
+
+
     
-    // lyric.replaceAll('G', "<span className='alphabet'> G </span>")
-    // let updatedlyric= lyric.replaceAll('A', '<span style="color: #00468b">A</span>')
-    // updatedlyric= lyric.replaceAll('A ', '<span style="color: #00468b">A </span>')
-    // updatedlyric = updatedlyric.replaceAll('Bm', '<span style="color: #00468b">Bm</span>')
-    // updatedlyric = updatedlyric.replaceAll('D', '<span style="color: #00468b">D</span>')
-    // // updatedlyric = updatedlyric.replaceAll('D ', '<span style="color: #00468b">D </span>')
-    // // updatedlyric = updatedlyric.replaceAll(' D', '<span style="color: #00468b"> D</span>')
-    // updatedlyric = updatedlyric.replaceAll(' G ', '<span style="color: #00468b"> G </span>')
-    // updatedlyric = updatedlyric.replaceAll('G ', '<span style="color: #00468b">G </span>')
-    // updatedlyric = updatedlyric.replaceAll('A7', '<span style="color: #00468b">A7</span>')
-    // updatedlyric = updatedlyric.replaceAll(' E ', '<span style="color: #00468b"> E </span>')
-    // updatedlyric = updatedlyric.replaceAll(' E7 ', '<span style="color: #00468b"> E7 </span>')
-    // updatedlyric = updatedlyric.replaceAll('E7', '<span style="color: #00468b">E7</span>')
-    // updatedlyric = updatedlyric.replaceAll(' C ', '<span style="color: #00468b"> C </span>')
-    // updatedlyric = updatedlyric.replaceAll('F#m', '<span style="color: #00468b">F#m</span>')
-    let updatedlyric = lyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
-    updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse</span>')
-    updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus</span>')
-    updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro</span>')
-    setLyric(updatedlyric)
+    
+    // let updatedlyric = lyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
+    // updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse</span>')
+    // updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus</span>')
+    // updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro</span>')
+    // setLyric(updatedlyric)
+
   }
 
   const handleGetSets = () => {
@@ -251,14 +250,6 @@ I'll be gone 50@  miles when the day  is done
 
         handleGetSets()
         handleGettingPlaylist()
-
-
-        socket.onopen = function(e) {
-          console.log("[open] Connection established");
-          // Perform actions after the WebSocket connection is established
-          // For example, send an initial request
-          socket.send('WebSocket connection established');
-        };
 
 
   }, []);
@@ -309,13 +300,21 @@ I'll be gone 50@  miles when the day  is done
       processRequest(currentRequest);
     }
   }, [requestQueue]);
+
+
+  socket.onopen = function(e) {
+    console.log("[open] Connection established");
+    // Perform actions after the WebSocket connection is established
+    // For example, send an initial request
+    socket.send('WebSocket connection established');
+  };
   
 
-    socket.onmessage = function(event) {
-      const data = JSON.parse(event.data); 
-      console.log(data)
-      setRequestQueue([data]);
-    };
+  socket.onmessage = function(event) {
+    const data = JSON.parse(event.data); 
+    console.log(data)
+    setRequestQueue([data]);
+  };
   
   
   // if (requestQueue.length === 0) {
@@ -405,7 +404,7 @@ I'll be gone 50@  miles when the day  is done
   const handleAdminBTN = () => {
     const adminDropDownContent = document.getElementById('bandleader-show') as HTMLElement;
     
-    if (adminDropDownContent.style.display == 'block'){
+    if (adminDropDownContent.style.display === 'block'){
       adminDropDownContent.style.display = 'none';
     }
     else{
@@ -766,6 +765,11 @@ I'll be gone 50@  miles when the day  is done
                     <a href="#">Delete</a>
                   </div>
                 </div>
+
+
+                <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
+                  <a href="/addsinglesong">Admin Portal</a>
+                </div>
               </div>
               
           </div>
@@ -806,7 +810,7 @@ I'll be gone 50@  miles when the day  is done
               :
               null}
             
-            { option === 'editset' && currentSet != 0 ?
+            { option === 'editset' && currentSet !== 0 ?
               songs.map((song: Song) => (
                 <div key={song.id} className="bandleader-song-dummy">
                 <h3>{song.song_number}</h3>
