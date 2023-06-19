@@ -380,7 +380,7 @@ I'll be gone 50@  miles when the day  is done
       setOption(e.target.value);
 
       const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
-      updown_arrow.style.position = 'absolute';
+      updown_arrow.style.right = '30px';
       const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
       songlist.style.alignItems = 'flex-start';
       songlist.style.padding = '0 2rem';
@@ -388,7 +388,7 @@ I'll be gone 50@  miles when the day  is done
     else{
       setOption(e.target.value);
       const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
-      updown_arrow.style.position = '';
+      updown_arrow.style.right = '-110px';
       const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
       songlist.style.alignItems = 'center';
       songlist.style.padding = '';

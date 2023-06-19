@@ -99,7 +99,7 @@ const SongList: React.FC = () => {
         setTimeout(function() {
           setResponseQueue(prevQueue => prevQueue.slice(1));
           container.style.right = "-350px"
-        }, 2000);
+        }, 5000);
         
       };
 
