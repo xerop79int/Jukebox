@@ -777,7 +777,10 @@ class ManagerPlaylistView(APIView):
                 'song_artist': now_song.song_artist,
                 'song_genre': now_song.song_genre,
                 'song_durations': now_song.song_durations,
-                'img': 'http://localhost:8000'+ str(now_song.song_cover.url)
+                'img': 'http://localhost:8000'+ str(now_song.song_cover.url),
+                'cortes': now_song.cortes,
+                'bpm': now_song.bpm,
+                'song_year': now_song.song_year,
             }
             data.append(now_data)
         
@@ -792,7 +795,10 @@ class ManagerPlaylistView(APIView):
                 'song_artist': next_song.song_artist,
                 'song_genre': next_song.song_genre,
                 'song_durations': next_song.song_durations,
-                'img': 'http://localhost:8000'+ str(next_song.song_cover.url)
+                'img': 'http://localhost:8000'+ str(next_song.song_cover.url),
+                'cortes': next_song.cortes,
+                'bpm': next_song.bpm,
+                'song_year': next_song.song_year,
             }
             data.append(next_data)
         

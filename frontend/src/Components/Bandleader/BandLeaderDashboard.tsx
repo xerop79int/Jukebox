@@ -12,6 +12,8 @@ interface Song {
     song_durations: string;
     song_year: string;
     number: number;
+    cortes: string;
+    bpm: string;
 }
 
 interface Sets {
@@ -261,6 +263,7 @@ I'll be gone 50@  miles when the day  is done
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
         .then(res => {
+          console.log(res.data)
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
 
@@ -661,7 +664,7 @@ I'll be gone 50@  miles when the day  is done
                 <h4>{nowSong?.number} - {nowSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nowSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue"> 1984 - {nowSong?.song_genre} - {nowSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue"> {nowSong.song_year} - {nowSong?.song_genre} - {nowSong.cortes} - {nowSong.bpm} - {nowSong?.song_durations}</h5>
             </div>
           </div>
           ): null}
@@ -674,7 +677,7 @@ I'll be gone 50@  miles when the day  is done
                 <h4>{nextSong?.number} - {nextSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nextSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue">1984 - {nextSong?.song_genre} - {nextSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue">{nextSong.song_year} - {nextSong?.song_genre} - {nextSong.cortes} - {nextSong.bpm} - {nextSong?.song_durations}</h5>
             </div>
           </div>
           ): null}
@@ -739,14 +742,14 @@ I'll be gone 50@  miles when the day  is done
                 </div>
                 
               
-                <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-2">
+                {/* <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-2">
                   <a href="#">Songs</a>
                   <div className="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-2">
                     <a href="#" className="bandleader-add-btn">Add</a>
                     <a href="#">Edit</a>
                     <a href="#">Delete</a>
                   </div>
-                </div>
+                </div> */}
               
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-3">
                   <a href="#">User Settings</a>

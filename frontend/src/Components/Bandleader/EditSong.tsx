@@ -26,6 +26,7 @@ const EditSong = () => {
                             Lorem ipsum dolor sit amet.
                         </p>
                         <button className="admin-display-song-dummy-button-1">Edit</button>
+                        <button className="admin-display-song-dummy-button-2">Delete</button>
                     </div>
                     
                     <div className="admin-display-song-list-dummy-1">
@@ -33,6 +34,7 @@ const EditSong = () => {
                             Lorem ipsum dolor sit amet.
                         </p>
                         <button className="admin-display-song-dummy-button-1">Edit</button>
+                        <button className="admin-display-song-dummy-button-2">Delete</button>
                     </div>
 
                     <div className="admin-display-song-list-dummy-1">
@@ -40,63 +42,10 @@ const EditSong = () => {
                             Lorem ipsum dolor sit amet.
                         </p>
                         <button className="admin-display-song-dummy-button-1">Edit</button>
+                        <button className="admin-display-song-dummy-button-2">Delete</button>
                     </div>
 
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
                     
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
-
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                    </div>
                     
                 </div>
             </div>
