@@ -64,7 +64,7 @@
     margin-top: 100px;
 }
 .admin-display-song-list-1{
-    width: 500px;
+    width: 1000px;
     height: 750px;
     background-color: #1c1c1c;
     margin: 20px;
@@ -82,6 +82,7 @@
     overflow-x: hidden;
     border-radius: 50px;
 }
+
 .admin-display-song-list-dummy-1{
     width: 90%;
     height: 60px;
@@ -109,6 +110,7 @@
    width: 50px;
    height: 40px;
    border-radius: 10px;
+   margin: 1.2rem;
    outline: none;
    border: none;
    font-weight: 700;

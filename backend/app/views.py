@@ -322,20 +322,69 @@ class ManagerBandSongsListView(APIView):
             band_leader = BandLeader.objects.get(user=req.user)
         except:
             return Response({'error': 'You are not a band leader.'})
+        song_number = req.data.get('song_number')
         song_name = req.data.get('song_name')
         song_artist = req.data.get('song_artist')
         song_genre = req.data.get('song_genre')
         song_durations = req.data.get('song_durations')
+        song_year = req.data.get('song_year')
+        song_cover = req.data.get('song_cover')
+        cortes = req.data.get('cortes')
+        bpm = req.data.get('bpm')
+        song_lyrics = req.data.get('song_lyrics')
 
-        band_song = BandSongsList(band=band_leader.band, song_name=song_name, song_artist=song_artist, song_genre=song_genre, song_durations=song_durations)
+        band_song = BandSongsList(band_leader=band_leader, song_name=song_name, song_number=song_number, song_artist=song_artist, song_genre=song_genre, song_durations=song_durations, song_year=song_year, song_cover=song_cover, cortes=cortes, bpm=bpm, song_lyrics=song_lyrics )
         band_song.save()
         return Response({'success': 'Song added successfully.'})
+
+    def put(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        song_id = req.data.get('song_id')
+        song_number = req.data.get('song_number')
+        song_name = req.data.get('song_name')
+        song_artist = req.data.get('song_artist')
+        song_genre = req.data.get('song_genre')
+        song_durations = req.data.get('song_durations')
+        song_year = req.data.get('song_year')
+        song_cover = req.data.get('song_cover')
+        cortes = req.data.get('cortes')
+        bpm = req.data.get('bpm')
+        song_lyrics = req.data.get('song_lyrics')
+
+        # if any of the fields are empty then keep the old data
+        band_song = BandSongsList.objects.get(id=song_id)
+        if song_name:
+            band_song.song_name = song_name
+        if song_number:
+            band_song.song_number = song_number
+        if song_artist:
+            band_song.song_artist = song_artist
+        if song_genre:
+            band_song.song_genre = song_genre
+        if song_durations:
+            band_song.song_durations = song_durations
+        if song_year:
+            band_song.song_year = song_year
+        if song_cover:
+            band_song.song_cover = song_cover
+        if cortes:
+            band_song.cortes = cortes
+        if bpm:
+            band_song.bpm = bpm
+        if song_lyrics:
+            band_song.song_lyrics = song_lyrics
+        band_song.save()
+        return Response({'success': 'Song updated successfully.'})
 
     def get(self, req):
         print(req.user)
         sort = req.GET.get('sort')
         view = req.GET.get('view')
         search = req.GET.get('search')
+        single = req.GET.get('single')
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
         elif sort == 'artist':
@@ -344,6 +393,23 @@ class ManagerBandSongsListView(APIView):
             band_songs = BandSongsList.objects.all().order_by('song_genre')
         else:
             band_songs = BandSongsList.objects.all()
+
+        if single:
+            band_song = BandSongsList.objects.get(id=single)
+            data = {
+                'id': band_song.id,
+                'song_number': band_song.song_number,
+                'song_name': band_song.song_name,
+                'song_artist': band_song.song_artist,
+                'song_genre': band_song.song_genre,
+                'song_durations': band_song.song_durations,
+                'song_year': band_song.song_year,
+                'cortes': band_song.cortes,
+                'bpm': band_song.bpm,
+                'song_lyrics': band_song.song_lyrics,
+                'img': 'http://localhost:8000'+ str(band_song.song_cover.url)
+            }
+            return Response({'band_song': data})
        
         if view == 'likes':
             data = []
@@ -717,47 +783,46 @@ class ManagerPlaylistView(APIView):
                     Playlist.objects.filter(status='next').update(status='')
                     Playlist.objects.filter(status='now').update(status='next')
                     Playlist.objects.filter(SongsInSet__number=now_number).update(status='now')
-        
-
-        # Send Now and next song to the customer frontend
-        data = []
-        if Playlist.objects.filter(status='now').exists():
-            now = Playlist.objects.get(status='now').SongsInSet
-            now_song = BandSongsList.objects.get(id=now.song.id)
-            now_data = {
-                'id': now_song.id,
-                'number': now.number,
-                'song_number': now_song.song_number,
-                'song_name': now_song.song_name,
-                'song_artist': now_song.song_artist,
-                'song_genre': now_song.song_genre,
-                'song_durations': now_song.song_durations,
-                'img': 'http://localhost:8000'+ str(now_song.song_cover.url)
-            }
-            data.append(now_data)
-        
-        if Playlist.objects.filter(status='next').exists():
-            next = Playlist.objects.get(status='next').SongsInSet
-            next_song = BandSongsList.objects.get(id=next.song.id)
-            next_data = {
-                'id': next_song.id,
-                'number': next.number,
-                'song_number': next_song.song_number,
-                'song_name': next_song.song_name,
-                'song_artist': next_song.song_artist,
-                'song_genre': next_song.song_genre,
-                'song_durations': next_song.song_durations,
-                'img': 'http://localhost:8000'+ str(next_song.song_cover.url)
-            }
-            data.append(next_data)
-        
-            # get the channel layer
-            channel_layer = get_channel_layer()
-            # send the data to the group
-            async_to_sync(channel_layer.group_send)('customer_frontend', {
-                'type': 'send_playlist',
-                'playlist': data
-            })
+        if movement == 'play':
+            # Send Now and next song to the customer frontend
+            data = []
+            if Playlist.objects.filter(status='now').exists():
+                now = Playlist.objects.get(status='now').SongsInSet
+                now_song = BandSongsList.objects.get(id=now.song.id)
+                now_data = {
+                    'id': now_song.id,
+                    'number': now.number,
+                    'song_number': now_song.song_number,
+                    'song_name': now_song.song_name,
+                    'song_artist': now_song.song_artist,
+                    'song_genre': now_song.song_genre,
+                    'song_durations': now_song.song_durations,
+                    'img': 'http://localhost:8000'+ str(now_song.song_cover.url)
+                }
+                data.append(now_data)
+            
+            if Playlist.objects.filter(status='next').exists():
+                next = Playlist.objects.get(status='next').SongsInSet
+                next_song = BandSongsList.objects.get(id=next.song.id)
+                next_data = {
+                    'id': next_song.id,
+                    'number': next.number,
+                    'song_number': next_song.song_number,
+                    'song_name': next_song.song_name,
+                    'song_artist': next_song.song_artist,
+                    'song_genre': next_song.song_genre,
+                    'song_durations': next_song.song_durations,
+                    'img': 'http://localhost:8000'+ str(next_song.song_cover.url)
+                }
+                data.append(next_data)
+            
+                # get the channel layer
+                channel_layer = get_channel_layer()
+                # send the data to the group
+                async_to_sync(channel_layer.group_send)('customer_frontend', {
+                    'type': 'send_playlist',
+                    'playlist': data
+                })
         
 
                 

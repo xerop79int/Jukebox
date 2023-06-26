@@ -32,7 +32,8 @@ function App() {
         { bandleader ? <Route path='/bandleader' element={<BandLeaderDashboard />} /> : null }
         <Route path='/addsinglesong' element={<AddSingleSong />} /> 
         <Route path='/addvenue' element={<AddVenue />} /> 
-        <Route path='/editsong' element={<EditSong />} /> 
+        <Route path='/editsong' element={<EditSong />} />
+        <Route path='/editsong/:song_id' element={<AddSingleSong />} />
         {/* <Route path='/requested' element={<CustomerRequestedSongs />} />
         <Route path='/allrequests' element={<AllCustomersRequests />} />
         <Route path='/allsongs' element={<DisplaySongsList />} />

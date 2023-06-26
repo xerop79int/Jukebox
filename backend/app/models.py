@@ -30,14 +30,15 @@ class BandMember(models.Model):
 class BandSongsList(models.Model):
     band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
     song_number = models.CharField(max_length=200, null=True, blank=True)
-    song_name = models.CharField(max_length=200)
-    song_artist = models.CharField(max_length=200)
-    song_genre = models.CharField(max_length=200)
-    song_durations = models.CharField(max_length=200)
+    song_name = models.CharField(max_length=200, null=True, blank=True)
+    song_artist = models.CharField(max_length=200, null=True, blank=True)
+    song_genre = models.CharField(max_length=200, null=True, blank=True)
+    song_durations = models.CharField(max_length=200, null=True, blank=True)
     song_year = models.CharField(max_length=200, null=True, blank=True)
     song_cover = models.ImageField(upload_to='band_covers', default='default.jpeg', null=True, blank=True)
     cortes = models.CharField(max_length=200, null=True, blank=True)
     bpm = models.CharField(max_length=200, null=True, blank=True)
+    song_lyrics = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name

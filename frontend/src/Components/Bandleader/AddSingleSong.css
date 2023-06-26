@@ -178,7 +178,7 @@
     color: white;
 }
 .admin-song-request-text {
-    width: 500px;
+    width: 1200px;
     height: 550px;
     background-color: #1c1c1c;
     margin: 20px;
@@ -189,7 +189,7 @@
     align-items: center;
 }
 .admin-song-request-text-form {
-    width: 480px;
+    width: inherit;
     height: 530px;
     display: flex;
     flex-direction: column;
@@ -197,7 +197,7 @@
     align-items: center;
 }
 .admin-song-request-text-area {
-    width: 90%;
+    width: 95%;
     height: 96%;
     border-radius: 10px;
     outline: none;
@@ -213,7 +213,7 @@
    height: auto;
    width: auto;
 }
-.admin-song-request-input-form-submit .admin-song-request-input-song-submit{
+.admin-song-request-input-song-submit{
    width: 300px;
    height: 40px;
    border-radius: 10px;
@@ -223,10 +223,10 @@
    background-color: #606060;
    color: white;
 }
-.admin-song-request-input-form-submit .admin-song-request-input-song-submit:hover{
+ .admin-song-request-input-song-submit:hover{
     cursor: pointer;
 }
-.admin-song-request-input-form-submit .admin-song-request-input-song-submit:active{
+.admin-song-request-input-song-submit:active{
     background-color: wheat;
     color: black;
 }

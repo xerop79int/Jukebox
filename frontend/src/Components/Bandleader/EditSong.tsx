@@ -1,6 +1,42 @@
+import { useState, useEffect } from 'react';
 import './EditSong.css'
+import axios from 'axios';
+
+interface Song {
+    id: number;
+    song_name: string;
+    song_artist: string;
+    song_genre: string;
+    count: number;
+    song_number: number;
+    song_durations: string;
+    song_year: string;
+    number: number;
+    cortes: string;
+    bpm: string;
+}
 
 const EditSong = () => {
+
+    const [songs, setSongs] = useState<Song[]>([]);
+
+    useEffect(() => {
+        let URL = `http://localhost:8000/songslist?view=likes`;
+    
+        axios.get(URL, {
+          headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+            .then(res => {
+              console.log(res.data.band_songs);
+              setSongs(res.data.band_songs);
+    
+            })
+            .catch(err => {if(err.response.status === 401){ window.location.href = '/login'; console.log(err) } else {console.log(err)}}) 
+      }, []);
+    
+    const handleSongEdit = (id: number) => {
+        window.location.href = `/editsong/${id}`;
+    }
 
     return(
         <div className="admin-display-song-main">
@@ -21,29 +57,21 @@ const EditSong = () => {
             <div className="admin-display-song-list-1">
                 <div className="admin-display-song-list-1-scroll">
                     
+                    {songs.map((song) => (
                     <div className="admin-display-song-list-dummy-1">
                         <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
+                           {song.song_number} - {song.song_name} - {song.song_artist} - {song.song_genre}
                         </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
+                        <div className='admin-display-song-button-container'>
+                        <button className="admin-display-song-dummy-button-1" onClick={e => handleSongEdit(song.id)}>Edit</button>
                         <button className="admin-display-song-dummy-button-2">Delete</button>
+                        </div>
                     </div>
+                    ))}
                     
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                        <button className="admin-display-song-dummy-button-2">Delete</button>
-                    </div>
+                    
 
-                    <div className="admin-display-song-list-dummy-1">
-                        <p className="admin-display-song--dummy-text-1">
-                            Lorem ipsum dolor sit amet.
-                        </p>
-                        <button className="admin-display-song-dummy-button-1">Edit</button>
-                        <button className="admin-display-song-dummy-button-2">Delete</button>
-                    </div>
+                    
 
                     
                     

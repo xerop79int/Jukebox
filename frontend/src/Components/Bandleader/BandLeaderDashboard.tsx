@@ -645,7 +645,7 @@ I'll be gone 50@  miles when the day  is done
       <div className="bandleader-sub-main">
         <div className="bandleader-main-buttons">
           <i className="fa-solid fa-arrow-left fa-2x" onClick={e => handleChangingSong('previous')}></i>
-          <i className="fa-solid fa-play fa-2x"></i>
+          <i className="fa-solid fa-play fa-2x" onClick={e => handleChangingSong('play')}></i>
           <i className="fa-solid fa-pause fa-2x"></i>
           <i className="fa-solid fa-stop fa-2x"></i>
           <i className="fa-solid fa-arrow-rotate-left fa-2x" onClick={handleScrolledToTop}></i>
