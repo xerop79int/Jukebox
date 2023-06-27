@@ -73,7 +73,7 @@ const AddSingleSong = () => {
             })
             .then((response) => {
                 console.log(response);
-                // window.location.href = '/editsong';
+                window.location.href = '/editsong';
             })
             .catch((error) => {
                 console.log(error);
@@ -86,7 +86,7 @@ const AddSingleSong = () => {
             })
             .then((response) => {
                 console.log(response);
-                // window.location.href = '/editsong';
+                window.location.href = '/editsong';
             })
             .catch((error) => {
                 console.log(error);
