@@ -379,6 +379,16 @@ class ManagerBandSongsListView(APIView):
         band_song.save()
         return Response({'success': 'Song updated successfully.'})
 
+    def delete(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        song_id = req.GET.get('song_id')
+        band_song = BandSongsList.objects.get(id=song_id)
+        band_song.delete()
+        return Response({'success': 'Song deleted successfully.'})
+
     def get(self, req):
         print(req.user)
         sort = req.GET.get('sort')

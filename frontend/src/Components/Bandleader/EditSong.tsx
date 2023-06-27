@@ -38,6 +38,22 @@ const EditSong = () => {
         window.location.href = `/editsong/${id}`;
     }
 
+
+    const handleSongDelete = (id: number) => {
+        
+        axios.delete(`http://localhost:8000/songslist?song_id=${id}`, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then((response) => {
+            console.log(response);
+            window.location.href = '/editsong';
+        })
+        .catch((error) => {
+            console.log(error);
+        }
+        )
+    }
+
     return(
         <div className="admin-display-song-main">
         <div className="admin-display-song-navbar">
@@ -64,7 +80,7 @@ const EditSong = () => {
                         </p>
                         <div className='admin-display-song-button-container'>
                         <button className="admin-display-song-dummy-button-1" onClick={e => handleSongEdit(song.id)}>Edit</button>
-                        <button className="admin-display-song-dummy-button-2">Delete</button>
+                        <button className="admin-display-song-dummy-button-2" onClick={e => handleSongDelete(song.id)}>Delete</button>
                         </div>
                     </div>
                     ))}
