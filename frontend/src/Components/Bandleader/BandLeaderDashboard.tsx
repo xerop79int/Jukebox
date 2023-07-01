@@ -14,6 +14,7 @@ interface Song {
     number: number;
     cortes: string;
     bpm: string;
+    is_inset: boolean;
 }
 
 interface Sets {
@@ -233,7 +234,8 @@ I'll be gone 50@  miles when the day  is done
   }
 
   useEffect(() => {
-    let URL = `http://localhost:8000/songslist?view=likes`;
+    // check if options have set word in it
+    let  URL = `http://localhost:8000/songslist?view=likes`;
 
     handlestyling()
 
@@ -369,6 +371,7 @@ I'll be gone 50@  miles when the day  is done
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     // check if the e.target.value has a substring of 'set'
+    console.log(e.target.value)
     if(e.target.value.includes('Set')){
       // split the string
       const splitString = e.target.value.split(' ')[1];
@@ -446,8 +449,20 @@ I'll be gone 50@  miles when the day  is done
  
 
   const handleEditSet = (id: number) => {
-    setOption('editset');
     setCurrentSet(id);
+    
+    let URL = `http://localhost:8000/songslist?view=likes&set_id=${id}`
+    axios.get(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      setSongs(res.data.band_songs);
+    }
+    )
+    .catch(err => console.log(err))
+
+    setOption('editset');
   }
 
   const handleSetSubmit = (id: number) => {
@@ -467,6 +482,7 @@ I'll be gone 50@  miles when the day  is done
       const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
       alertMessage.innerHTML = res.data.success
       alert.style.display = "block";
+      handleEditSet(currentSet);
 
       setTimeout(function() {
         alert.style.display = 'none';
@@ -474,6 +490,29 @@ I'll be gone 50@  miles when the day  is done
     })
     .catch(err => console.log(err))
   }
+
+  const handleSetRemove = (id: number) => {
+    const URL = `http://localhost:8000/songsinset?set_id=${currentSet}&song_id=${id}`
+
+    axios.delete(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+      const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+      alertMessage.innerHTML = res.data.success
+      alert.style.display = "block";
+      handleEditSet(currentSet);
+
+      setTimeout(function() {
+        alert.style.display = 'none';
+      }, 2000);
+    })
+    .catch(err => console.log(err))
+
+  }
+
 
   const handleCustomerRequestUpdate = (status: string, approved: boolean, number: number) => {
 
@@ -644,12 +683,11 @@ I'll be gone 50@  miles when the day  is done
 
       <div className="bandleader-sub-main">
         <div className="bandleader-main-buttons">
-          <i className="fa-solid fa-arrow-left fa-2x" onClick={e => handleChangingSong('previous')}></i>
-          <i className="fa-solid fa-play fa-2x" onClick={e => handleChangingSong('play')}></i>
-          <i className="fa-solid fa-pause fa-2x"></i>
-          <i className="fa-solid fa-stop fa-2x"></i>
-          <i className="fa-solid fa-arrow-rotate-left fa-2x" onClick={handleScrolledToTop}></i>
-          <i className="fa-solid fa-arrow-right fa-2x" onClick={e => handleChangingSong('next')}></i>
+          <i  className="fa-solid fa-arrow-left fa-2x bandleader-controls" onClick={e => handleChangingSong('previous')}></i>
+          <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>
+          <i className="fa-solid fa-stop fa-2x bandleader-controls"></i>
+          <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
+          <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
           <i className="fa-solid fa-1 fa-2x"></i>
           <i className="fa-solid fa-2 fa-2x"></i>
           <i className="fa-solid fa-3 fa-2x"></i>
@@ -658,26 +696,26 @@ I'll be gone 50@  miles when the day  is done
         <nav>
           { nowSong ? (
           <div className="bandleader-nav-child1">
-            <h3>Now</h3>
+            <h3 style={{paddingTop: '0.2rem'}}>Now</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
                 <h4>{nowSong?.number} - {nowSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nowSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue"> {nowSong.song_year} - {nowSong?.song_genre} - {nowSong.cortes} - {nowSong.bpm} - {nowSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue">  <span className='keys-now-next'> {nowSong.cortes} </span> <span className='bpm-now-next'>- {nowSong.bpm}</span> </h5>
             </div>
           </div>
           ): null}
 
           { nextSong ? (
           <div className="bandleader-nav-child2">
-            <h3>Next</h3>
+            <h3 style={{paddingTop: '0.2rem'}}>Next</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
-                <h4>{nextSong?.number} - {nextSong?.song_name} -</h4>
+                <h4 >{nextSong?.number} - {nextSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nextSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue">{nextSong.song_year} - {nextSong?.song_genre} - {nextSong.cortes} - {nextSong.bpm} - {nextSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue"> <span className='keys-now-next'>{nextSong.cortes}</span> <span className='bpm-now-next'>- {nextSong.bpm}</span></h5>
             </div>
           </div>
           ): null}
@@ -705,9 +743,9 @@ I'll be gone 50@  miles when the day  is done
         </div>
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
-            <option value="queue">Queue</option>
+            <option value="queue">Sets</option>
             <option value='search'>Search</option>
-            <option value="editset">Edit Set</option>
+            {/* <option value="editset">Edit Set</option> */}
             {  Sets.map((set, index) => ( 
             <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
             ))}
@@ -806,8 +844,6 @@ I'll be gone 50@  miles when the day  is done
                   <p> - {song.song_durations}</p>
                   </div>
                 </div>
-                {/* <i className="fa-solid fa-check fa-2x" id="brandleaderCheck"></i>
-                <i className="fa-solid fa-xmark fa-2x" id="brandleaderCross"></i> */}
               </div>
               ))
               :
@@ -828,8 +864,13 @@ I'll be gone 50@  miles when the day  is done
                   <p> - {song.song_durations}</p>
                   </div>
                 </div>
-                <i className="fa-solid fa-check fa-2x" onClick={e => handleSetSubmit(song.id)} id="brandleaderCheck"></i>
-                <i className="fa-solid fa-xmark fa-2x" id="brandleaderCross"></i>
+                { song.is_inset === true ?
+                <i className="fa-solid fa-xmark fa-2x" onClick={e => handleSetRemove(song.id)} id="brandleaderCross"></i>: 
+                null}
+                { song.is_inset === false ?
+                <i className="fa-solid fa-check fa-2x" onClick={e => handleSetSubmit(song.id)} id="brandleaderCheck"></i>:
+                null}
+                
               </div>
               ))
               :

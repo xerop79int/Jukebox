@@ -13,4 +13,5 @@ urlpatterns = [
     path('sets', ManagerSetsView.as_view()),
     path('songsinset', ManagerSongsInSetView.as_view()),
     path('playlist', ManagerPlaylistView.as_view()),
+    path('venue', ManagerVenueView.as_view()),
 ]

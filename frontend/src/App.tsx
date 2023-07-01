@@ -4,6 +4,7 @@ import Login from './Components/login';
 import Register from './Components/Register';
 import NowPlaying from './Components/Customer/NowPlaying';
 import BandLeaderDashboard from './Components/Bandleader/BandLeaderDashboard';
+import BandMemberDashboard from './Components/BandMember/BandMemberDashboard'
 import Upload from './Components/Bandleader/Upload';
 import AddSingleSong from './Components/Bandleader/AddSingleSong';
 import AddVenue from './Components/Bandleader/AddVenue';
@@ -34,6 +35,7 @@ function App() {
         <Route path='/addvenue' element={<AddVenue />} /> 
         <Route path='/editsong' element={<EditSong />} />
         <Route path='/editsong/:song_id' element={<AddSingleSong />} />
+        <Route path='/bandmember' element={<BandMemberDashboard />} />
         {/* <Route path='/requested' element={<CustomerRequestedSongs />} />
         <Route path='/allrequests' element={<AllCustomersRequests />} />
         <Route path='/allsongs' element={<DisplaySongsList />} />

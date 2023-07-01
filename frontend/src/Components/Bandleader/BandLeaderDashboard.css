@@ -386,8 +386,8 @@
   }
   .bandleader-sub-main {
     position: absolute;
-    width: 97%;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     background-color: #1c1c1c;
     border-radius: 10px;
     top: 50%;
@@ -428,6 +428,7 @@
   .bandleader-songdetail-queue{
     display: inline-flex;
     margin-left: 0.2rem;
+    /* padding-top: 0.6rem; */
   }
   .bandleader-nav-child1 h3 {
     color: whitesmoke;
@@ -497,7 +498,7 @@
   .bandleader-verse-sec {
     position: absolute;
     bottom: 0;
-    height: 514px;
+    height: 92%;
     width: 100%;
     background-color: #23242a;
     border-bottom-right-radius: 10px;
@@ -554,7 +555,7 @@
   .bandleader-slider-section {
     position: absolute;
     width: 600px;
-    height: 600px;
+    height: 100%;
     top: 50%;
     transform: translateY(-50%);
     background-color: #808080;
@@ -703,7 +704,7 @@
   .bandleader-songlist {
     position: absolute;
     bottom: 0;
-    height: 514px;
+    height: 90%;
     width: 100%;
     background-color: #606060;
     border-bottom-right-radius: 10px;
@@ -794,7 +795,7 @@
     align-self: center;
     justify-self: flex-end;
     margin-left: auto;
-    display: none;
+    display: block;
   }
 
 
@@ -1247,7 +1248,7 @@
   padding: 10px;
   border-radius: 50%;
 }
-.bandleader-main-buttons i:hover{
+.bandleader-controls:hover{
   border: 2px solid lightgreen;
   color: black;
   opacity: 1;
@@ -1259,7 +1260,7 @@
 .bandleader-buttons-updown{
   /* display: none; */
   position: absolute;
-  height: 514px;
+  height: 80%;
   width: 10%;
   right: -110px;
   bottom: 0px;
@@ -1287,4 +1288,19 @@
   background-color: rgb(0, 0, 0);
 } 
 
+.keys-now-next{
+  color: #00468b;
+  font-size: 20px;
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
+  font-weight: bold;
+  padding-top: 0 !important;
+}
 
+.bpm-now-next{
+  color: rgb(217, 6, 6);
+  font-size: 20px;
+  padding-right: 0.2rem;
+  font-weight: bold;
+  padding-top: 0 !important;
+}

@@ -97,6 +97,39 @@ class ManagerLogoutView(APIView):
         response = redirect('login')
         response.delete_cookie('token')
         return response
+    
+
+class ManagerVenueView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        venue_name = req.data.get('venue_name')
+
+        venue = Venue(name=venue_name);
+        venue.save()
+
+        return Response({'success': 'Venue has been added successfully.'})
+    
+    def get(self, req):
+        # check if the Venue model is empty
+        if Venue.objects.all().exists():
+            venues = Venue.objects.all()
+            data = []
+            for venue in venues:
+                data.append({
+                    'id': venue.id,
+                    'name': venue.name,
+                })
+            return Response({'venue': data})
+        else:
+            return Response({'error': 'No venues found.'})
+
+
 
 
 # CUSTOMER VIEWS
@@ -395,6 +428,8 @@ class ManagerBandSongsListView(APIView):
         view = req.GET.get('view')
         search = req.GET.get('search')
         single = req.GET.get('single')
+        set_id = req.GET.get('set_id');
+
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
         elif sort == 'artist':
@@ -428,6 +463,12 @@ class ManagerBandSongsListView(APIView):
                     count = LikedBandSongsList.objects.filter(band_song=band_song).count()
                 else:
                     count = 0
+
+                # check if the song exists in the songinset
+                if SongsInSet.objects.filter(song=band_song, set__id=set_id).exists():
+                    is_in_set = True
+                else:
+                    is_in_set = False
                 song_data = {
                     'id': band_song.id,
                     'song_number': band_song.song_number,
@@ -439,7 +480,8 @@ class ManagerBandSongsListView(APIView):
                     'cortes': band_song.cortes,
                     'song_year': band_song.song_year,
                     'bpm': band_song.bpm,
-                    'img': 'http://localhost:8000'+ str(band_song.song_cover.url)
+                    'img': 'http://localhost:8000'+ str(band_song.song_cover.url),
+                    'is_inset': is_in_set
                 }
                 data.append(song_data)
         elif search:
@@ -749,7 +791,24 @@ class ManagerSongsInSetView(APIView):
         return Response({'success': 'Song added successfully to the playlist'}, status=200)
 
 
+    def delete(self, req):
+        set_id = req.GET.get('set_id')
+        song_id = req.GET.get('song_id')
+        
+        songinset = SongsInSet.objects.get(set__id=set_id, song__id=song_id)
+        song_playlist = Playlist.objects.get(SongsInSet=songinset)
+        # if the playlist.status is not empty, then update the status of the next song to the playlist.statu
+        if song_playlist.status != '':
+            next_song = SongsInSet.objects.get(number=songinset.number+1)
+            next_song_playlist = Playlist.objects.get(SongsInSet=next_song)
+            next_song_playlist.status = song_playlist.status
+            next_song_playlist.save()
 
+        songinset.delete()
+
+        return Response({'success': 'Song deleted successfully'}, status=200)
+
+        
 
 
     def get(self, req):

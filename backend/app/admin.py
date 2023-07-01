@@ -10,6 +10,7 @@ admin.site.register(BandSongsList)
 admin.site.register(LikedBandSongsList)
 admin.site.register(SongsSet)
 admin.site.register(Sets)
+admin.site.register(Venue)
 # admin.site.register(SongsInSet)
 # admin.site.register(Playlist)
 

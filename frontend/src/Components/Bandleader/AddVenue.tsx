@@ -1,6 +1,60 @@
 import './AddVenue.css'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+interface Venue {
+    id: number,
+    name: string
+}
 
 const AddVenue = () => {
+
+    const [venue, setVenue] = useState("")
+    const [venueList, setVenueList] = useState<Venue[]>([])
+    const [selectVenue, setSelectVenue] = useState("") 
+
+    const handleSubmitVenue = () => {
+        const URL = "http://localhost:8000/venue"
+
+        const data = {
+            'venue_name': venue
+        }
+
+        axios.post(URL, data, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            console.log(res)
+            // save the venue_name in the local storage
+            localStorage.setItem('venue_name', venue)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    useEffect (() => {
+        const URL = "http://localhost:8000/venue"
+
+        axios.get(URL, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            setVenueList(res.data.venue)
+
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+    }, [])
+
+
+    const SelectVenue = (e: any) => {
+        // save the venue_name in the local storage
+        localStorage.setItem('venue_name', selectVenue)
+    }
+
 
     return(
         <div className="admin-venue-main">
@@ -23,10 +77,10 @@ const AddVenue = () => {
                     <p className="admin-venue-input-headiung">
                         Add a New Venue
                     </p>
-                    <textarea className="admin-venue-input-field">
+                    <textarea onChange={e => setVenue(e.target.value)} className="admin-venue-input-field">
 
                     </textarea>
-                    <button className="admin-venue-input-button">
+                    <button onClick={handleSubmitVenue} className="admin-venue-input-button">
                         Submit
                     </button>
                 </div>
@@ -36,12 +90,14 @@ const AddVenue = () => {
                     <p className="admin-venue-dropdown-headiung">
                         Choice from the Existing Venues
                     </p>
-                    <select className="admin-venue-dropdown-menu">
-                        <option value="">ABC</option>
-                        <option value="">ZXC</option>
-                        <option value="">QWE</option>
+                    <select className="admin-venue-dropdown-menu" onChange={e => setSelectVenue(e.target.value)}>
+                    <option value="">Select Venue</option>
+                    { venueList.map((venue) => {
+                        return <option key={venue.id} value={venue.name}>{venue.name}</option>
+                    })}
                     </select>
-                    <button className="admin-venue-dropdown-button">
+                    
+                    <button onClick={SelectVenue} className="admin-venue-dropdown-button">
                         Select
                     </button>
                 </div>
