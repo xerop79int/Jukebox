@@ -44,7 +44,7 @@
     text-align: center;
     color: white;
     font-size: 14px;
-    top: 229px;
+    top: 245px;
     cursor: pointer;
     z-index: 1;
 }
@@ -74,12 +74,13 @@
     width: 150px;
     height: 40px;
     margin-top: 50px;
+    margin-right: 1.2rem;
     background-color: #727272;
     color: white;
     font-size: 1rem;
     border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 8px;
     border-radius: 10px;
 }
 .submit-file:active{
