@@ -21,7 +21,7 @@ const EditSong = () => {
     const [songs, setSongs] = useState<Song[]>([]);
 
     useEffect(() => {
-        let URL = `http://localhost:8000/songslist?view=likes`;
+        let URL = `http://127.0.0.1:8000/songslist?view=likes`;
     
         axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -41,7 +41,7 @@ const EditSong = () => {
 
     const handleSongDelete = (id: number) => {
         
-        axios.delete(`http://localhost:8000/songslist?song_id=${id}`, {
+        axios.delete(`http://127.0.0.1:8000/songslist?song_id=${id}`, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then((response) => {

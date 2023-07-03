@@ -50,7 +50,7 @@ const SongList: React.FC = () => {
   const [movesong, setMovesong] = useState<number>(0);
 
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket('ws://localhost:8000/ws/bandleadercustomerrequests/');
+  const socket = new WebSocket('ws://127.0.0.1:8000/ws/bandleadercustomerrequests/');
 
   const [lyric, setLyric]= useState<string>( 
   `
@@ -222,7 +222,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleGetSets = () => {
-    const URL = `http://localhost:8000/sets`
+    const URL = `http://127.0.0.1:8000/sets`
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -235,7 +235,7 @@ I'll be gone 50@  miles when the day  is done
 
   useEffect(() => {
     // check if options have set word in it
-    let  URL = `http://localhost:8000/songslist?view=likes`;
+    let  URL = `http://127.0.0.1:8000/songslist?view=likes`;
 
     handlestyling()
 
@@ -259,7 +259,7 @@ I'll be gone 50@  miles when the day  is done
   }, []);
 
   const handleGettingPlaylist = () => {
-    let URL = `http://localhost:8000/playlist`;
+    let URL = `http://127.0.0.1:8000/playlist`;
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -326,7 +326,7 @@ I'll be gone 50@  miles when the day  is done
   //   processRequest();
   // }
   const handleSearch = () => {
-    const URL = `http://localhost:8000/songslist?search=${search}`
+    const URL = `http://127.0.0.1:8000/songslist?search=${search}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -342,7 +342,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleGettingSongsInSet = (id: number) => {
-    const URL = `http://localhost:8000/songsinset?set_id=${id}`
+    const URL = `http://127.0.0.1:8000/songsinset?set_id=${id}`
 
 
     axios.get(URL, {
@@ -356,7 +356,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   // const handleSetGet = () => {
-  //   const URL = `http://localhost:8000/songsset`
+  //   const URL = `http://127.0.0.1:8000/songsset`
 
   //   axios.get(URL, {
   //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -420,7 +420,7 @@ I'll be gone 50@  miles when the day  is done
 
   const handleSetAdd = () => {
     console.log(localStorage.getItem('token'))
-    const URL = `http://localhost:8000/sets`
+    const URL = `http://127.0.0.1:8000/sets`
 
     const data = {
       "name": 'Set '
@@ -451,7 +451,7 @@ I'll be gone 50@  miles when the day  is done
   const handleEditSet = (id: number) => {
     setCurrentSet(id);
     
-    let URL = `http://localhost:8000/songslist?view=likes&set_id=${id}`
+    let URL = `http://127.0.0.1:8000/songslist?view=likes&set_id=${id}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -466,7 +466,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleSetSubmit = (id: number) => {
-    const URL = `http://localhost:8000/songsinset`
+    const URL = `http://127.0.0.1:8000/songsinset`
 
     const data = {
       "set_id": currentSet,
@@ -492,7 +492,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleSetRemove = (id: number) => {
-    const URL = `http://localhost:8000/songsinset?set_id=${currentSet}&song_id=${id}`
+    const URL = `http://127.0.0.1:8000/songsinset?set_id=${currentSet}&song_id=${id}`
 
     axios.delete(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -516,7 +516,7 @@ I'll be gone 50@  miles when the day  is done
 
   const handleCustomerRequestUpdate = (status: string, approved: boolean, number: number) => {
 
-    const URL = `http://localhost:8000/customerrequest`
+    const URL = `http://127.0.0.1:8000/customerrequest`
 
     const data = {
       "request_id": SongRequestid,
@@ -547,7 +547,7 @@ I'll be gone 50@  miles when the day  is done
 
     if (number !== 0) {
 
-    const SonginsetURL = `http://localhost:8000/songsinset`
+    const SonginsetURL = `http://127.0.0.1:8000/songsinset`
 
     const songinsetdata = {
       "request_id": SongRequestid,
@@ -574,7 +574,7 @@ I'll be gone 50@  miles when the day  is done
 
 
   const handleChangingSong = (movement: string) => {
-    const URL = `http://localhost:8000/playlist`
+    const URL = `http://127.0.0.1:8000/playlist`
 
     const data = {
       "movement": movement
@@ -612,7 +612,7 @@ I'll be gone 50@  miles when the day  is done
       place = 5;
     }
 
-    const URL = `http://localhost:8000/songsinset`
+    const URL = `http://127.0.0.1:8000/songsinset`
 
     const data = {
       "request_id": movesong,

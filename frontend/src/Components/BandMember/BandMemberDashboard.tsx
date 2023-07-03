@@ -49,7 +49,7 @@ const SongList: React.FC = () => {
   const [movesong, setMovesong] = useState<number>(0);
 
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket('ws://localhost:8000/ws/bandleadercustomerrequests/');
+  const socket = new WebSocket('ws://127.0.0.1:8000/ws/bandleadercustomerrequests/');
 
   const [lyric, setLyric]= useState<string>( 
   `
@@ -221,7 +221,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleGetSets = () => {
-    const URL = `http://localhost:8000/sets`
+    const URL = `http://127.0.0.1:8000/sets`
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -233,7 +233,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   useEffect(() => {
-    let URL = `http://localhost:8000/songslist?view=likes`;
+    let URL = `http://127.0.0.1:8000/songslist?view=likes`;
 
     handlestyling()
 
@@ -257,7 +257,7 @@ I'll be gone 50@  miles when the day  is done
   }, []);
 
   const handleGettingPlaylist = () => {
-    let URL = `http://localhost:8000/playlist`;
+    let URL = `http://127.0.0.1:8000/playlist`;
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -324,7 +324,7 @@ I'll be gone 50@  miles when the day  is done
   //   processRequest();
   // }
   const handleSearch = () => {
-    const URL = `http://localhost:8000/songslist?search=${search}`
+    const URL = `http://127.0.0.1:8000/songslist?search=${search}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -340,7 +340,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   const handleGettingSongsInSet = (id: number) => {
-    const URL = `http://localhost:8000/songsinset?set_id=${id}`
+    const URL = `http://127.0.0.1:8000/songsinset?set_id=${id}`
 
 
     axios.get(URL, {
@@ -354,7 +354,7 @@ I'll be gone 50@  miles when the day  is done
   }
 
   // const handleSetGet = () => {
-  //   const URL = `http://localhost:8000/songsset`
+  //   const URL = `http://127.0.0.1:8000/songsset`
 
   //   axios.get(URL, {
   //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },

@@ -21,7 +21,7 @@ const Upload: React.FC = () => {
                 formData.append('file', file);
             })
 
-            axios.post('http://localhost:8000/upload', formData, {
+            axios.post('http://127.0.0.1:8000/upload', formData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then(res => {
@@ -39,7 +39,7 @@ const Upload: React.FC = () => {
                 formData.append('files', file);
             })
 
-            axios.post('http://localhost:8000/upload', formData, {
+            axios.post('http://127.0.0.1:8000/upload', formData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then(res => {

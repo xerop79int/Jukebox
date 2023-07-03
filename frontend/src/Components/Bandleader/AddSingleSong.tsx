@@ -22,7 +22,7 @@ const AddSingleSong = () => {
     useEffect(() => {
             const song_id = url.split("/")[4];
             if (check) {
-            axios.get(`http://localhost:8000/songslist?single=${song_id}`, {
+            axios.get(`http://127.0.0.1:8000/songslist?single=${song_id}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
                 .then((response) => {
@@ -68,7 +68,7 @@ const AddSingleSong = () => {
         songData.append("song_lyrics", songLyrics);
 
         if(check){
-            axios.put('http://localhost:8000/songslist', songData, {
+            axios.put('http://127.0.0.1:8000/songslist', songData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then((response) => {
@@ -81,7 +81,7 @@ const AddSingleSong = () => {
             )
         }
         else{
-            axios.post('http://localhost:8000/songslist', songData, {
+            axios.post('http://127.0.0.1:8000/songslist', songData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then((response) => {

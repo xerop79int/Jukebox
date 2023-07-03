@@ -50,10 +50,10 @@ const SongList: React.FC = () => {
     const [nextSong, setNextSong] = useState<Song>();
     const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);
 
-    const socket = new WebSocket('ws://localhost:8000/ws/customerrequestsresponse/');
+    const socket = new WebSocket('ws://127.0.0.1:8000/ws/customerrequestsresponse/');
 
     useEffect(() => {
-        let URL = `http://localhost:8000/customersongslist?view=likes`;
+        let URL = `http://127.0.0.1:8000/customersongslist?view=likes`;
     
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
@@ -128,7 +128,7 @@ const SongList: React.FC = () => {
       };
 
       const handleGettingPlaylist = () : Promise<boolean> => {
-        let URL = `http://localhost:8000/playlist`;
+        let URL = `http://127.0.0.1:8000/playlist`;
     
         return axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -157,7 +157,7 @@ const SongList: React.FC = () => {
       }
 
       const handleRefresh = (id: number) => {
-        let URL = `http://localhost:8000/songslist`;
+        let URL = `http://127.0.0.1:8000/songslist`;
 
         axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -174,7 +174,7 @@ const SongList: React.FC = () => {
       }
 
       const handleSorting = (sort: string) =>{
-        let URL = `http://localhost:8000/customersongslist?sort=${sort}`;
+        let URL = `http://127.0.0.1:8000/customersongslist?sort=${sort}`;
     
         axios.get(URL)
             .then(res => {
@@ -200,7 +200,7 @@ const SongList: React.FC = () => {
           return;
         }
         
-        let URL = `http://localhost:8000/likedbandsongslist`;
+        let URL = `http://127.0.0.1:8000/likedbandsongslist`;
     
         const data = {
             "song_id": id,
@@ -227,7 +227,7 @@ const SongList: React.FC = () => {
       }
 
       const handleSubmit = () => {
-        const URL = "http://localhost:8000/customerrequest"
+        const URL = "http://127.0.0.1:8000/customerrequest"
 
         const data = {
             "song_id": currentSong?.id,
@@ -256,7 +256,7 @@ const SongList: React.FC = () => {
     }
 
     const handleSearch = () => {
-      const URL = `http://localhost:8000/songslist?search=${search}`
+      const URL = `http://127.0.0.1:8000/songslist?search=${search}`
       axios.get(URL, {
         headers: { Authorization: `Token ${localStorage.getItem('token')}` },
       })

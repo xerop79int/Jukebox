@@ -10,13 +10,18 @@ import os
 import shutil
 import re
 import sys
+from PyPDF2 import PdfFileReader
 
+current_script_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_script_path)
+os.chdir(current_directory)
 os.chmod('./tesseract.AppImage', stat.S_IRUSR | stat.S_IXUSR | stat.S_IWUSR | stat.S_IWGRP | stat.S_IRGRP | stat.S_IXGRP | stat.S_IWOTH | stat.S_IROTH | stat.S_IXOTH)
 
 OUTPUT_DIR = 'output_dir/'
 
 def write_pdf_to_images(pdf_file, folder_name):
 	pages = extract_pages(pdf_file)
+
 	iw = ImageWriter(OUTPUT_DIR + folder_name)
 	for page_layout in pages:
 		for element in page_layout:
@@ -197,11 +202,19 @@ def read_pdf_file(pdf_file):
 	return text
 
 
-def write_to_text_file(pdf_file):
-	text = read_pdf_file(pdf_file)
+def write_to_text_file(pdf_file, file_name):
+	with open(file_name + '.pdf', 'wb') as file:
+		for chunk in pdf_file.chunks():
+			file.write(chunk)
+	saved_pdf_file = file_name + '.pdf' 
+	text = read_pdf_file(saved_pdf_file)
 	text = extract_page_numbers(text)
 	text = replace_weird_chord_characters(text)
 	body = get_body(text)
 	
+	if body != '':
+		os.remove(saved_pdf_file)
+	
+	print(body)
 	return body
 

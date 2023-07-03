@@ -14,7 +14,7 @@ const AddVenue = () => {
     const [selectVenue, setSelectVenue] = useState("") 
 
     const handleSubmitVenue = () => {
-        const URL = "http://localhost:8000/venue"
+        const URL = "http://127.0.0.1:8000/venue"
 
         const data = {
             'venue_name': venue
@@ -34,7 +34,7 @@ const AddVenue = () => {
     }
 
     useEffect (() => {
-        const URL = "http://localhost:8000/venue"
+        const URL = "http://127.0.0.1:8000/venue"
 
         axios.get(URL, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
