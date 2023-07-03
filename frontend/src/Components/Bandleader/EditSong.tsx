@@ -62,6 +62,7 @@ const EditSong = () => {
                 <a href="/addvenue">&nbsp;Add or Select Venue &nbsp;</a>
                 <a href="/editsong">&nbsp;Edit Song &nbsp;</a>
                 <a href="/bandleader">&nbsp;Bandleader Dashboard</a>
+                <a href="/upload">&nbsp;&nbsp;Upload</a>
             </div>
             <div className="admin-display-song-nav-logout">
                 <button>

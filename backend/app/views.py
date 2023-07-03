@@ -807,9 +807,10 @@ class ManagerUploadSongsListView(APIView):
                         if file_name.lower() == song_name.lower():    
                             output = self.write_to_text_file(file)
                             print(output)
+                            band_song.song_lyrics = output
 
 
-
+        print(i)
                 
 
 
