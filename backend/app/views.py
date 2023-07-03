@@ -17,7 +17,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 
-from pdf_to_text import *
+from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -593,10 +593,15 @@ class ManagerUploadSongsListView(APIView):
                     for band_song in band_songs:
                         song_name = re.sub(r'[^a-zA-Z0-9\s]', '', band_song.song_name)
                         if file_name.lower() == song_name.lower():    
-                            output = write_pdf_to_images(file)
-                            band_song.song_lyrics = output
-                            band_song.save()
-                            i += 1
+                            try:
+                                output = write_pdf_to_images(file)
+                                print(output)
+                                band_song.song_lyrics = output
+                                band_song.save()
+                                i += 1
+                            except Exception as e:
+                                print(e)
+                                pass
 
 
         print(i)
@@ -858,10 +863,16 @@ class ManagerSongsInSetView(APIView):
 
 class ManagerPlaylistView(APIView):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, req):
         movement = req.data.get('movement')
+
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader'}, status=400)
+
 
         if movement == 'next':
             if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='next').exists():
