@@ -772,19 +772,6 @@
   .bandleader-song-dummy:hover h3 {
     color: #808080;
   }
-  #brandleaderLock{
-    align-self: center;
-    justify-self: flex-end;
-    margin-left: auto;
-    display: block;
-  }
-  #brandleaderUnlock{
-    align-self: center;
-    justify-self: flex-end;
-    margin-left: auto;
-    display: none;
-  }
-
 
 
   /* This Is Admin DropDown Start */

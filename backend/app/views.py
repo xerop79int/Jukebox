@@ -17,7 +17,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -263,6 +263,8 @@ class ManagerCustomerSongsListView(APIView):
             band_songs = BandSongsList.objects.all().order_by('song_artist')
         elif sort == 'genre':
             band_songs = BandSongsList.objects.all().order_by('song_genre')
+        elif sort == 'year':
+            band_songs = BandSongsList.objects.all().order_by('song_year').reverse()
         else:
             band_songs = BandSongsList.objects.all()
        
@@ -594,9 +596,9 @@ class ManagerUploadSongsListView(APIView):
                         song_name = re.sub(r'[^a-zA-Z0-9\s]', '', band_song.song_name)
                         if file_name.lower() == song_name.lower():    
                             try:
-                                output = write_to_text_file(file, file_name)
-                                band_song.song_lyrics = output
-                                band_song.save()
+                                #output = write_to_text_file(file, file_name)
+                                #band_song.song_lyrics = output
+                                #band_song.save()
                                 print('saved')
                                 i += 1
                                 break
@@ -609,7 +611,7 @@ class ManagerUploadSongsListView(APIView):
                 
 
 
-        return Response({'success': 'Successfully Uploaded all files.'}, status=200)
+#         return Response({'success': 'Successfully Uploaded all files.'}, status=200)
 
 
 # Have to check why the authorizations are not working on post request
@@ -631,6 +633,19 @@ class ManagerSetsView(APIView):
             sets = Sets(Setname=name)
             sets.save()
             return Response({'success': 'Set created successfully.'}, status=200)
+    
+    def delete(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        set_id = req.GET.get('delete')
+        if not set_id:
+            return Response({'error': 'No set id found.'})
+        else:
+            sets = Sets.objects.get(id=set_id)
+            sets.delete()
+            return Response({'success': 'Set deleted successfully.'}, status=200)
     
     def get(self, req):
         
@@ -941,6 +956,10 @@ class ManagerPlaylistView(APIView):
         if Playlist.objects.filter(status='now').exists():
             now = Playlist.objects.get(status='now').SongsInSet
             now_song = BandSongsList.objects.get(id=now.song.id)
+            if LikedBandSongsList.objects.filter(band_song=now_song).exists():
+                    count = LikedBandSongsList.objects.filter(band_song=now_song).count()
+            else:
+                count = 0
             now_data = {
                 'id': now_song.id,
                 'number': now.number,
@@ -953,6 +972,7 @@ class ManagerPlaylistView(APIView):
                 'cortes': now_song.cortes,
                 'bpm': now_song.bpm,
                 'song_year': now_song.song_year,
+                'count': count
             }
             data.append(now_data)
         
@@ -971,6 +991,7 @@ class ManagerPlaylistView(APIView):
                 'cortes': next_song.cortes,
                 'bpm': next_song.bpm,
                 'song_year': next_song.song_year,
+
             }
             data.append(next_data)
         

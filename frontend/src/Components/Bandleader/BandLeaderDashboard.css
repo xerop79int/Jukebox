@@ -783,7 +783,7 @@
     align-self: center;
     justify-self: flex-end;
     margin-left: auto;
-    display: none;
+    display: block;
   }
   #brandleaderCheck{
     align-self: center;

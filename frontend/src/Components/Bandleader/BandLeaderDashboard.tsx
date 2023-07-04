@@ -465,6 +465,29 @@ I'll be gone 50@  miles when the day  is done
     setOption('editset');
   }
 
+  const handleDeleteSet = (id: number) => {
+    const URL = `http://127.0.0.1:8000/sets?delete=${id}`;
+
+    axios.delete(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` }
+    })
+    .then(res => {
+      console.log(res.data)
+      const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+      const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+      alertMessage.innerHTML = res.data.success
+      alert.style.display = "block";
+      handleGetSets();
+
+      setTimeout(function() {
+        alert.style.display = 'none';
+      }, 2000);
+    })
+    .catch(err => console.log(err))
+  }
+
+  
+
   const handleSetSubmit = (id: number) => {
     const URL = `http://127.0.0.1:8000/songsinset`
 
@@ -775,7 +798,14 @@ I'll be gone 50@  miles when the day  is done
                         ))}
                       </div>
                     </div>
-                    <a href="#">Delete</a>
+                    <div className="bandleader-dropdown-submenu-edit">
+                      <a href="#">Delete</a>
+                      <div className="bandleader-dropdown-submenu-content-edit">
+                        { Sets.map((set, index) => (
+                          <a key={set.id} onClick={e => handleDeleteSet(set.id)}>{set.set_name}</a>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -891,8 +921,8 @@ I'll be gone 50@  miles when the day  is done
                 <p> - {song.song_durations}</p>
                 </div>
               </div>
-              <i className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
               <i className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
+              {/* <i className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i> */}
             </div>
             ))
             :

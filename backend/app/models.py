@@ -46,7 +46,6 @@ class BandSongsList(models.Model):
     cortes = models.CharField(max_length=200, null=True, blank=True)
     bpm = models.CharField(max_length=200, null=True, blank=True)
     song_lyrics = models.TextField(null=True, blank=True)
-    song_pdf = models.FileField(upload_to='band_songs', null=True, blank=True)
 
     def __str__(self):
         return self.band_leader.name + ' - ' + self.song_name
