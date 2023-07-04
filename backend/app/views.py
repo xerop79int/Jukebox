@@ -611,7 +611,7 @@ class ManagerUploadSongsListView(APIView):
                 
 
 
-#         return Response({'success': 'Successfully Uploaded all files.'}, status=200)
+        return Response({'success': 'Successfully Uploaded all files.'}, status=200)
 
 
 # Have to check why the authorizations are not working on post request
