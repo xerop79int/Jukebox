@@ -17,7 +17,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 
-# from .pdf_to_text import *
+from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -596,9 +596,9 @@ class ManagerUploadSongsListView(APIView):
                         song_name = re.sub(r'[^a-zA-Z0-9\s]', '', band_song.song_name)
                         if file_name.lower() == song_name.lower():    
                             try:
-                                #output = write_to_text_file(file, file_name)
-                                #band_song.song_lyrics = output
-                                #band_song.save()
+                                output = write_to_text_file(file, file_name)
+                                band_song.song_lyrics = output
+                                band_song.save()
                                 print('saved')
                                 i += 1
                                 break
