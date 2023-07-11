@@ -86,6 +86,7 @@ class SongsInSet(models.Model):
     number = models.IntegerField(null=True, blank=True)
     song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     set = models.ForeignKey(Sets, on_delete=models.CASCADE)
+    is_locked = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.number) + ' - ' + self.song.song_name + ' - ' + self.set.Setname

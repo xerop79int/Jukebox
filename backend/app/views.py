@@ -17,7 +17,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -596,9 +596,9 @@ class ManagerUploadSongsListView(APIView):
                         song_name = re.sub(r'[^a-zA-Z0-9\s]', '', band_song.song_name)
                         if file_name.lower() == song_name.lower():    
                             try:
-                                output = write_to_text_file(file, file_name)
-                                band_song.song_lyrics = output
-                                band_song.save()
+                                # output = write_to_text_file(file, file_name)
+                                # band_song.song_lyrics = output
+                                # band_song.save()
                                 print('saved')
                                 i += 1
                                 break
@@ -809,6 +809,8 @@ class ManagerSongsInSetView(APIView):
 
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
+            if SongsInSet.objects.get(number=number).is_locked == True:
+                return Response({'success': 'Song is locked'})
             if Playlist.objects.get(status='now').SongsInSet.number == number-1:
                 return Response({'success': 'Song can not be moved'}, status=200)
             if number == 1:
@@ -822,6 +824,8 @@ class ManagerSongsInSetView(APIView):
                 return Response({'success': 'Song position updated'}, status=200)
         
         if place == 5:
+            if SongsInSet.objects.get(number=number).is_locked == True:
+                return Response({'success': 'Song is locked'})
             if SongsInSet.objects.all().count() == number:
                 return Response({'success': 'This song is the last song so cannot be moved down'}, status=200)
             if SongsInSet.objects.filter(number=number+1).exists():
@@ -871,7 +875,8 @@ class ManagerSongsInSetView(APIView):
                 'song_name': song.song_name,
                 'song_artist': song.song_artist,
                 'song_genre': song.song_genre,
-                'song_durations': song.song_durations
+                'song_durations': song.song_durations,
+                'is_locked': song_in_set.is_locked
             }
             data.append(song_data)
 
@@ -972,7 +977,8 @@ class ManagerPlaylistView(APIView):
                 'cortes': now_song.cortes,
                 'bpm': now_song.bpm,
                 'song_year': now_song.song_year,
-                'count': count
+                'count': count,
+                'lyric': now_song.song_lyrics
             }
             data.append(now_data)
         
