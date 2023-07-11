@@ -272,7 +272,7 @@ const SongList: React.FC = () => {
 
       return (
         <div>
-          <Sidenav />
+          {/* <Sidenav /> */}
             <div className="alert-box green">
                 <p className='alert-message'></p>
             </div>
