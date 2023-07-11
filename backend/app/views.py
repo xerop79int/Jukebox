@@ -17,7 +17,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 
-# from .pdf_to_text import *
+from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
