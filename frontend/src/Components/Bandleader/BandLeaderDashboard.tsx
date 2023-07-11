@@ -745,7 +745,7 @@ const SongList: React.FC = () => {
             
             { option === 'editset' && currentSet !== 0 ?
               songs.map((song: Song) => (
-                <div key={song.id} className="bandleader-song-dummy">
+                <div key={song.id} className="bandleader-song-dummy" onClick={e => handleSetSubmit(song.id)}>
                 <h3>{song.song_number}</h3>
                 <div className="bandleader-song-title-queue">
                   <div className="bandleader-songtitle-queue">
@@ -758,12 +758,16 @@ const SongList: React.FC = () => {
                   <p> - {song.song_durations}</p>
                   </div>
                 </div>
-                { song.is_inset === true ?
+                { song.is_inset === true ? 
+                <i className="fa-solid fa-check fa-2x" id="brandleaderCheck"></i>
+                :null
+                }
+                {/* { song.is_inset === true ?
                 <i className="fa-solid fa-xmark fa-2x" onClick={e => handleSetRemove(song.id)} id="brandleaderCross"></i>: 
                 null}
                 { song.is_inset === false ?
                 <i className="fa-solid fa-check fa-2x" onClick={e => handleSetSubmit(song.id)} id="brandleaderCheck"></i>:
-                null}
+                null} */}
                 
               </div>
               ))

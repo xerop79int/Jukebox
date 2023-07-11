@@ -674,7 +674,16 @@ class ManagerSongsInSetView(APIView):
 
         # Check if the song is already in the set
         if SongsInSet.objects.filter(set__id=set_id, song__id=song_id).exists():
-            return Response({'success': 'Song already added.'}, status=200)
+            song_to_del = SongsInSet.objects.get(set__id=set_id, song_id=song_id)
+            if SongsInSet.objects.filter(number=song_to_del.number+1).exists():
+                next_song = SongsInSet.objects.get(number=song_to_del.number + 1)
+                next_song_playlist = Playlist.objects.get(SongsInSet=next_song)
+                next_song_playlist.status = Playlist.objects.get(SongsInSet=song_to_del).status
+                next_song.number = next_song.number-1
+                next_song.save()
+                next_song_playlist.save()
+            song_to_del.delete()
+            return Response({'success': 'Song has been removed'}, status=200)
         else:
             set = Sets.objects.get(id=set_id)
             song = BandSongsList.objects.get(id=song_id)
