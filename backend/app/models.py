@@ -75,6 +75,15 @@ class LikedBandSongsList(models.Model):
 
     def __str__(self):
         return self.band_song.song_name
+
+class LikedBandSongsListInAllVenues(models.Model):
+    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
+    band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
+    liked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.band_song.song_name
     
 class Sets(models.Model):
     Setname = models.CharField(max_length=200)

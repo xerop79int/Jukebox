@@ -13,6 +13,7 @@ interface Song {
     song_durations: string;
     img: string;
     song_year: string;
+    all_venues_count: number;
 }
 
 interface CurrentSong {
@@ -25,6 +26,7 @@ interface CurrentSong {
     song_durations: string;
     img: string;
     song_year: string;
+    all_venues_count: number;
 }
 
 interface SongResponse{
@@ -54,7 +56,7 @@ const SongList: React.FC = () => {
     useEffect(() => {
 
       
-        let URL = `http://${backendURL}/customersongslist?view=likes`;
+        let URL = `http://${backendURL}/customersongslist`;
     
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
@@ -208,6 +210,7 @@ const SongList: React.FC = () => {
     
         const data = {
             "song_id": id,
+            "venue_name": "Just Venue Testing"
         }
 
         axios.post(URL, data)
@@ -362,7 +365,7 @@ const SongList: React.FC = () => {
                   <div className="box2icon">
                     <i className="fa-solid fa-thumbs-up fa-xs"> </i>
                   </div>
-                  <h5> 1566</h5>
+                  <h5> {currentSong?.all_venues_count}</h5>
                 </div>
               </div>
 

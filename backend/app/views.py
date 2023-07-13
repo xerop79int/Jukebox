@@ -236,10 +236,17 @@ class ManagerLikedBandSongsListView(APIView):
 
     def post(self, req):
         song_id = req.data.get('song_id')
+        venue_name = req.data.get('venue_name')
+
         band_song = BandSongsList.objects.get(id=song_id)
         liked_band_song = LikedBandSongsList(band_song=band_song)
         liked_band_song.liked = True
         liked_band_song.save()
+        venue = Venue.objects.get(name=venue_name)
+        venue_liked_band_song = LikedBandSongsListInAllVenues(venue=venue, band_song=band_song)
+        venue_liked_band_song.liked = True
+        venue_liked_band_song.save()
+
         return Response({'success': 'Song liked successfully.'})
 
     def get(self, req):
@@ -324,6 +331,11 @@ class ManagerCustomerSongsListView(APIView):
                 else:
                     count = 0
                     liked = False
+                
+                if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
+                    all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).count()
+                else:
+                    all_venues_count = 0
                 song_data = {
                     'id': band_song.id,
                     'song_number': band_song.song_number,
@@ -332,6 +344,7 @@ class ManagerCustomerSongsListView(APIView):
                     'song_genre': band_song.song_genre,
                     'song_durations': band_song.song_durations,
                     'count': count,
+                    'all_venues_count': all_venues_count,
                     'liked': liked,
                     'song_year': band_song.song_year,
                     'cortes': band_song.cortes,
@@ -424,7 +437,6 @@ class ManagerBandSongsListView(APIView):
         return Response({'success': 'Song deleted successfully.'})
 
     def get(self, req):
-        print(req.user)
         sort = req.GET.get('sort')
         view = req.GET.get('view')
         search = req.GET.get('search')
@@ -520,6 +532,11 @@ class ManagerBandSongsListView(APIView):
                 else:
                     count = 0
                     liked = False
+                
+                if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
+                    all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).count()
+                else:
+                    all_venues_count = 0
                 song_data = {
                     'id': band_song.id,
                     'song_number': band_song.song_number,
@@ -528,6 +545,7 @@ class ManagerBandSongsListView(APIView):
                     'song_genre': band_song.song_genre,
                     'song_durations': band_song.song_durations,
                     'count': count,
+                    'all_venues_count': all_venues_count,
                     'liked': liked,
                     'song_year': band_song.song_year,
                     'cortes': band_song.cortes,
@@ -993,6 +1011,11 @@ class ManagerPlaylistView(APIView):
                     count = LikedBandSongsList.objects.filter(band_song=now_song).count()
             else:
                 count = 0
+            
+            if LikedBandSongsListInAllVenues.objects.filter(band_song=now_song).exists():
+                all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=now_song).count()
+            else:
+                all_venues_count = 0
             now_data = {
                 'id': now_song.id,
                 'number': now.number,
@@ -1006,7 +1029,8 @@ class ManagerPlaylistView(APIView):
                 'bpm': now_song.bpm,
                 'song_year': now_song.song_year,
                 'count': count,
-                'lyric': now_song.song_lyrics
+                'lyric': now_song.song_lyrics,
+                'all_venues_count': all_venues_count,
             }
             data.append(now_data)
         
