@@ -432,7 +432,9 @@ body {
     display: none;
     margin: 0 auto;
     width: 20rem;
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 40%;
     padding: 20px;
     border: 1px solid;
     border-radius: 4px;
