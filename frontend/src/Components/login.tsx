@@ -19,6 +19,7 @@
   
   export default function Login() {
 
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState("");
@@ -29,7 +30,7 @@
     }
 
     const handleSubmit = () => {
-        axios.post('http://127.0.0.1:8000/login', data,{
+        axios.post(`http://${backendURL}/login`, data,{
           headers: {
               'Content-Type': 'application/json'
           }

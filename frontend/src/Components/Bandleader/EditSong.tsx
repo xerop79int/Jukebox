@@ -18,10 +18,11 @@ interface Song {
 
 const EditSong = () => {
 
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [songs, setSongs] = useState<Song[]>([]);
 
     useEffect(() => {
-        let URL = `http://127.0.0.1:8000/songslist?view=likes`;
+        let URL = `http://${backendURL}/songslist?view=likes`;
     
         axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -41,7 +42,7 @@ const EditSong = () => {
 
     const handleSongDelete = (id: number) => {
         
-        axios.delete(`http://127.0.0.1:8000/songslist?song_id=${id}`, {
+        axios.delete(`http://${backendURL}/songslist?song_id=${id}`, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then((response) => {

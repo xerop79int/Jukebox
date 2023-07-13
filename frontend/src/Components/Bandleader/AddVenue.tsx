@@ -9,12 +9,13 @@ interface Venue {
 
 const AddVenue = () => {
 
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [venue, setVenue] = useState("")
     const [venueList, setVenueList] = useState<Venue[]>([])
     const [selectVenue, setSelectVenue] = useState("") 
 
     const handleSubmitVenue = () => {
-        const URL = "http://127.0.0.1:8000/venue"
+        const URL = `http://${backendURL}/venue`
 
         const data = {
             'venue_name': venue
@@ -34,7 +35,7 @@ const AddVenue = () => {
     }
 
     useEffect (() => {
-        const URL = "http://127.0.0.1:8000/venue"
+        const URL = `http://${backendURL}/venue`
 
         axios.get(URL, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },

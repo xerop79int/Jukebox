@@ -34,6 +34,7 @@ interface SongRequest{
 
 const SongList: React.FC = () => {
 
+  const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
   const [songs, setSongs] = useState<Song[]>([]);
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
@@ -46,7 +47,7 @@ const SongList: React.FC = () => {
   const [nowSong, setNowSong] = useState<Song>();
   const [nextSong, setNextSong] = useState<Song>();
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket('ws://127.0.0.1:8000/ws/bandleadercustomerrequests/');
+  const socket = new WebSocket(`ws://${backendURL}/ws/bandleadercustomerrequests/`);
 
   const [lyric, setLyric]= useState<string>(``);
 
@@ -84,7 +85,7 @@ const SongList: React.FC = () => {
   }
 
   const handleGetSets = () => {
-    const URL = `http://127.0.0.1:8000/sets`
+    const URL = `http://${backendURL}/sets`
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -96,7 +97,7 @@ const SongList: React.FC = () => {
   }
 
   useEffect(() => {
-    let URL = `http://127.0.0.1:8000/songslist?view=likes`;
+    let URL = `http://${backendURL}/songslist?view=likes`;
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -118,7 +119,7 @@ const SongList: React.FC = () => {
   }, []);
 
   const handleGettingPlaylist = () => {
-    let URL = `http://127.0.0.1:8000/playlist`;
+    let URL = `http://${backendURL}/playlist`;
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -185,7 +186,7 @@ const SongList: React.FC = () => {
   //   processRequest();
   // }
   const handleSearch = () => {
-    const URL = `http://127.0.0.1:8000/songslist?search=${search}`
+    const URL = `http://${backendURL}/songslist?search=${search}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -201,7 +202,7 @@ const SongList: React.FC = () => {
   }
 
   const handleGettingSongsInSet = (id: number) => {
-    const URL = `http://127.0.0.1:8000/songsinset?set_id=${id}`
+    const URL = `http://${backendURL}/songsinset?set_id=${id}`
 
 
     axios.get(URL, {
@@ -215,7 +216,7 @@ const SongList: React.FC = () => {
   }
 
   // const handleSetGet = () => {
-  //   const URL = `http://127.0.0.1:8000/songsset`
+  //   const URL = `http://${backendURL}/songsset`
 
   //   axios.get(URL, {
   //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },

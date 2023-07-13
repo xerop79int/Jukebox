@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Sidenav from './Sidenav';
 import tipjar from './img/tip jar.png';
 import "./NowPlaying.css";
 
@@ -41,6 +40,8 @@ interface SongResponse{
 
 const SongList: React.FC = () => {
 
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
+
     const [songs, setSongs] = useState<Song[]>([]);
     const [currentSong, setCurrentSong] = useState<CurrentSong | null>();
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -48,12 +49,12 @@ const SongList: React.FC = () => {
     const [search, setSearch] = useState<string>("");
     const [likedtiming, setLikedTiming] = useState<boolean>(false);
     const [nextSong, setNextSong] = useState<Song>();
-    const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);
-
-    const socket = new WebSocket('ws://127.0.0.1:8000/ws/customerrequestsresponse/');
-
+    const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);    
+      
     useEffect(() => {
-        let URL = `http://127.0.0.1:8000/customersongslist?view=likes`;
+
+      
+        let URL = `http://${backendURL}/customersongslist?view=likes`;
     
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
@@ -66,16 +67,19 @@ const SongList: React.FC = () => {
               }
             })
             .catch(err => {console.log(err) })
-
-
             
-
             
-        
-      }, []);
+            
+            
+            
+            
+          }, []);
+          
 
-      const processRequest = (currentRequest: any) => {
+        const socket = new WebSocket(`ws://${backendURL}/ws/customerrequestsresponse/`);
 
+        const processRequest = (currentRequest: any) => {
+            
         const container = document.querySelector("#nowPlayingPopup") as HTMLInputElement;
         container.style.right = "0px"
   
@@ -128,7 +132,7 @@ const SongList: React.FC = () => {
       };
 
       const handleGettingPlaylist = () : Promise<boolean> => {
-        let URL = `http://127.0.0.1:8000/playlist`;
+        let URL = `http://${backendURL}/playlist`;
     
         return axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -157,7 +161,7 @@ const SongList: React.FC = () => {
       }
 
       const handleRefresh = (id: number) => {
-        let URL = `http://127.0.0.1:8000/songslist`;
+        let URL = `http://${backendURL}/songslist`;
 
         axios.get(URL, {
           headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -174,7 +178,7 @@ const SongList: React.FC = () => {
       }
 
       const handleSorting = (sort: string) =>{
-        let URL = `http://127.0.0.1:8000/customersongslist?sort=${sort}`;
+        let URL = `http://${backendURL}/customersongslist?sort=${sort}`;
     
         axios.get(URL)
             .then(res => {
@@ -200,7 +204,7 @@ const SongList: React.FC = () => {
           return;
         }
         
-        let URL = `http://127.0.0.1:8000/likedbandsongslist`;
+        let URL = `http://${backendURL}/likedbandsongslist`;
     
         const data = {
             "song_id": id,
@@ -227,7 +231,7 @@ const SongList: React.FC = () => {
       }
 
       const handleSubmit = () => {
-        const URL = "http://127.0.0.1:8000/customerrequest"
+        const URL = "http://${backendURL}/customerrequest"
 
         const data = {
             "song_id": currentSong?.id,
@@ -256,7 +260,7 @@ const SongList: React.FC = () => {
     }
 
     const handleSearch = () => {
-      const URL = `http://127.0.0.1:8000/songslist?search=${search}`
+      const URL = `http://${backendURL}/songslist?search=${search}`
       axios.get(URL, {
         headers: { Authorization: `Token ${localStorage.getItem('token')}` },
       })
@@ -414,7 +418,7 @@ const SongList: React.FC = () => {
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </button>
                   <div className="search-bar">
-                    <input className='search' type="text" onChange={e => setSearch(e.target.value)}  placeholder="Search..." />
+                    <input className='search' type="text" onKeyDown={e => e.key === 'Enter' && handleSearch()} onChange={e => setSearch(e.target.value)}  placeholder="Search..." />
                     <button onClick={handleSearch} className="search-submit">Submit</button>
                   </div>
                 </div>

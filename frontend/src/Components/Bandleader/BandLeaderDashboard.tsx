@@ -36,6 +36,7 @@ interface SongRequest{
 
 const SongList: React.FC = () => {
 
+  const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
   const [songs, setSongs] = useState<Song[]>([]);
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
@@ -51,7 +52,7 @@ const SongList: React.FC = () => {
   const [movesong, setMovesong] = useState<number>(0);
 
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket('ws://127.0.0.1:8000/ws/bandleadercustomerrequests/');
+  const socket = new WebSocket(`ws://${backendURL}/ws/bandleadercustomerrequests/`);
 
   const [lyric, setLyric] = useState<string>(``);
 
@@ -89,7 +90,7 @@ const SongList: React.FC = () => {
   }
 
   const handleGetSets = () => {
-    const URL = `http://127.0.0.1:8000/sets`
+    const URL = `http://${backendURL}/sets`
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -102,7 +103,7 @@ const SongList: React.FC = () => {
 
   useEffect(() => {
     // check if options have set word in it
-    let  URL = `http://127.0.0.1:8000/songslist?view=likes`;
+    let  URL = `http://${backendURL}/songslist?view=likes`;
 
     
     axios.get(URL, {
@@ -123,7 +124,7 @@ const SongList: React.FC = () => {
   }, []);
 
   const handleGettingPlaylist = () => {
-    let URL = `http://127.0.0.1:8000/playlist`;
+    let URL = `http://${backendURL}/playlist`;
 
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -190,7 +191,7 @@ const SongList: React.FC = () => {
   //   processRequest();
   // }
   const handleSearch = () => {
-    const URL = `http://127.0.0.1:8000/songslist?search=${search}`
+    const URL = `http://${backendURL}/songslist?search=${search}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -206,7 +207,7 @@ const SongList: React.FC = () => {
   }
 
   const handleGettingSongsInSet = (id: number) => {
-    const URL = `http://127.0.0.1:8000/songsinset?set_id=${id}`
+    const URL = `http://${backendURL}/songsinset?set_id=${id}`
 
 
     axios.get(URL, {
@@ -220,7 +221,7 @@ const SongList: React.FC = () => {
   }
 
   // const handleSetGet = () => {
-  //   const URL = `http://127.0.0.1:8000/songsset`
+  //   const URL = `http://${backendURL}/songsset`
 
   //   axios.get(URL, {
   //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -243,7 +244,6 @@ const SongList: React.FC = () => {
       const id = parseInt(splitString);
       // call the handleSet function
       handleGettingSongsInSet(id);
-
       setOption(e.target.value);
 
       const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
@@ -269,6 +269,15 @@ const SongList: React.FC = () => {
   const handleToggle = () => {
     const section = document.getElementById("mySection") as HTMLElement;
     section.classList.toggle("bandleader-right-position");
+    const moveButton = document.getElementById("moveButton") as HTMLElement;
+    if(moveButton.classList.contains("fa-rotate-90")){
+      moveButton.classList.remove("fa-rotate-90");
+      moveButton.classList.add("fa-rotate-270");
+    }
+    else if(moveButton.classList.contains("fa-rotate-270")){
+    moveButton.classList.remove("fa-rotate-270");
+    moveButton.classList.add("fa-rotate-90");
+    }
   }
 
   const handleAdminBTN = () => {
@@ -284,7 +293,7 @@ const SongList: React.FC = () => {
 
   const handleSetAdd = () => {
     console.log(localStorage.getItem('token'))
-    const URL = `http://127.0.0.1:8000/sets`
+    const URL = `http://${backendURL}/sets`
 
     const data = {
       "name": 'Set '
@@ -315,7 +324,7 @@ const SongList: React.FC = () => {
   const handleEditSet = (id: number) => {
     setCurrentSet(id);
     
-    let URL = `http://127.0.0.1:8000/songslist?view=likes&set_id=${id}`
+    let URL = `http://${backendURL}/songslist?view=likes&set_id=${id}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -330,7 +339,7 @@ const SongList: React.FC = () => {
   }
 
   const handleDeleteSet = (id: number) => {
-    const URL = `http://127.0.0.1:8000/sets?delete=${id}`;
+    const URL = `http://${backendURL}/sets?delete=${id}`;
 
     axios.delete(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` }
@@ -353,7 +362,7 @@ const SongList: React.FC = () => {
   
 
   const handleSetSubmit = (id: number) => {
-    const URL = `http://127.0.0.1:8000/songsinset`
+    const URL = `http://${backendURL}/songsinset`
 
     const data = {
       "set_id": currentSet,
@@ -378,32 +387,32 @@ const SongList: React.FC = () => {
     .catch(err => console.log(err))
   }
 
-  const handleSetRemove = (id: number) => {
-    const URL = `http://127.0.0.1:8000/songsinset?set_id=${currentSet}&song_id=${id}`
+  // const handleSetRemove = (id: number) => {
+  //   const URL = `http://${backendURL}/songsinset?set_id=${currentSet}&song_id=${id}`
 
-    axios.delete(URL, {
-      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-    })
-    .then(res => {
-      console.log(res.data)
-      const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
-      const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
-      alertMessage.innerHTML = res.data.success
-      alert.style.display = "block";
-      handleEditSet(currentSet);
+  //   axios.delete(URL, {
+  //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+  //   })
+  //   .then(res => {
+  //     console.log(res.data)
+  //     const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+  //     const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+  //     alertMessage.innerHTML = res.data.success
+  //     alert.style.display = "block";
+  //     handleEditSet(currentSet);
 
-      setTimeout(function() {
-        alert.style.display = 'none';
-      }, 2000);
-    })
-    .catch(err => console.log(err))
+  //     setTimeout(function() {
+  //       alert.style.display = 'none';
+  //     }, 2000);
+  //   })
+  //   .catch(err => console.log(err))
 
-  }
+  // }
 
 
   const handleCustomerRequestUpdate = (status: string, approved: boolean, number: number) => {
 
-    const URL = `http://127.0.0.1:8000/customerrequest`
+    const URL = `http://${backendURL}/customerrequest`
 
     const data = {
       "request_id": SongRequestid,
@@ -434,7 +443,7 @@ const SongList: React.FC = () => {
 
     if (number !== 0) {
 
-    const SonginsetURL = `http://127.0.0.1:8000/songsinset`
+    const SonginsetURL = `http://${backendURL}/songsinset`
 
     const songinsetdata = {
       "request_id": SongRequestid,
@@ -461,7 +470,7 @@ const SongList: React.FC = () => {
 
 
   const handleChangingSong = (movement: string) => {
-    const URL = `http://127.0.0.1:8000/playlist`
+    const URL = `http://${backendURL}/playlist`
 
     const data = {
       "movement": movement
@@ -499,7 +508,7 @@ const SongList: React.FC = () => {
       place = 5;
     }
 
-    const URL = `http://127.0.0.1:8000/songsinset`
+    const URL = `http://${backendURL}/songsinset`
 
     const data = {
       "request_id": movesong,
@@ -513,10 +522,46 @@ const SongList: React.FC = () => {
       console.log(res.data)
       const id = parseInt(option.split(' ')[1]);
       handleGettingSongsInSet(id)
+
+      const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+      const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+      alertMessage.innerHTML = res.data.success
+      alert.style.display = "block";
+
+      setTimeout(function() {
+        alert.style.display = 'none';
+      }
+      , 2000);
+
     }
     )
     .catch(err => console.log(err))
   }
+
+  const handleLockingFunctionality = (str : string, song: number) => {
+
+    const URL = `http://${backendURL}/songsinset`
+
+    const set_name = option;
+
+    const data = {
+      'set_name': set_name,
+      'song_id': song,
+      "locking": str
+    }
+
+    axios.put(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      const id = parseInt(option.split(' ')[1]);
+      handleGettingSongsInSet(id)
+    }
+    )
+    .catch(err => console.log(err))
+  }
+
 
 
 
@@ -623,14 +668,14 @@ const SongList: React.FC = () => {
           </div>
           <div className="bandleader-downarrow arrowww" onClick={e => handlemovement('down')}>
             <i className="fa-solid fa-arrow-down fa-3x"></i>
-          </div>
+          </div>onClick
         </div>
         <div className="bandleader-button" onClick={handleToggle}>
-          <i className="fa-solid fa-circle fa-3x" id="moveButton"></i>
+          <i className="fa-solid fa-chevron-down fa-rotate-270" id="moveButton"></i>
         </div>
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
-            <option value="queue">Sets</option>
+            <option value="queue">Songs</option>
             <option value='search'>Search</option>
             {/* <option value="editset">Edit Set</option> */}
             {  Sets.map((set, index) => ( 
@@ -643,7 +688,7 @@ const SongList: React.FC = () => {
           <div className="bandleader-admin-dropdown" onClick={handleAdminBTN} id="bandleader-btn">
 
 
-            <button className="bandleader-drop-button bandleader-dropdown-btn">Admin &nbsp; <i className="fa-solid fa-arrow-down"></i></button>
+            <button className="bandleader-drop-button bandleader-dropdown-btn">Admin &nbsp; <i className="fa-solid fa-chevron-down"></i></button>
 
 
               <div className="bandleader-dropdown-content" id="bandleader-show" >
@@ -790,9 +835,9 @@ const SongList: React.FC = () => {
                 </div>
               </div>
               { song.is_locked == false ?
-              <i className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
+              <i style={{zIndex: '9999'}} onClick={e => handleLockingFunctionality('lock', song.id)}  className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
               :
-              <i className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
+              <i style={{zIndex: '9999'}} onClick={e => handleLockingFunctionality('unlock', song.id)}  className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
               }
             </div>
             ))

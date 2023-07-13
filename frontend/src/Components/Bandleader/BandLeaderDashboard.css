@@ -535,7 +535,7 @@
     white-space: pre-wrap;
     margin: 0;
     padding: 0;
-    font-size: 32px;
+    font-size: 28px;
     /* font-family: "DejaVu Sans"; */
     font-family: monospace !important;
   }
@@ -691,7 +691,20 @@
     left: -60px;
     cursor: pointer;
   }
-  .fa-circle {
+
+  #moveButton{
+    position: absolute;
+    z-index: 5;
+    left: 35%;
+    top: 30%;
+    font-size: 25px;
+    /* transform: translate(-50%, -50%); */
+    color: #1c1c1c;
+  }
+  #moveButton:hover{
+      color: black;
+  }
+  /* .fa-circle {
     position: absolute;
     z-index: 5;
     left: 50%;
@@ -701,7 +714,7 @@
   }
   .fa-circle:hover{
       color: black;
-  }
+  } */
   .bandleader-songlist {
     position: absolute;
     bottom: 0;
@@ -879,11 +892,11 @@
   }
   
   .bandleader-dropdown-submenu-3:hover .bandleader-dropdown-submenu-content {
-    top: 80px;
+    top: 40px;
   }
   
   .bandleader-dropdown-submenu-4:hover .bandleader-dropdown-submenu-content {
-    top: 120px;
+    top: 90px;
   }
     
   #bandleader-hide-btn{
@@ -917,12 +930,13 @@
   .bandleader-dropdown-submenu-content-edit {
     display: none;
     position: absolute;
-    border-radius: 0;
-    top: 40px;
-    left: 100px;
+    top: 0;
+    left: 100%;
     min-width: 100%;
+    background-color: #f9f9f9;
+    background: #353936;
     border-radius: 10px;
-    background-color: #353936;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 199999;
   }
   
@@ -1234,7 +1248,7 @@
   position: absolute;
   width: 550px;
   height: 50px;
-  background-color:transparent;
+  /* background-color:transparent; */
   top: 100px;
   right: 0px;
   z-index: 9999;
@@ -1243,16 +1257,17 @@
   justify-content: space-evenly;
 }
 .bandleader-main-buttons i{
+  background-color: black;
   border: 2px solid black;
-  color: wheat;
-  opacity: 0.5;
+  color: white;
   padding: 10px;
   border-radius: 50%;
+  opacity: 1 !important;
 }
 .bandleader-controls:hover{
   border: 2px solid lightgreen;
-  color: black;
-  opacity: 1;
+  /* color: black; */
+  opacity: 1 !important;
   cursor: pointer;
 }
 
@@ -1262,7 +1277,7 @@
   /* display: none; */
   position: absolute;
   height: 80%;
-  width: 10%;
+  width: 7%;
   right: -110px;
   bottom: 0px;
   background-color: transparent;

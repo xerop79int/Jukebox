@@ -3,6 +3,7 @@ import './Upload.css';
 import axios from 'axios';
 
 const Upload: React.FC = () => {
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [file, setFile] = useState<File[]>([]);
 
 
@@ -21,7 +22,7 @@ const Upload: React.FC = () => {
                 formData.append('file', file);
             })
 
-            axios.post('http://127.0.0.1:8000/upload', formData, {
+            axios.post(`http://${backendURL}/upload`, formData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then(res => {
@@ -39,7 +40,7 @@ const Upload: React.FC = () => {
                 formData.append('files', file);
             })
 
-            axios.post('http://127.0.0.1:8000/upload', formData, {
+            axios.post(`http://${backendURL}/upload`, formData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then(res => {

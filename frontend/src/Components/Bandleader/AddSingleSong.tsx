@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const AddSingleSong = () => {
 
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [songNumber, setSongNumber] = useState<string>("");
     const [songName, setSongName] = useState<string>("");
     const [songArtist, setSongArtist] = useState<string>("");
@@ -22,7 +23,7 @@ const AddSingleSong = () => {
     useEffect(() => {
             const song_id = url.split("/")[4];
             if (check) {
-            axios.get(`http://127.0.0.1:8000/songslist?single=${song_id}`, {
+            axios.get(`http://${backendURL}/songslist?single=${song_id}`, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
                 .then((response) => {
@@ -68,7 +69,7 @@ const AddSingleSong = () => {
         songData.append("song_lyrics", songLyrics);
 
         if(check){
-            axios.put('http://127.0.0.1:8000/songslist', songData, {
+            axios.put(`http://${backendURL}/songslist`, songData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then((response) => {
@@ -81,7 +82,7 @@ const AddSingleSong = () => {
             )
         }
         else{
-            axios.post('http://127.0.0.1:8000/songslist', songData, {
+            axios.post(`http://${backendURL}/songslist`, songData, {
                 headers: { Authorization: `Token ${localStorage.getItem('token')}` },
             })
             .then((response) => {

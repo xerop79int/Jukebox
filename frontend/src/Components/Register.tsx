@@ -22,6 +22,7 @@ import {
   import axios from 'axios';
   
   export default function Register() {
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
     const [showPassword, setShowPassword] = useState(false);
     
     const [name, setName] = useState('');
@@ -42,7 +43,7 @@ import {
     }
 
     const handleSubmit = () => {
-        axios.post('http://127.0.0.1:8000/register', data,{
+        axios.post(`http://${backendURL}/register`, data,{
           headers: {
               'Content-Type': 'application/json'
           }
