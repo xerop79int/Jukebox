@@ -271,7 +271,7 @@ class ManagerCustomerSongsListView(APIView):
         elif sort == 'genre':
             band_songs = BandSongsList.objects.all().order_by('song_genre')
         elif sort == 'year':
-            band_songs = BandSongsList.objects.all().order_by('song_year').reverse()
+            band_songs = BandSongsList.objects.all().order_by('song_year')
         else:
             band_songs = BandSongsList.objects.all()
        
