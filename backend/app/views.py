@@ -747,7 +747,26 @@ class ManagerSongsInSetView(APIView):
 
     def put(self, req):
         customer_request = req.data.get('request_id')
+        set_name = req.data.get('set_name')
+        song_id = req.data.get('song_id')
         place = req.data.get('place')
+        locking = req.data.get('locking')
+
+        print(set_name, song_id)
+
+        if locking == 'lock':
+            set = Sets.objects.get(Setname=set_name)
+            request = SongsInSet.objects.get(set=set, song__id=song_id)
+            request.is_locked = True
+            request.save()
+            return Response({'success': 'Request locked successfully.'}, status=200)
+        elif locking == 'unlock':
+            set = Sets.objects.get(Setname=set_name)
+            request = SongsInSet.objects.get(set=set, song__id=song_id)
+            request.is_locked = False
+            request.save()
+            return Response({'success': 'Request unlocked successfully.'}, status=200)
+
 
 
         if place > 3:
