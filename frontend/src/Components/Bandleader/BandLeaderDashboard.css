@@ -1281,7 +1281,7 @@
   right: -110px;
   bottom: 0px;
   background-color: transparent;
-  z-index: 999999;
+  z-index: 999;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -855,6 +855,8 @@ class ManagerSongsInSetView(APIView):
 
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
+            if SongsInSet.objects.get(number=number-1).is_locked == True:
+                return Response({'success': 'Previous Song is locked, So this song cannot be moved up'})
             if SongsInSet.objects.get(number=number).is_locked == True:
                 return Response({'success': 'Song is locked'})
             if Playlist.objects.get(status='now').SongsInSet.number == number-1:
@@ -870,6 +872,9 @@ class ManagerSongsInSetView(APIView):
                 return Response({'success': 'Song position updated'}, status=200)
         
         if place == 5:
+            # check if the song with the number + 1 is the now song and return a response that song can't be moved
+            if SongsInSet.objects.get(number=number+1).is_locked == True:
+                return Response({'success': 'Next Song is locked, So this song cannot be moved down'})
             if SongsInSet.objects.get(number=number).is_locked == True:
                 return Response({'success': 'Song is locked'})
             if SongsInSet.objects.all().count() == number:

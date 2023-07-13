@@ -616,7 +616,7 @@ const SongList: React.FC = () => {
       <div className="bandleader-sub-main">
         <div className="bandleader-main-buttons">
           <i  className="fa-solid fa-arrow-left fa-2x bandleader-controls" onClick={e => handleChangingSong('previous')}></i>
-          <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>
+          <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>box2icon
           <i className="fa-solid fa-stop fa-2x bandleader-controls"></i>
           <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
@@ -668,7 +668,7 @@ const SongList: React.FC = () => {
           </div>
           <div className="bandleader-downarrow arrowww" onClick={e => handlemovement('down')}>
             <i className="fa-solid fa-arrow-down fa-3x"></i>
-          </div>onClick
+          </div>
         </div>
         <div className="bandleader-button" onClick={handleToggle}>
           <i className="fa-solid fa-chevron-down fa-rotate-270" id="moveButton"></i>
@@ -835,9 +835,9 @@ const SongList: React.FC = () => {
                 </div>
               </div>
               { song.is_locked == false ?
-              <i style={{zIndex: '9999'}} onClick={e => handleLockingFunctionality('lock', song.id)}  className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
+              <i onClick={e => handleLockingFunctionality('lock', song.id)}  className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
               :
-              <i style={{zIndex: '9999'}} onClick={e => handleLockingFunctionality('unlock', song.id)}  className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
+              <i onClick={e => handleLockingFunctionality('unlock', song.id)}  className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
               }
             </div>
             ))
