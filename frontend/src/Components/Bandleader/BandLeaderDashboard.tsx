@@ -16,6 +16,7 @@ interface Song {
     bpm: string;
     is_inset: boolean;
     is_locked: boolean;
+    numbering: number;
 }
 
 interface Sets {
@@ -488,11 +489,19 @@ const SongList: React.FC = () => {
   }
 
   const handleSelectedSongForMovement = (id: number) => {
+    if (movesong){
+      const presong = document.querySelector(`.song-${movesong}`) as HTMLElement;
+      presong.style.border = '1px solid white'
+    }
     setMovesong(id);
     const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
     const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
     alertMessage.innerHTML = "Song Selected"
     alert.style.display = "block";
+
+   
+    const song = document.querySelector(`.song-${id}`) as HTMLElement;
+    song.style.border = '2px solid green'
 
     setTimeout(function() {
       alert.style.display = 'none';
@@ -616,7 +625,7 @@ const SongList: React.FC = () => {
       <div className="bandleader-sub-main">
         <div className="bandleader-main-buttons">
           <i  className="fa-solid fa-arrow-left fa-2x bandleader-controls" onClick={e => handleChangingSong('previous')}></i>
-          <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>box2icon
+          <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>
           <i className="fa-solid fa-stop fa-2x bandleader-controls"></i>
           <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
@@ -821,8 +830,8 @@ const SongList: React.FC = () => {
 
              { option.includes('Set') ? 
              selectedSetSongs.map((song: Song) => (
-              <div key={song.id} className="bandleader-song-dummy" onClick={e => handleSelectedSongForMovement(song.id)}>
-              <h3>{song.number}</h3>
+              <div key={song.id} className={`bandleader-song-dummy song-${song.id}`} onClick={e => handleSelectedSongForMovement(song.id)}>
+              <h3>{song.numbering}</h3>
               <div className="bandleader-song-title-queue">
                 <div className="bandleader-songtitle-queue">
                   <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>
@@ -835,9 +844,9 @@ const SongList: React.FC = () => {
                 </div>
               </div>
               { song.is_locked == false ?
-              <i onClick={e => handleLockingFunctionality('lock', song.id)}  className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
+              <i onClick={e => handleLockingFunctionality('lock', song.id)} style={{color: "#fff"}}  className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
               :
-              <i onClick={e => handleLockingFunctionality('unlock', song.id)}  className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
+              <i onClick={e => handleLockingFunctionality('unlock', song.id)} style={{color: "#000"}}  className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
               }
             </div>
             ))

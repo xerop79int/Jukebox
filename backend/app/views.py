@@ -855,12 +855,20 @@ class ManagerSongsInSetView(APIView):
 
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
+            
             if SongsInSet.objects.get(number=number-1).is_locked == True:
                 return Response({'success': 'Previous Song is locked, So this song cannot be moved up'})
             if SongsInSet.objects.get(number=number).is_locked == True:
                 return Response({'success': 'Song is locked'})
             if Playlist.objects.get(status='now').SongsInSet.number == number-1:
                 return Response({'success': 'Song can not be moved'}, status=200)
+            try:
+                set = SongsInSet.objects.get(number=number).set
+                count = SongsInSet.objects.filter(set=set).count()
+                if number == count:
+                    return Response({'success': 'This song is the last song so cannot be moved up'}, status=200)
+            except:
+                pass
             if number == 1:
                 return Response({'success': 'This song is the first in the queue so cannot be moved up'}, status=200)
             if SongsInSet.objects.filter(number=number-1).exists():
@@ -873,12 +881,16 @@ class ManagerSongsInSetView(APIView):
         
         if place == 5:
             # check if the song with the number + 1 is the now song and return a response that song can't be moved
-            if SongsInSet.objects.get(number=number+1).is_locked == True:
-                return Response({'success': 'Next Song is locked, So this song cannot be moved down'})
-            if SongsInSet.objects.get(number=number).is_locked == True:
-                return Response({'success': 'Song is locked'})
+            if SongsInSet.objects.filter(number=number+1).exists():
+                if SongsInSet.objects.get(number=number+1).is_locked == True:
+                    return Response({'success': 'Next Song is locked, So this song cannot be moved down'})
+            
+            if SongsInSet.objects.filter(number=number).exists():
+                if SongsInSet.objects.get(number=number).is_locked == True:
+                    return Response({'success': 'Song is locked'})
             if SongsInSet.objects.all().count() == number:
                 return Response({'success': 'This song is the last song so cannot be moved down'}, status=200)
+
             if SongsInSet.objects.filter(number=number+1).exists():
                 next = SongsInSet.objects.get(number=number+1)
                 next.number -= 1
@@ -917,9 +929,12 @@ class ManagerSongsInSetView(APIView):
         set_id = req.GET.get('set_id')
         songs_in_set = SongsInSet.objects.filter(set__id=set_id).order_by('number')
         data = []
+        count = 0
         for song_in_set in songs_in_set:
             song = BandSongsList.objects.get(id=song_in_set.song.id)
+            count += 1
             song_data = {
+                'numbering': count,
                 'id': song.id,
                 'number': song_in_set.number,
                 'song_number': song.song_number,
