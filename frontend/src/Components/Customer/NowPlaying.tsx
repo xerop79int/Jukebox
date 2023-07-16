@@ -42,7 +42,7 @@ interface SongResponse{
 
 const SongList: React.FC = () => {
 
-    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
 
     const [songs, setSongs] = useState<Song[]>([]);
     const [currentSong, setCurrentSong] = useState<CurrentSong | null>();
@@ -311,7 +311,7 @@ const SongList: React.FC = () => {
               <div className="p-heading">Now Playing</div>
               <div className="player-thumbnail">
                 <img
-                  src={currentSong?.img}
+                  src={`http://${backendURL}${currentSong?.img}`}
                   alt="Thumbnail"
                   className="thumbnail"
                 />
@@ -380,7 +380,7 @@ const SongList: React.FC = () => {
                   <div className="song-queue">
                     <div className="song-img">
                       <img
-                        src={nextSong.img}
+                        src={`http://${backendURL}${nextSong.img}`}
                         alt="song-img"
                         className="song-image"
                       />
@@ -437,7 +437,7 @@ const SongList: React.FC = () => {
                   >
                     <div className="song-img-list">
                       <img
-                        src={song.img}
+                        src={`http://${backendURL}${song.img}`}
                         alt="song-img"
                         className="song-image-list"
                       />

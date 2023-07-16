@@ -16,8 +16,9 @@ from rest_framework.permissions import AllowAny
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -293,7 +294,7 @@ class ManagerCustomerSongsListView(APIView):
                     'cortes': band_song.cortes,
                     'song_year': band_song.song_year,
                     'bpm': band_song.bpm,
-                    'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                    'img': str(band_song.song_cover.url)
                 }
                 data.append(song_data)
         elif search:
@@ -318,7 +319,7 @@ class ManagerCustomerSongsListView(APIView):
                         'liked': liked,
                         'cortes': band_song.cortes,
                         'bpm': band_song.bpm,
-                        'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                        'img': str(band_song.song_cover.url)
                     }
                     data.append(song_data)
         else:
@@ -349,7 +350,7 @@ class ManagerCustomerSongsListView(APIView):
                     'song_year': band_song.song_year,
                     'cortes': band_song.cortes,
                     'bpm': band_song.bpm,
-                    'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                    'img': str(band_song.song_cover.url)
                 }
                 data.append(song_data)
                 
@@ -465,7 +466,7 @@ class ManagerBandSongsListView(APIView):
                 'cortes': band_song.cortes,
                 'bpm': band_song.bpm,
                 'song_lyrics': band_song.song_lyrics,
-                'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                'img': str(band_song.song_cover.url)
             }
             return Response({'band_song': data})
        
@@ -493,7 +494,7 @@ class ManagerBandSongsListView(APIView):
                     'cortes': band_song.cortes,
                     'song_year': band_song.song_year,
                     'bpm': band_song.bpm,
-                    'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url),
+                    'img': str(band_song.song_cover.url),
                     'is_inset': is_in_set
                 }
                 data.append(song_data)
@@ -519,7 +520,7 @@ class ManagerBandSongsListView(APIView):
                         'liked': liked,
                         'cortes': band_song.cortes,
                         'bpm': band_song.bpm,
-                        'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                        'img': str(band_song.song_cover.url)
                     }
                     data.append(song_data)
         else:
@@ -550,7 +551,7 @@ class ManagerBandSongsListView(APIView):
                     'song_year': band_song.song_year,
                     'cortes': band_song.cortes,
                     'bpm': band_song.bpm,
-                    'img': 'http://127.0.0.1:8000'+ str(band_song.song_cover.url)
+                    'img': str(band_song.song_cover.url)
                 }
                 data.append(song_data)
                 
@@ -638,7 +639,6 @@ class ManagerSetsView(APIView):
     # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, req):
-        print(req.user)
         # try:
         #     band_leader = BandLeader.objects.get(user=req.user)
         # except:
@@ -949,8 +949,8 @@ class ManagerSongsInSetView(APIView):
         return Response({'songs_in_set': data})
 
 class ManagerPlaylistView(APIView):
-    authentication_classes = [TokenAuthentication]
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = []
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def post(self, req):
         movement = req.data.get('movement')
@@ -990,7 +990,7 @@ class ManagerPlaylistView(APIView):
                     'song_artist': now_song.song_artist,
                     'song_genre': now_song.song_genre,
                     'song_durations': now_song.song_durations,
-                    'img': 'http://127.0.0.1:8000'+ str(now_song.song_cover.url)
+                    'img': str(now_song.song_cover.url)
                 }
                 data.append(now_data)
             
@@ -1005,7 +1005,7 @@ class ManagerPlaylistView(APIView):
                     'song_artist': next_song.song_artist,
                     'song_genre': next_song.song_genre,
                     'song_durations': next_song.song_durations,
-                    'img': 'http://127.0.0.1:8000'+ str(next_song.song_cover.url)
+                    'img': str(next_song.song_cover.url)
                 }
                 data.append(next_data)
             
@@ -1044,7 +1044,7 @@ class ManagerPlaylistView(APIView):
                 'song_artist': now_song.song_artist,
                 'song_genre': now_song.song_genre,
                 'song_durations': now_song.song_durations,
-                'img': 'http://127.0.0.1:8000'+ str(now_song.song_cover.url),
+                'img': str(now_song.song_cover.url),
                 'cortes': now_song.cortes,
                 'bpm': now_song.bpm,
                 'song_year': now_song.song_year,
@@ -1065,7 +1065,7 @@ class ManagerPlaylistView(APIView):
                 'song_artist': next_song.song_artist,
                 'song_genre': next_song.song_genre,
                 'song_durations': next_song.song_durations,
-                'img': 'http://127.0.0.1:8000'+ str(next_song.song_cover.url),
+                'img': str(next_song.song_cover.url),
                 'cortes': next_song.cortes,
                 'bpm': next_song.bpm,
                 'song_year': next_song.song_year,
