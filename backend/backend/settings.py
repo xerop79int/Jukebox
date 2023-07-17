@@ -157,7 +157,7 @@ STATIC_URL = 'static/'
 #     host_https
 # ]
 
-ALLOWED_HOSTS = [host_ip]
+ALLOWED_HOSTS = [host_ip, 'localhost', '127.0.0.1']
 
 host_http = f'http://{host_ip}:3000'
 host_https = f'https://{host_ip}:3000'
