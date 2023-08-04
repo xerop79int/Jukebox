@@ -49,6 +49,8 @@ const SongList: React.FC = () => {
   const [SongRequestid, setSongRequestid] = useState<number>(0);
   const [nowSong, setNowSong] = useState<Song>();
   const [nextSong, setNextSong] = useState<Song>();
+  const [orginialScrollingvalue, setOrginialScrollingvalue] = useState<number>(0);
+  const [scrollingvalue, setScrollingvalue] = useState<number>(0);
 
   const [movesong, setMovesong] = useState<number>(0);
 
@@ -124,6 +126,16 @@ const SongList: React.FC = () => {
     handleGettingPlaylist()
   }, []);
 
+  const handleAutoScrolling = (value: number) => {
+    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    scrollingdiv.scrollTo({
+      top: value,
+      behavior: 'smooth'
+    })
+    // scrollingdiv.scrollTop = value;
+  }
+
+
   const handleGettingPlaylist = () => {
     let URL = `http://${backendURL}/playlist`;
 
@@ -182,9 +194,16 @@ const SongList: React.FC = () => {
   
 
   socket.onmessage = function(event) {
-    const data = JSON.parse(event.data); 
+    const data = JSON.parse(event.data);
     console.log(data)
-    setRequestQueue([data]);
+    if (data.value){
+      // console.log(data)
+      handleAutoScrolling(data.value.SCROLL)
+    }
+    else{
+      const data = JSON.parse(event.data); 
+      setRequestQueue([data]);
+    }
   };
   
   
@@ -482,6 +501,8 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
+      setScrollingvalue(res.data.scroll_value)
+      setOrginialScrollingvalue(res.data.scroll_value)
       handleGettingPlaylist()
     }
     )

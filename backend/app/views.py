@@ -16,8 +16,10 @@ from rest_framework.permissions import AllowAny
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
+import threading
+from time import sleep
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -948,20 +950,49 @@ class ManagerSongsInSetView(APIView):
 
         return Response({'songs_in_set': data})
 
+SCROLL = 0
+MEASURE = 1
+BEAT = 1
 class ManagerPlaylistView(APIView):
-    authentication_classes = [TokenAuthentication]
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = []
 
-    def post(self, req):
+    def send_auto_scroll_value(self, auto_scroll_value):
+        print('Hello')
+        global SCROLL, MEASURE, BEAT
+        SCROLL = SCROLL + auto_scroll_value + auto_scroll_value + auto_scroll_value
+        if BEAT == 4:
+            MEASURE += 1
+            BEAT = 1
+        else:
+            BEAT += 1
+
+        # get the channel layer
+        channel_layer = get_channel_layer()
+        # send the data to the group
+        async_to_sync(channel_layer.group_send)('bandleader_frontend', {
+            'type': 'send_scrolling_value',
+            'scrolling_value': {
+                'SCROLL': SCROLL,
+                'MEASURE': MEASURE,
+                'BEAT': BEAT
+            }
+        })
+        sleep(0.5)
+        self.send_auto_scroll_value(auto_scroll_value)
+
+    def post(self, req, *args, **kwargs):
         movement = req.data.get('movement')
-
-        try:
-            band_leader = BandLeader.objects.get(user=req.user)
-        except:
-            return Response({'error': 'You are not a band leader'}, status=400)
+        # try:
+        #     band_leader = BandLeader.objects.get(user=req.user)
+        # except:
+        #     return Response({'error': 'You are not a band leader'}, status=400)
 
 
         if movement == 'next':
+            global SCROLL, MEASURE, BEAT
+            SCROLL = 0
+            MEASURE = 1
+            BEAT = 1
             if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='next').exists():
                 if not Playlist.objects.get(status='next').SongsInSet.number > Playlist.objects.all().count():
                     next = Playlist.objects.get(status='next')
@@ -970,6 +1001,10 @@ class ManagerPlaylistView(APIView):
                     Playlist.objects.filter(id=next.id).update(status='now')
                     Playlist.objects.filter(SongsInSet__number=next_number).update(status='next')
         if movement == 'previous':
+            # global SCROLL, MEASURE, BEAT
+            # SCROLL = 0
+            # MEASURE = 1
+            # BEAT = 1
             if Playlist.objects.filter(status='now').exists():
                 if Playlist.objects.get(status='now').SongsInSet.number != 1:
                     now_number = int(Playlist.objects.get(status='now').SongsInSet.number) - 1
@@ -1016,11 +1051,32 @@ class ManagerPlaylistView(APIView):
                     'type': 'send_playlist',
                     'playlist': data
                 })
-        
+                if Playlist.objects.filter(status='now').exists():
+                    now = Playlist.objects.get(status='now').SongsInSet
+                    now_song = BandSongsList.objects.get(id=now.song.id)
 
+                    bpm = int(now_song.bpm)
+                    song_duration = now_song.song_durations
+                    song_duration = sum(x * int(t) for x, t in zip([1, 60, 3600], reversed(song_duration.split(":"))))
+                    # get the number of lines from lyrics
+                    if now_song.song_lyrics:
+                        num_lines = now_song.song_lyrics.count('\n') + 1
+
+
+                    SCROLL_SPEED = 1
+                    LINE_DURATION = song_duration / num_lines
+                    BEAT_DURATION = 60 / bpm
+                    BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
+                    auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
+
+                    thread = threading.Thread(target=self.send_auto_scroll_value, args=(auto_scroll_value,))
+                    thread.start()
+
+        
+            return Response({'success': 'Playlist updated successfully'}, status=200)
                 
         
-        return Response({'success': 'Playlist updated successfully'}, status=200)
+        return Response({'success': 'Playlist updated successfully'})
 
     def get(self, req):
         data = []
