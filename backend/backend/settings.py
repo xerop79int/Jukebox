@@ -12,6 +12,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import socket
+
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))  # Connect to a remote host (Google's DNS server)
+    local_ip_address = s.getsockname()[0]  # Get the local IP address of the connected interface
+    s.close()
+
+    host_ip = local_ip_address
+    
+
+except:
+    pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +39,6 @@ SECRET_KEY = 'django-insecure-hag(17&r&&7kahwh^a4+oww@aooag6(poh78hveoo6xyoes%o@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -137,22 +149,34 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 # CORS_ORIGIN_WHITELIST = [
 #     'http://localhost:3000',
-#     'http://127.0.0.1:3000'
+#     'http://127.0.0.1:3000',
+#     host_http,
+#     host_https
 # ]
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'Authorization',
-    'content-type',
-    'origin',
-    'user-agent',
-    'Token', # Add any custom headers here
+ALLOWED_HOSTS = [host_ip, 'localhost', '127.0.0.1']
+
+host_http = f'http://{host_ip}:3000'
+host_https = f'https://{host_ip}:3000'
+
+CORS_ORIGIN_WHITELIST = [
+    host_http,
+    host_https,
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
 ]
+# CORS_ALLOW_HEADERS = [
+#     'accept',
+#     'accept-encoding',
+#     'Authorization',
+#     'content-type',
+#     'origin',
+#     'user-agent',
+#     'Token', # Add any custom headers here
+# ]
 
 
 

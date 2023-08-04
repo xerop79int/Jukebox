@@ -9,7 +9,7 @@ interface Venue {
 
 const AddVenue = () => {
 
-    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [venue, setVenue] = useState("")
     const [venueList, setVenueList] = useState<Venue[]>([])
     const [selectVenue, setSelectVenue] = useState("") 

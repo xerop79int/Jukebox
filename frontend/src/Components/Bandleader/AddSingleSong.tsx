@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const AddSingleSong = () => {
 
-    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
+    const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [songNumber, setSongNumber] = useState<string>("");
     const [songName, setSongName] = useState<string>("");
     const [songArtist, setSongArtist] = useState<string>("");

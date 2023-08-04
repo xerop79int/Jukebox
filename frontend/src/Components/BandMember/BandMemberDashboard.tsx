@@ -34,7 +34,7 @@ interface SongRequest{
 
 const SongList: React.FC = () => {
 
-  const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":8000");
+  const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
   const [songs, setSongs] = useState<Song[]>([]);
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
