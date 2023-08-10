@@ -950,37 +950,40 @@ class ManagerSongsInSetView(APIView):
 
         return Response({'songs_in_set': data})
 
-SCROLL = 0
-MEASURE = 1
-BEAT = 1
+# SCROLL = 0
+# MEASURE = 1
+# BEAT = 0
 class ManagerPlaylistView(APIView):
     authentication_classes = []
+    SCROLL = 0
+    MEASURE = 1
+    BEAT = 0
+    bps = 0
 
-    def send_auto_scroll_value(self, auto_scroll_value):
-        global SCROLL, MEASURE, BEAT
-        if BEAT == 4:
-            MEASURE += 1
-            BEAT = 1
-        else:
-            BEAT += 1
-
-        # send the Scroll data only when the measure is 4, 8, 12, 16, 20, 24, 28, 32
-        if MEASURE % 4 == 0:
-            SCROLL = SCROLL + auto_scroll_value + auto_scroll_value + auto_scroll_value
+    # def send_auto_scroll_value(self, auto_scroll_value):
+    #     sleep_time = 1/self.bps
+    #     sleep(0.6)
+    #     if self.BEAT == 4:
+    #         self.MEASURE += 1
+    #         self.BEAT = 1
+    #     else:
+    #         self.BEAT += 1
+    #     if self.MEASURE % 4 == 0:
+    #         self.SCROLL = self.SCROLL + auto_scroll_value * 4
             
-        # get the channel layer
-        channel_layer = get_channel_layer()
-        # send the data to the group
-        async_to_sync(channel_layer.group_send)('bandleader_frontend', {
-            'type': 'send_scrolling_value',
-            'scrolling_value': {
-                'SCROLL': SCROLL,
-                'MEASURE': MEASURE,
-                'BEAT': BEAT
-            }
-        })
-        sleep(0.1)
-        self.send_auto_scroll_value(auto_scroll_value)
+    #     # get the channel layer
+    #     channel_layer = get_channel_layer()
+    #     # send the data to the group
+    #     async_to_sync(channel_layer.group_send)('bandleader_frontend', {
+    #         'type': 'send_scrolling_value',
+    #         'scrolling_value': {
+    #             'SCROLL': int(self.SCROLL),
+    #             'MEASURE': self.MEASURE,
+    #             'BEAT': self.BEAT
+    #         }
+    #     })
+    #     sleep(sleep_time)
+    #     self.send_auto_scroll_value(auto_scroll_value)
 
     def post(self, req, *args, **kwargs):
         movement = req.data.get('movement')
@@ -1045,40 +1048,40 @@ class ManagerPlaylistView(APIView):
                     'img': str(next_song.song_cover.url)
                 }
                 data.append(next_data)
-            
-                # get the channel layer
-                channel_layer = get_channel_layer()
-                # send the data to the group
-                async_to_sync(channel_layer.group_send)('customer_frontend', {
-                    'type': 'send_playlist',
-                    'playlist': data
-                })
-                if Playlist.objects.filter(status='now').exists():
-                    now = Playlist.objects.get(status='now').SongsInSet
-                    now_song = BandSongsList.objects.get(id=now.song.id)
 
-                    bpm = int(now_song.bpm)
-                    song_duration = now_song.song_durations
-                    song_duration = sum(x * int(t) for x, t in zip([1, 60, 3600], reversed(song_duration.split(":"))))
-                    # get the number of lines from lyrics
-                    if now_song.song_lyrics:
-                        num_lines = now_song.song_lyrics.count('\n') + 1
+            # # get the channel layer
+            # channel_layer = get_channel_layer()
+            # # send the data to the group
+            # async_to_sync(channel_layer.group_send)('customer_frontend', {
+            #     'type': 'send_playlist',
+            #     'playlist': data
+            # })
+            if Playlist.objects.filter(status='now').exists():
+                now = Playlist.objects.get(status='now').SongsInSet
+                now_song = BandSongsList.objects.get(id=now.song.id)
 
+                bpm = int(now_song.bpm)
+                song_duration = now_song.song_durations
+                song_duration = sum(x * int(t) for x, t in zip([1, 60, 3600], reversed(song_duration.split(":"))))
+                # get the number of lines from lyrics
+                if now_song.song_lyrics:
+                    num_lines = now_song.song_lyrics.count('\n') + 1
 
-                    SCROLL_SPEED = 1
-                    LINE_DURATION = song_duration / num_lines
-                    BEAT_DURATION = 60 / bpm
-                    BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
-                    auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
+                num_lines = num_lines / 5
+                SCROLL_SPEED = 1
+                LINE_DURATION = song_duration / num_lines
+                BEAT_DURATION = 60 / bpm
+                BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
+                print(BEATS_PER_LINE)
+                auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
+                self.bps = 60 / bpm
 
-                    thread = threading.Thread(target=self.send_auto_scroll_value, args=(auto_scroll_value,))
-                    thread.start()
+            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value})
 
-        
-            return Response({'success': 'Playlist updated successfully'}, status=200)
                 
-        
+
         return Response({'success': 'Playlist updated successfully'})
+
 
     def get(self, req):
         data = []

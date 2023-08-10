@@ -24,7 +24,6 @@ class BandLeaderConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(data))
     
     async def send_scrolling_value(self, event):
-        print('Sending scrolling value')
         # Send data to the group
         value = {'value': event['scrolling_value']}
         await self.send(text_data=json.dumps(value))

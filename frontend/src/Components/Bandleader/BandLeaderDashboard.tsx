@@ -49,22 +49,84 @@ const SongList: React.FC = () => {
   const [SongRequestid, setSongRequestid] = useState<number>(0);
   const [nowSong, setNowSong] = useState<Song>();
   const [nextSong, setNextSong] = useState<Song>();
-  const [orginialScrollingvalue, setOrginialScrollingvalue] = useState<number>(0);
-  const [scrollingvalue, setScrollingvalue] = useState<number>(0);
-
   const [movesong, setMovesong] = useState<number>(0);
-
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket(`ws://${backendURL}/ws/bandleadercustomerrequests/`);
+
+  
 
   const [lyric, setLyric] = useState<string>(``);
 
-  
+  useEffect(() => {
+    const socket = new WebSocket(`ws://${backendURL}/ws/bandleadercustomerrequests/`);
+
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      setRequestQueue([data]);
+    };
+
+  }, []);
+
+  let Measure: number = 1;
+  let Beat: number = 0;
+  let SCROLL: number = 0;
+  const handleMeasureAndBeat = (bps: number, Scroll: number) => {
+
+    if(Beat === 4){
+      Measure = Measure + 1;
+      Beat = 1;
+    }
+    else{
+      Beat = Beat + 1;
+    }
+
+    if (Measure % 4 === 0){
+      SCROLL = SCROLL + Scroll;
+      handleAutoScrolling(SCROLL);
+    }
+    const measure1 = document.querySelector('.measure-1') as HTMLElement;
+    const measure2 = document.querySelector('.measure-2') as HTMLElement;
+    const measure3 = document.querySelector('.measure-3') as HTMLElement;
+    measure3.textContent = Measure.toString();
+    
+    // get all the div with class of fa
+    const fa = document.querySelectorAll('.fa1') as NodeListOf<HTMLElement>;
+    // loop through and toggle the background color
+
+    if (Beat === 1){
+      measure1.style.backgroundColor = 'red';
+      measure2.style.backgroundColor = 'red';
+      measure3.style.backgroundColor = 'red';
+      const fa4 = document.querySelector('.fa4') as HTMLElement;
+      fa4.style.backgroundColor = 'black';
+    }
+    else{
+      measure1.style.backgroundColor = 'black';
+      measure2.style.backgroundColor = 'black';
+      measure3.style.backgroundColor = 'black';
+      const fa = document.querySelector('.fa' + (Beat - 1)) as HTMLElement;
+      fa.style.backgroundColor = 'black';
+      const fabeat = document.querySelector('.fa' + Beat) as HTMLElement;
+      fabeat.style.backgroundColor = 'red';
+    }
+
+    setTimeout(() => {
+      handleMeasureAndBeat(bps, Scroll);
+    }, bps * 1000);
+  }
+
+  const handleAutoScrolling = (SCROLL: number) => {
+    
+      
+    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    scrollingdiv.scrollTo({
+      top: SCROLL
+    })
+  }
 
   const handlestyling = (lyric: string) => {
 
     const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA']
-    const styledWords = ['[Break]', 'Verse', 'Chorus'];
+    const styledWords = ['Break', 'Verse', 'Chorus'];
 
     const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
     const wordRegex = new RegExp(
@@ -79,16 +141,6 @@ const SongList: React.FC = () => {
       ''
     );
     setLyric(replacelyric)
-
-
-
-    
-    
-    // let updatedlyric = lyric.replaceAll('[Break]', '<span style="color: Yellow">Break</span>')
-    // updatedlyric = updatedlyric.replaceAll('[Verse]', '<span style="color: Yellow">Verse</span>')
-    // updatedlyric = updatedlyric.replaceAll('[Chorus]', '<span style="color: Yellow">Chorus</span>')
-    // updatedlyric = updatedlyric.replaceAll('[Outro]', '<span style="color: Yellow">Outro</span>')
-    // setLyric(updatedlyric)
 
   }
 
@@ -126,14 +178,9 @@ const SongList: React.FC = () => {
     handleGettingPlaylist()
   }, []);
 
-  const handleAutoScrolling = (value: number) => {
-    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
-    scrollingdiv.scrollTo({
-      top: value,
-      behavior: 'smooth'
-    })
-    // scrollingdiv.scrollTop = value;
-  }
+  
+
+  
 
 
   const handleGettingPlaylist = () => {
@@ -183,33 +230,7 @@ const SongList: React.FC = () => {
       processRequest(currentRequest);
     }
   }, [requestQueue]);
-
-
-  socket.onopen = function(e) {
-    console.log("[open] Connection established");
-    // Perform actions after the WebSocket connection is established
-    // For example, send an initial request
-    socket.send('WebSocket connection established');
-  };
   
-
-  socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    console.log(data)
-    if (data.value){
-      // console.log(data)
-      handleAutoScrolling(data.value.SCROLL)
-    }
-    else{
-      const data = JSON.parse(event.data); 
-      setRequestQueue([data]);
-    }
-  };
-  
-  
-  // if (requestQueue.length === 0) {
-  //   processRequest();
-  // }
   const handleSearch = () => {
 
     const URL = `http://${backendURL}/songslist?search=${search}`
@@ -240,19 +261,6 @@ const SongList: React.FC = () => {
     })
     .catch(err => console.log(err))
   }
-
-  // const handleSetGet = () => {
-  //   const URL = `http://${backendURL}/songsset`
-
-  //   axios.get(URL, {
-  //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-  //   })
-  //   .then(res => {
-  //     console.log(res.data)
-  //     setSetSongs(res.data.song_sets);
-  //   })
-  //   .catch(err => console.log(err))
-  // }
 
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
@@ -408,28 +416,6 @@ const SongList: React.FC = () => {
     .catch(err => console.log(err))
   }
 
-  // const handleSetRemove = (id: number) => {
-  //   const URL = `http://${backendURL}/songsinset?set_id=${currentSet}&song_id=${id}`
-
-  //   axios.delete(URL, {
-  //     headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-  //   })
-  //   .then(res => {
-  //     console.log(res.data)
-  //     const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
-  //     const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
-  //     alertMessage.innerHTML = res.data.success
-  //     alert.style.display = "block";
-  //     handleEditSet(currentSet);
-
-  //     setTimeout(function() {
-  //       alert.style.display = 'none';
-  //     }, 2000);
-  //   })
-  //   .catch(err => console.log(err))
-
-  // }
-
 
   const handleCustomerRequestUpdate = (status: string, approved: boolean, number: number) => {
 
@@ -502,8 +488,9 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
-      setScrollingvalue(res.data.scroll_value)
-      setOrginialScrollingvalue(res.data.scroll_value)
+      if (res.data.bps){
+        handleMeasureAndBeat(res.data.bps, res.data.Scroll)
+      }
       handleGettingPlaylist()
     }
     )
@@ -600,7 +587,6 @@ const SongList: React.FC = () => {
     <div className="bandleader-main">
        <div className="bandleader-alert-box bandleader-green">
                 <p className='bandleader-alert-message'></p>
-                {/* <span onClick={handleAlertClose} className="close-btn">&times;</span> */}
        </div>
 
        <div id="popup" className="">
@@ -651,10 +637,20 @@ const SongList: React.FC = () => {
           <i className="fa-solid fa-stop fa-2x bandleader-controls"></i>
           <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
-          <i className="fa-solid fa-1 fa-2x"></i>
-          <i className="fa-solid fa-2 fa-2x"></i>
-          <i className="fa-solid fa-3 fa-2x"></i>
-          <i className="fa-solid fa-4 fa-2x"></i>
+          <div className="band-leader-main-button-1-head">
+          <div className="band-leader-main-button-1">
+            <div className="band-leader-main-button-circle-1 measure-1 fa1">
+            </div>
+            <div className="band-leader-main-button-circle-2 measure-2 fa1">
+            </div>
+            <div className="band-leader-main-button-circle-3 measure-3 fa1">
+            1
+            </div>
+          </div>
+          </div>
+          <i className="fa-solid fa2 fa-2x">2</i>
+          <i className="fa-solid fa3 fa-2x">3</i>
+          <i className="fa-solid fa4 fa-2x">4</i>
         </div>
         <nav>
           { nowSong ? (
@@ -686,7 +682,6 @@ const SongList: React.FC = () => {
         <div className="bandleader-verse-sec">
           <div className="bandleader-verse-sec-scroll">
             <pre dangerouslySetInnerHTML={{ __html: lyric }} >
-            {/* <div className='bandleader-lyric' /> */}
             </pre>
           </div>
         </div>
