@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './BandLeaderDashboard.css';
 import axios from 'axios';
 
@@ -52,6 +52,14 @@ const SongList: React.FC = () => {
   const [movesong, setMovesong] = useState<number>(0);
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
 
+  const Measure = useRef<number>(1);
+  const Beat = useRef<number>(0);
+  const SCROLL = useRef<number>(0);
+  const isRunning = useRef<boolean>(true);
+
+  // make ref of Measure and Beat
+
+
   
 
   const [lyric, setLyric] = useState<string>(``);
@@ -66,33 +74,29 @@ const SongList: React.FC = () => {
 
   }, []);
 
-  let Measure: number = 1;
-  let Beat: number = 0;
-  let SCROLL: number = 0;
   const handleMeasureAndBeat = (bps: number, Scroll: number) => {
 
-    if(Beat === 4){
-      Measure = Measure + 1;
-      Beat = 1;
+    if (!isRunning.current){
+      return;
+    }
+    if(Beat.current === 4){
+      Measure.current = Measure.current + 1;
+      Beat.current = 1;
     }
     else{
-      Beat = Beat + 1;
+      Beat.current = Beat.current + 1;
     }
 
-    if (Measure % 4 === 0){
-      SCROLL = SCROLL + Scroll;
-      handleAutoScrolling(SCROLL);
+    if (Measure.current % 4 === 0){
+      SCROLL.current = SCROLL.current + Scroll;
+      handleAutoScrolling(SCROLL.current);
     }
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
     const measure2 = document.querySelector('.measure-2') as HTMLElement;
     const measure3 = document.querySelector('.measure-3') as HTMLElement;
-    measure3.textContent = Measure.toString();
-    
-    // get all the div with class of fa
-    const fa = document.querySelectorAll('.fa1') as NodeListOf<HTMLElement>;
-    // loop through and toggle the background color
+    measure3.textContent = Measure.current.toString();
 
-    if (Beat === 1){
+    if (Beat.current === 1){
       measure1.style.backgroundColor = 'red';
       measure2.style.backgroundColor = 'red';
       measure3.style.backgroundColor = 'red';
@@ -103,9 +107,9 @@ const SongList: React.FC = () => {
       measure1.style.backgroundColor = 'black';
       measure2.style.backgroundColor = 'black';
       measure3.style.backgroundColor = 'black';
-      const fa = document.querySelector('.fa' + (Beat - 1)) as HTMLElement;
+      const fa = document.querySelector('.fa' + (Beat.current - 1)) as HTMLElement;
       fa.style.backgroundColor = 'black';
-      const fabeat = document.querySelector('.fa' + Beat) as HTMLElement;
+      const fabeat = document.querySelector('.fa' + Beat.current) as HTMLElement;
       fabeat.style.backgroundColor = 'red';
     }
 
@@ -115,13 +119,17 @@ const SongList: React.FC = () => {
   }
 
   const handleAutoScrolling = (SCROLL: number) => {
-    
-      
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
     scrollingdiv.scrollTo({
       top: SCROLL
     })
   }
+
+  const handleStopingSong = () => {
+    isRunning.current = false;
+  }
+
+
 
   const handlestyling = (lyric: string) => {
 
@@ -194,6 +202,20 @@ const SongList: React.FC = () => {
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
           handlestyling(res.data.playlist[0].lyric)
+        })
+        .catch(err => {console.log(err)})
+
+      
+    const data = {
+      'movement': 'play'
+    }
+
+
+    axios.post(URL,data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+        .then(res => {
+          console.log(res.data)
         })
         .catch(err => {console.log(err)})
   }
@@ -436,12 +458,10 @@ const SongList: React.FC = () => {
       const popup = document.querySelector('#popup') as HTMLInputElement;
       popup.style.right = '-350px';
       setRequestQueue(prevQueue => prevQueue.slice(1));
-      // const currentRequest = requestQueue[0];
-      // processRequest(currentRequest);
       }
-      else{
+      // else{
         
-      }
+      // }
 
       
       
@@ -489,6 +509,7 @@ const SongList: React.FC = () => {
     .then(res => {
       console.log(res.data)
       if (res.data.bps){
+        isRunning.current = true;
         handleMeasureAndBeat(res.data.bps, res.data.Scroll)
       }
       handleGettingPlaylist()
@@ -496,6 +517,8 @@ const SongList: React.FC = () => {
     )
     .catch(err => console.log(err))
   }
+
+
 
   const handleSelectedSongForMovement = (id: number) => {
     if (movesong){
@@ -634,7 +657,7 @@ const SongList: React.FC = () => {
         <div className="bandleader-main-buttons">
           <i  className="fa-solid fa-arrow-left fa-2x bandleader-controls" onClick={e => handleChangingSong('previous')}></i>
           <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>
-          <i className="fa-solid fa-stop fa-2x bandleader-controls"></i>
+          <i className="fa-solid fa-stop fa-2x bandleader-controls" onClick={e => handleStopingSong()}></i>
           <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
           <div className="band-leader-main-button-1-head">
@@ -687,7 +710,7 @@ const SongList: React.FC = () => {
         </div>
       </div>
 
-      <div className="bandleader-slider-section bandleader-right-position" id="mySection">
+      <div className="bandleader-slider-section" id="mySection">
       <div className="bandleader-buttons-updown arrowww">
           <div className="bandleader-uparrow" onClick={e => handlemovement('up')}>
             <i className="fa-solid fa-arrow-up fa-3x"></i>
@@ -697,7 +720,7 @@ const SongList: React.FC = () => {
           </div>
         </div>
         <div className="bandleader-button" onClick={handleToggle}>
-          <i className="fa-solid fa-chevron-down fa-rotate-270" id="moveButton"></i>
+          <i className="fa-solid fa-chevron-down fa-rotate-90" id="moveButton"></i>
         </div>
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
@@ -869,33 +892,6 @@ const SongList: React.FC = () => {
             ))
             :
             null}
-
-            {/* <div className="bandleader-song-dummy">
-              <h3>12</h3>
-              <div className="bandleader-song-title-queue">
-                <div className="bandleader-songtitle-queue">
-                  <h4>123 - Lorem ipsum dolor sit -</h4>
-                  <h6>Lorem, ipsum</h6>
-                </div>
-                <h5 className="bandleader-songdetail-queue">1984 - lorem - 7:14</h5>
-              </div>
-              <i className="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
-              <i className="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
-            </div> */}
-            
-
-            {/* <div className="bandleader-song-dummy">
-              <h3>12</h3>
-              <div className="bandleader-song-title-queue">
-                <div className="bandleader-songtitle-queue">
-                  <h4>123 - Lorem ipsum dolor sit -</h4>
-                  <h6>Lorem, ipsum</h6>
-                </div>
-                <h5 className="bandleader-songdetail-queue">1984 - lorem - 7:14</h5>
-              </div>
-              <i className="fa-solid fa-check fa-2x" id="brandleaderCheck"></i>
-              <i className="fa-solid fa-xmark fa-2x" id="brandleaderCross"></i>
-            </div> */}
 
           </div>
         </div>

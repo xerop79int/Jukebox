@@ -984,7 +984,7 @@ class ManagerPlaylistView(APIView):
     #     })
     #     sleep(sleep_time)
     #     self.send_auto_scroll_value(auto_scroll_value)
-
+    
     def post(self, req, *args, **kwargs):
         movement = req.data.get('movement')
         # try:
@@ -994,10 +994,6 @@ class ManagerPlaylistView(APIView):
 
 
         if movement == 'next':
-            global SCROLL, MEASURE, BEAT
-            SCROLL = 0
-            MEASURE = 1
-            BEAT = 1
             if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='next').exists():
                 if not Playlist.objects.get(status='next').SongsInSet.number > Playlist.objects.all().count():
                     next = Playlist.objects.get(status='next')
@@ -1006,10 +1002,6 @@ class ManagerPlaylistView(APIView):
                     Playlist.objects.filter(id=next.id).update(status='now')
                     Playlist.objects.filter(SongsInSet__number=next_number).update(status='next')
         if movement == 'previous':
-            # global SCROLL, MEASURE, BEAT
-            # SCROLL = 0
-            # MEASURE = 1
-            # BEAT = 1
             if Playlist.objects.filter(status='now').exists():
                 if Playlist.objects.get(status='now').SongsInSet.number != 1:
                     now_number = int(Playlist.objects.get(status='now').SongsInSet.number) - 1
@@ -1049,13 +1041,6 @@ class ManagerPlaylistView(APIView):
                 }
                 data.append(next_data)
 
-            # # get the channel layer
-            # channel_layer = get_channel_layer()
-            # # send the data to the group
-            # async_to_sync(channel_layer.group_send)('customer_frontend', {
-            #     'type': 'send_playlist',
-            #     'playlist': data
-            # })
             if Playlist.objects.filter(status='now').exists():
                 now = Playlist.objects.get(status='now').SongsInSet
                 now_song = BandSongsList.objects.get(id=now.song.id)
@@ -1076,8 +1061,7 @@ class ManagerPlaylistView(APIView):
                 auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
                 self.bps = 60 / bpm
 
-            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value})
-
+            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value, 'Measure': self.MEASURE, 'Beat': self.BEAT, 'SCROLL': self.SCROLL})
                 
 
         return Response({'success': 'Playlist updated successfully'})
