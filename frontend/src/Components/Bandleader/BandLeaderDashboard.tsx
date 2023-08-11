@@ -204,20 +204,6 @@ const SongList: React.FC = () => {
           handlestyling(res.data.playlist[0].lyric)
         })
         .catch(err => {console.log(err)})
-
-      
-    const data = {
-      'movement': 'play'
-    }
-
-
-    axios.post(URL,data, {
-      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-    })
-        .then(res => {
-          console.log(res.data)
-        })
-        .catch(err => {console.log(err)})
   }
 
 
