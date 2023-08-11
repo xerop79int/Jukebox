@@ -1057,7 +1057,6 @@ class ManagerPlaylistView(APIView):
                 LINE_DURATION = song_duration / num_lines
                 BEAT_DURATION = 60 / bpm
                 BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
-                print(BEATS_PER_LINE)
                 auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
                 self.bps = 60 / bpm
 

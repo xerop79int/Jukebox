@@ -57,9 +57,6 @@ const SongList: React.FC = () => {
   const SCROLL = useRef<number>(0);
   const isRunning = useRef<boolean>(true);
 
-  // make ref of Measure and Beat
-
-
   
 
   const [lyric, setLyric] = useState<string>(``);
@@ -121,7 +118,8 @@ const SongList: React.FC = () => {
   const handleAutoScrolling = (SCROLL: number) => {
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
     scrollingdiv.scrollTo({
-      top: SCROLL
+      top: SCROLL,
+      behavior: 'smooth'
     })
   }
 
