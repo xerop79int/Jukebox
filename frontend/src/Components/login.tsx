@@ -43,7 +43,8 @@
               else{
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('account_type', response.data.account_type);
-                window.location.href = '/';
+                console.log(localStorage.getItem('account_type'));
+                window.location.href = '/' + response.data.account_type;
               }
           }
       })

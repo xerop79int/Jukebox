@@ -55,7 +55,7 @@ const SongList: React.FC = () => {
   const Measure = useRef<number>(1);
   const Beat = useRef<number>(0);
   const SCROLL = useRef<number>(0);
-  const isRunning = useRef<boolean>(true);
+  const isRunning = useRef<boolean>(false);
 
   
 
@@ -84,6 +84,15 @@ const SongList: React.FC = () => {
       Beat.current = Beat.current + 1;
     }
 
+    // make SCROLL, Measure and Beat as zero when it reached the bottom
+    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    if (scrollingdiv.scrollTop + scrollingdiv.clientHeight >= scrollingdiv.scrollHeight) {
+      isRunning.current = false;
+      return;
+      // Perform actions when the bottom is reached
+  }
+    
+
     if (Measure.current % 4 === 0){
       SCROLL.current = SCROLL.current + Scroll;
       handleAutoScrolling(SCROLL.current);
@@ -91,7 +100,22 @@ const SongList: React.FC = () => {
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
     const measure2 = document.querySelector('.measure-2') as HTMLElement;
     const measure3 = document.querySelector('.measure-3') as HTMLElement;
-    measure3.textContent = Measure.current.toString();
+
+    // check if the measure is in double digit
+    if (Measure.current >= 10 && Measure.current < 100){
+      measure1.textContent = '';
+      measure2.textContent = Measure.current.toString()[0];
+      measure3.textContent = Measure.current.toString()[1];
+    }
+    // check if the measure is in triple digit
+    else if (Measure.current >= 100){
+      measure1.textContent = Measure.current.toString()[0];
+      measure2.textContent = Measure.current.toString()[1];
+      measure3.textContent = Measure.current.toString()[2];
+    }
+    else{
+      measure3.textContent = Measure.current.toString();
+    }
 
     if (Beat.current === 1){
       measure1.style.backgroundColor = 'red';
@@ -121,10 +145,65 @@ const SongList: React.FC = () => {
       top: SCROLL,
       behavior: 'smooth'
     })
+
+
+    const URL = `http://${backendURL}/scrollshare`;
+
+    const data = {
+      scroll: SCROLL
+    }
+
+    axios.post(URL, data, {
+        headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then((response) => {
+      console.log(response);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    }
+    )
   }
 
   const handleStopingSong = () => {
     isRunning.current = false;
+  }
+
+  const handleReset = () => {
+    Measure.current = 1;
+    Beat.current = 0;
+    SCROLL.current = 0;
+
+    const measure1 = document.querySelector('.measure-1') as HTMLElement;
+    const measure2 = document.querySelector('.measure-2') as HTMLElement;
+    const measure3 = document.querySelector('.measure-3') as HTMLElement;
+    measure1.style.backgroundColor = 'black';
+    measure2.style.backgroundColor = 'black';
+    measure3.style.backgroundColor = 'black';
+    measure1.textContent = '';
+    measure2.textContent = '';
+    measure3.textContent = '1';
+
+    const fa4 = document.querySelector('.fa4') as HTMLElement;
+    fa4.style.backgroundColor = 'black';
+    fa4.textContent = '4';
+    const fa3 = document.querySelector('.fa3') as HTMLElement;
+    fa3.style.backgroundColor = 'black';
+    fa3.textContent = '3';
+    const fa2 = document.querySelector('.fa2') as HTMLElement;
+    fa2.style.backgroundColor = 'black';
+    fa2.textContent = '2';
+    const fa1 = document.querySelector('.fa1') as HTMLElement;
+    fa1.style.backgroundColor = 'black';
+
+    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    scrollingdiv.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+
+
   }
 
 
@@ -474,10 +553,7 @@ const SongList: React.FC = () => {
 
   }
 
-  const handleScrolledToTop = () => {
-    const scroll = document.querySelector('.bandleader-verse-sec') as HTMLElement;
-    scroll.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
-  }
+  
 
 
   const handleChangingSong = (movement: string) => {
@@ -493,8 +569,10 @@ const SongList: React.FC = () => {
     .then(res => {
       console.log(res.data)
       if (res.data.bps){
-        isRunning.current = true;
-        handleMeasureAndBeat(res.data.bps, res.data.Scroll)
+        if(isRunning.current === false){
+          isRunning.current = true;
+          handleMeasureAndBeat(res.data.bps, res.data.Scroll)
+        }
       }
       handleGettingPlaylist()
     }
@@ -642,7 +720,7 @@ const SongList: React.FC = () => {
           <i  className="fa-solid fa-arrow-left fa-2x bandleader-controls" onClick={e => handleChangingSong('previous')}></i>
           <i className="fa-solid fa-play fa-2x bandleader-controls" onClick={e => handleChangingSong('play')}></i>
           <i className="fa-solid fa-stop fa-2x bandleader-controls" onClick={e => handleStopingSong()}></i>
-          <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleScrolledToTop}></i>
+          <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleReset}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
           <div className="band-leader-main-button-1-head">
           <div className="band-leader-main-button-1">

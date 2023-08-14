@@ -22,11 +22,28 @@ class BandLeaderConsumer(AsyncWebsocketConsumer):
         # Send data to the group
         data = event['data']
         await self.send(text_data=json.dumps(data))
-    
-    async def send_scrolling_value(self, event):
+
+class BandMemberConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        # Join the group for the consumer
+        await self.channel_layer.group_add('bandmember_frontend', self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Leave the group when the WebSocket connection is closed
+        await self.channel_layer.group_discard('bandmember_frontend', self.channel_name)
+
+    async def receive(self, text_data):
+        print(text_data)
+        pass
+
+    async def send_message(self, text_data):
+        pass
+
+    async def send_data(self, event):
         # Send data to the group
-        value = {'value': event['scrolling_value']}
-        await self.send(text_data=json.dumps(value))
+        scroll = event['scroll']
+        await self.send(text_data=json.dumps(scroll))
 
 
 class CustomerConsumer(AsyncWebsocketConsumer):

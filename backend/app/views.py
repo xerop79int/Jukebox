@@ -36,13 +36,13 @@ class ManagerSigninView(ObtainAuthToken):
         if BandLeader.objects.filter(user__username=username).exists():
             # check if band leader is active
             if BandLeader.objects.filter(user__username=username, isactive=True).exists():
-                account_type = 'band_leader'
+                account_type = 'bandleader'
             else:
                 return Response({'error': 'Band leader\'s account is not active'})      
         elif BandMember.objects.filter(user__username=username).exists():
             # check if band member is active
             if BandMember.objects.filter(user__username=username, isactive=True).exists():
-                account_type = 'band_member'
+                account_type = 'bandmember'
             else:
                 return Response({'error': 'Band member\'s account is not active'})
 
@@ -443,7 +443,7 @@ class ManagerBandSongsListView(APIView):
         view = req.GET.get('view')
         search = req.GET.get('search')
         single = req.GET.get('single')
-        set_id = req.GET.get('set_id');
+        set_id = req.GET.get('set_id')
 
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
@@ -1121,6 +1121,22 @@ class ManagerPlaylistView(APIView):
             return Response({'success': "empty"}, status=200)
         
         return Response({'playlist': data})
+
+class ManagerScrollShareView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        scroll = req.data.get('scroll')
+
+        channel_layer = get_channel_layer()
+        # send the data to the group
+        async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+            'type': 'send_data',
+            'scroll': scroll,
+        })
+
+        return Response({'success': 'Scroll sent successfully'})
         
 
 
