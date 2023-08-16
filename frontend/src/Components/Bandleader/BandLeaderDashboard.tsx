@@ -97,7 +97,6 @@ const SongList: React.FC = () => {
     
 
     if (Measure.current % 4 === 0){
-      console.log(Scroll.current)
       SCROLL.current = SCROLL.current + Scroll.current;
       handleAutoScrolling(SCROLL.current);
     }

@@ -41,15 +41,32 @@ const SongList: React.FC = () => {
   const [search, setSearch] = useState<string>("");
   // const [SongsSet, setSetSongs] = useState<Song[]>([]);
   const [Sets, setSets] = useState<Sets[]>([]);
-  const [currentSet, setCurrentSet] = useState<number>(0);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
-  const [SongRequestid, setSongRequestid] = useState<number>(0);
   const [nowSong, setNowSong] = useState<Song>();
   const [nextSong, setNextSong] = useState<Song>();
-  const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
-  const socket = new WebSocket(`ws://${backendURL}/ws/bandleadercustomerrequests/`);
 
   const [lyric, setLyric]= useState<string>(``);
+
+
+  useEffect(() => {
+    const socket = new WebSocket(`ws://${backendURL}/ws/bandmember/`);
+
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      handleAutoScrolling(data)
+    };
+
+  }, []);
+
+
+  const handleAutoScrolling = (SCROLL: number) => {
+    console.log(SCROLL)
+    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    scrollingdiv.scrollTo({
+      top: SCROLL,
+      behavior: 'smooth'
+    })
+  }
 
   
 
@@ -134,53 +151,6 @@ const SongList: React.FC = () => {
   }
 
 
-  const processRequest = (currentRequest: any) => {
-  
-    // Display the request data on the frontend
-    const name = document.querySelector('.customer-name') as HTMLInputElement;
-    name.textContent = " " + currentRequest.customer_name;
-  
-    const song_number_name = document.querySelector('.number-song-name') as HTMLInputElement;
-    song_number_name.textContent = " " + currentRequest.song_number + " - " + currentRequest.song_name + " - ";
-  
-    const artist = document.querySelector('.artist-durations') as HTMLInputElement;
-    artist.textContent = " " + currentRequest.song_artist + " - " + currentRequest.song_duration;
-  
-    const popup = document.querySelector('#popup') as HTMLInputElement;
-    popup.style.right = '0px';
-    popup.style.display = 'flex';
-  
-    setSongRequestid(currentRequest.id);
-  
-    // Process the request by sending the response
-    // ...
-  
-    // Remove the processed request from the queue
-    
-  };
-
-  useEffect(() => {
-    if(requestQueue.length !== 0){
-      const currentRequest = requestQueue[0];
-      processRequest(currentRequest);
-    }
-  }, [requestQueue]);
-
-
-  socket.onopen = function(e) {
-    console.log("[open] Connection established");
-    // Perform actions after the WebSocket connection is established
-    // For example, send an initial request
-    socket.send('WebSocket connection established');
-  };
-  
-
-  socket.onmessage = function(event) {
-    const data = JSON.parse(event.data); 
-    console.log(data)
-    setRequestQueue([data]);
-  };
-  
   
   // if (requestQueue.length === 0) {
   //   processRequest();

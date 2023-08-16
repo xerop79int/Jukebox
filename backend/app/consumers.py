@@ -41,6 +41,7 @@ class BandMemberConsumer(AsyncWebsocketConsumer):
         pass
 
     async def send_data(self, event):
+        print('Sending data')
         # Send data to the group
         scroll = event['scroll']
         await self.send(text_data=json.dumps(scroll))

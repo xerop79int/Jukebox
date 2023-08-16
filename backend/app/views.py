@@ -1097,6 +1097,8 @@ class ManagerScrollShareView(APIView):
     def post(self, req):
         scroll = req.data.get('scroll')
 
+        print(scroll)
+
         channel_layer = get_channel_layer()
         # send the data to the group
         async_to_sync(channel_layer.group_send)('bandmember_frontend', {
