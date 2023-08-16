@@ -955,42 +955,10 @@ class ManagerSongsInSetView(APIView):
 # BEAT = 0
 class ManagerPlaylistView(APIView):
     authentication_classes = []
-    SCROLL = 0
-    MEASURE = 1
-    BEAT = 0
-    bps = 0
-
-    # def send_auto_scroll_value(self, auto_scroll_value):
-    #     sleep_time = 1/self.bps
-    #     sleep(0.6)
-    #     if self.BEAT == 4:
-    #         self.MEASURE += 1
-    #         self.BEAT = 1
-    #     else:
-    #         self.BEAT += 1
-    #     if self.MEASURE % 4 == 0:
-    #         self.SCROLL = self.SCROLL + auto_scroll_value * 4
-            
-    #     # get the channel layer
-    #     channel_layer = get_channel_layer()
-    #     # send the data to the group
-    #     async_to_sync(channel_layer.group_send)('bandleader_frontend', {
-    #         'type': 'send_scrolling_value',
-    #         'scrolling_value': {
-    #             'SCROLL': int(self.SCROLL),
-    #             'MEASURE': self.MEASURE,
-    #             'BEAT': self.BEAT
-    #         }
-    #     })
-    #     sleep(sleep_time)
-    #     self.send_auto_scroll_value(auto_scroll_value)
+    
     
     def post(self, req, *args, **kwargs):
         movement = req.data.get('movement')
-        # try:
-        #     band_leader = BandLeader.objects.get(user=req.user)
-        # except:
-        #     return Response({'error': 'You are not a band leader'}, status=400)
 
 
         if movement == 'next':
@@ -1060,7 +1028,7 @@ class ManagerPlaylistView(APIView):
                 auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
                 self.bps = 60 / bpm
 
-            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value, 'Measure': self.MEASURE, 'Beat': self.BEAT, 'SCROLL': self.SCROLL})
+            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value})
                 
 
         return Response({'success': 'Playlist updated successfully'})
@@ -1137,6 +1105,47 @@ class ManagerScrollShareView(APIView):
         })
 
         return Response({'success': 'Scroll sent successfully'})
+    
+
+class ManagerModifyBPMView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    
+    def post(self, req):
+
+        bpm = req.data.get('bpm')
+        action = req.data.get('action')
+
+        if action == 'get':
+            if Playlist.objects.filter(status='next').exists():
+                now = Playlist.objects.get(status='now').SongsInSet
+                now_song = BandSongsList.objects.get(id=now.song.id)
+                song_duration = now_song.song_durations
+                song_duration = sum(x * int(t) for x, t in zip([1, 60, 3600], reversed(song_duration.split(":"))))
+                # get the number of lines from lyrics
+                if now_song.song_lyrics:
+                    num_lines = now_song.song_lyrics.count('\n') + 1
+
+
+                num_lines = num_lines / 5
+                SCROLL_SPEED = 1
+                LINE_DURATION = song_duration / num_lines
+                BEAT_DURATION = 60 / bpm
+                BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
+                auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
+                self.bps = 60 / bpm
+
+                return Response({'success': 'BPM updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value})
+    
+        elif action == 'save':
+            if Playlist.objects.filter(status='now').exists():
+                now = Playlist.objects.get(status='now').SongsInSet
+                now_song = BandSongsList.objects.get(id=now.song.id)
+                now_song.bpm = bpm
+                now_song.save()
+
+        return Response({'success': 'BPM updated successfully'})
         
 
 

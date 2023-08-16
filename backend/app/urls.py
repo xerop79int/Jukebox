@@ -8,11 +8,11 @@ urlpatterns = [
     path('songslist', ManagerBandSongsListView.as_view()),
     path('customersongslist', ManagerCustomerSongsListView.as_view()),
     path('likedbandsongslist', ManagerLikedBandSongsListView.as_view()),
-    # path('songsset', ManagerSongsSetView.as_view()),
     path('upload', ManagerUploadSongsListView.as_view()),
     path('sets', ManagerSetsView.as_view()),
     path('songsinset', ManagerSongsInSetView.as_view()),
     path('playlist', ManagerPlaylistView.as_view()),
     path('venue', ManagerVenueView.as_view()),
     path('scrollshare', ManagerScrollShareView.as_view()),
+    path('modifybpm', ManagerModifyBPMView.as_view()),
 ]

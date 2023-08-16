@@ -4,6 +4,10 @@ const lock = document.getElementById('brandleaderLock');
 const unlock = document.getElementById('brandleaderUnlock');
 const check = document.getElementById('brandleaderCheck');
 const cross = document.getElementById('brandleaderCross');
+const mainButton = document.getElementById('bMainButton');
+const closeButton = document.getElementById('bCloseButton');
+const popup = document.getElementById('bPopup');
+
 
 moveButton.addEventListener('click', () => {
   mySection.classList.toggle('bandleader-right-position');
@@ -59,3 +63,14 @@ function showPopup(element) {
     popup.classList.remove('bandleader-show');
   }, 1000);
 }
+
+mainButton.addEventListener('click', () => {
+  popup.style.right = '25px';
+  popup.style.display = 'flex';
+  mainButton.style.display = 'none';
+});
+
+closeButton.addEventListener('click', () => {
+  mainButton.style.display = 'block';
+  popup.style.right = '-550px';
+});

@@ -51,11 +51,14 @@ const SongList: React.FC = () => {
   const [nextSong, setNextSong] = useState<Song>();
   const [movesong, setMovesong] = useState<number>(0);
   const [requestQueue, setRequestQueue] = useState<SongRequest[]>([]);
+  const [ModifiedBPM, setModifiedBPM] = useState<number>(0);
 
   const Measure = useRef<number>(1);
   const Beat = useRef<number>(0);
   const SCROLL = useRef<number>(0);
   const isRunning = useRef<boolean>(false);
+  const BPS = useRef<number>(0);
+  const Scroll = useRef<number>(0);
 
   
 
@@ -71,7 +74,7 @@ const SongList: React.FC = () => {
 
   }, []);
 
-  const handleMeasureAndBeat = (bps: number, Scroll: number) => {
+  const handleMeasureAndBeat = () => {
 
     if (!isRunning.current){
       return;
@@ -94,7 +97,8 @@ const SongList: React.FC = () => {
     
 
     if (Measure.current % 4 === 0){
-      SCROLL.current = SCROLL.current + Scroll;
+      console.log(Scroll.current)
+      SCROLL.current = SCROLL.current + Scroll.current;
       handleAutoScrolling(SCROLL.current);
     }
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
@@ -135,11 +139,12 @@ const SongList: React.FC = () => {
     }
 
     setTimeout(() => {
-      handleMeasureAndBeat(bps, Scroll);
-    }, bps * 1000);
+      handleMeasureAndBeat();
+    }, BPS.current * 1000);
   }
 
   const handleAutoScrolling = (SCROLL: number) => {
+    console.log(SCROLL)
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
     scrollingdiv.scrollTo({
       top: SCROLL,
@@ -219,8 +224,8 @@ const SongList: React.FC = () => {
       'g'
     );
 
-    let replacelyric = lyric.replace(regex, '<span class="styled-char">$&</span>');
-    replacelyric = replacelyric.replace(wordRegex, '<span class="styled-word">$&</span>');
+    let replacelyric = lyric.replace(regex, '<span  style="color: #00468b;font-size: 32px;">$&</span>');
+    replacelyric = replacelyric.replace(wordRegex, '<span style="color: yellow;">$&</span>');
     replacelyric = replacelyric.replace(
       /\[|\]/g,
       ''
@@ -279,6 +284,7 @@ const SongList: React.FC = () => {
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
           handlestyling(res.data.playlist[0].lyric)
+          setModifiedBPM(parseInt(res.data.playlist[0].bpm))
         })
         .catch(err => {console.log(err)})
   }
@@ -571,7 +577,12 @@ const SongList: React.FC = () => {
       if (res.data.bps){
         if(isRunning.current === false){
           isRunning.current = true;
-          handleMeasureAndBeat(res.data.bps, res.data.Scroll)
+          if (BPS.current !== 0 && Scroll.current !== 0){
+            handleReset();
+          }
+          BPS.current = res.data.bps
+          Scroll.current = res.data.Scroll
+          handleMeasureAndBeat()
         }
       }
       handleGettingPlaylist()
@@ -664,6 +675,88 @@ const SongList: React.FC = () => {
     )
     .catch(err => console.log(err))
   }
+
+  const handleModifingBPM = (action: string) => {
+    
+    if( action === 'increase'){
+      setModifiedBPM(ModifiedBPM + 1)
+    }
+    else if( action === 'decrease'){
+      setModifiedBPM(ModifiedBPM - 1)
+    }
+
+
+    const URL = `http://${backendURL}/modifybpm`
+
+    const data = {
+      "bpm": ModifiedBPM,
+      "action": "get"
+    }
+
+    axios.post(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      BPS.current = res.data.bps;
+      Scroll.current = res.data.Scroll;
+    }
+    )
+    .catch(err => console.log(err))
+
+  }
+
+
+  const handleMetronomeStartAndStop = (action: string) => {
+
+    const URL = `http://${backendURL}/modifybpm`
+
+    const data = {
+      "bpm": ModifiedBPM,
+      "action": 'get'
+    }
+
+    axios.post(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      BPS.current = res.data.bps;
+      Scroll.current = res.data.Scroll;
+      if (action === 'start'){
+        if(isRunning.current === false){
+          isRunning.current = true;
+          handleMeasureAndBeat()
+        }
+      }
+      else if (action === 'stop'){
+        isRunning.current = false;
+      }
+    }
+    )
+    .catch(err => console.log(err))
+  }
+
+
+  const handleSaveUpdatedBPM = () => {
+    const URL = `http://${backendURL}/modifybpm`
+
+    const data = {
+      "bpm": ModifiedBPM,
+      "action": 'save'
+    }
+
+    axios.post(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+    }
+    )
+    .catch(err => console.log(err))
+  }
+  
+
 
 
 
@@ -788,7 +881,6 @@ const SongList: React.FC = () => {
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
             <option value="queue">Songs</option>
             <option value='search'>Search</option>
-            {/* <option value="editset">Edit Set</option> */}
             {  Sets.map((set, index) => ( 
             <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
             ))}
@@ -955,6 +1047,36 @@ const SongList: React.FC = () => {
             :
             null}
 
+          </div>
+        </div>
+      </div>
+
+      <div id="bPopup" className="">
+        <div className="bandleader-popup-upper">
+          <div className="bandleader-t1">
+            Tempo: <span> {nowSong?.bpm}</span> - bpm - Duration - {nowSong?.song_durations}
+          </div>
+        </div>
+        <div className="bandleader-popup-lower">
+          <div className="bandleader-popup-lower-one">
+            <button className="bandleader-start-popup-button" onClick={e => handleMetronomeStartAndStop('start')}>Start</button>
+            <button className="bandleader-stop-popup-button" onClick={e => handleMetronomeStartAndStop('stop')}>Stop</button>
+          </div>
+          <div className="bandleader-popup-lower-two">
+            <p>{ModifiedBPM}</p>
+          </div>
+          <div className="bandleader-popup-lower-three">
+            <div className="bandleader-popup-lower-three-up" onClick={e => handleModifingBPM('increase')}>
+              <i className="fa-solid fa-up-long fa-2x"></i>
+            </div>
+            <div className="bandleader-popup-lower-three-down" onClick={e => handleModifingBPM('decrease')}>
+              <i className="fa-solid fa-down-long fa-2x"></i>
+            </div>
+          </div>
+          <div className="bandleader-popup-lower-four">
+            <button className="bandleader-save-popup-button" onClick={handleSaveUpdatedBPM}>
+              Save / Update DB
+            </button>
           </div>
         </div>
       </div>

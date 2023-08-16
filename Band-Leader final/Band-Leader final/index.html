@@ -19,12 +19,37 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
   </head>
 
   <body>
     <div class="bandleader-main">
       <div class="bandleader-sub-main">
+        <div class="bandleader-main-buttons">
+          <i class="fa-solid fa-arrow-left fa-2x bandleader-main-button"></i>
+          <i class="fa-solid fa-play fa-2x bandleader-main-button"></i>
+          <i class="fa-solid fa-pause fa-2x bandleader-main-button"></i>
+          <i class="fa-solid fa-stop fa-2x bandleader-main-button"></i>
+          <i
+            class="fa-solid fa-arrow-rotate-left fa-2x bandleader-main-button"
+          ></i>
+          <i class="fa-solid fa-arrow-right fa-2x bandleader-main-button"></i>
+          <div class="band-leader-main-button-1-head">
+            <div class="band-leader-main-button-1">
+              <div class="band-leader-main-button-circle-1"></div>
+              <div class="band-leader-main-button-circle-2"></div>
+              <div class="band-leader-main-button-circle-3">
+                <i class="fa-solid fa-1 fa-2x"></i>
+              </div>
+            </div>
+          </div>
+          <i class="fa-solid fa-2 fa-2x bandleader-main-button"></i>
+          <i class="fa-solid fa-3 fa-2x bandleader-main-button"></i>
+          <i class="fa-solid fa-4 fa-2x bandleader-main-button"></i>
+        </div>
+        <div class="bandleader-startstop">
+          <button class="bandleader-main-start">Start</button>
+          <button class="bandleader-main-stop">Stop</button>
+        </div>
         <nav>
           <div class="bandleader-nav-child1">
             <h3>Now</h3>
@@ -164,8 +189,19 @@ I'll be gone 50@  miles when the day  is done
       </div>
 
       <div class="bandleader-slider-section" id="mySection">
+        <div class="bandleader-buttons-updown arrowww">
+          <div class="bandleader-uparrow">
+            <i class="fa-solid fa-arrow-up fa-3x"></i>
+          </div>
+          <div class="bandleader-downarrow arrowww">
+            <i class="fa-solid fa-arrow-down fa-3x"></i>
+          </div>
+        </div>
         <div class="bandleader-button">
-          <i class="fa-solid fa-circle fa-3x" id="moveButton"></i>
+          <i
+            class="fa-solid fa-circle fa-3x bandleader-button-circle"
+            id="moveButton"
+          ></i>
         </div>
         <div class="bandleader-nav">
           <select class="bandleader-dropdown">
@@ -174,74 +210,86 @@ I'll be gone 50@  miles when the day  is done
             <option value="option3">opt 3</option>
           </select>
 
-
-
-          
           <!-- This Is Admin DropDown Start -->
 
-
           <div class="bandleader-admin-dropdown" id="bandleader-btn">
+            <button class="bandleader-drop-button bandleader-dropdown-btn">
+              Admin &nbsp; <i class="fa-solid fa-arrow-down"></i>
+            </button>
 
-
-            <button class="bandleader-drop-button bandleader-dropdown-btn">Admin &nbsp; <i class="fa-solid fa-arrow-down"></i></button>
-
-
-              <div class="bandleader-dropdown-content" id="bandleader-show" >
-
-                <div class="bandleader-dropdown-submenu bandleader-dropdown-submenu-1">
-                  <a href="#">Songs</a>
-                  <div class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-1">
-                    <a href="#" class="bandleader-add-btn" onclick="showPopup(this)">Add</a>
-                    <div class="bandleader-dropdown-submenu-edit">
-                      <a href="#">Edit</a>
-                      <div class="bandleader-dropdown-submenu-content-edit">
-                        <a href="#">Set 1</a>
-                        <a href="#">Set 2</a>
-                        <a href="#">Set 3</a>
-                      </div>
+            <div class="bandleader-dropdown-content" id="bandleader-show">
+              <div
+                class="bandleader-dropdown-submenu bandleader-dropdown-submenu-1"
+              >
+                <a href="#">Songs</a>
+                <div
+                  class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-1"
+                >
+                  <a
+                    href="#"
+                    class="bandleader-add-btn"
+                    onclick="showPopup(this)"
+                    >Add</a
+                  >
+                  <div class="bandleader-dropdown-submenu-edit">
+                    <a href="#">Edit</a>
+                    <div class="bandleader-dropdown-submenu-content-edit">
+                      <a href="#">Set 1</a>
+                      <a href="#">Set 2</a>
+                      <a href="#">Set 3</a>
                     </div>
-                    <a href="#">Delete</a>
                   </div>
+                  <a href="#">Delete</a>
                 </div>
-                
-              
-                <div class="bandleader-dropdown-submenu bandleader-dropdown-submenu-2">
-                  <a href="#">Sets</a>
-                  <div class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-2">
-                    <a href="#" class="bandleader-add-btn">Add</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                  </div>
-                </div>
-              
-                <div class="bandleader-dropdown-submenu bandleader-dropdown-submenu-3">
-                  <a href="#">User Settings</a>
-                  <div class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-3">
-                    <a href="#" class="bandleader-add-btn">Add</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                  </div>
-                </div>
-              
-                <div class="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
-                  <a href="#">Network Setting</a>
-                  <div class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-4">
-                    <a href="#" class="bandleader-add-btn">Add</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                  </div>
-                </div>
-                
-                <div class="bandleader-popup" >
-                  <p>This is a popup!</p>
-                </div>
-
-                 <button id="bandleader-hide-btn">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                  </button>
-              
               </div>
-              
+
+              <div
+                class="bandleader-dropdown-submenu bandleader-dropdown-submenu-2"
+              >
+                <a href="#">Sets</a>
+                <div
+                  class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-2"
+                >
+                  <a href="#" class="bandleader-add-btn">Add</a>
+                  <a href="#">Edit</a>
+                  <a href="#">Delete</a>
+                </div>
+              </div>
+
+              <div
+                class="bandleader-dropdown-submenu bandleader-dropdown-submenu-3"
+              >
+                <a href="#">User Settings</a>
+                <div
+                  class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-3"
+                >
+                  <a href="#" class="bandleader-add-btn">Add</a>
+                  <a href="#">Edit</a>
+                  <a href="#">Delete</a>
+                </div>
+              </div>
+
+              <div
+                class="bandleader-dropdown-submenu bandleader-dropdown-submenu-4"
+              >
+                <a href="#">Network Setting</a>
+                <div
+                  class="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-4"
+                >
+                  <a href="#" class="bandleader-add-btn">Add</a>
+                  <a href="#">Edit</a>
+                  <a href="#">Delete</a>
+                </div>
+              </div>
+
+              <div class="bandleader-popup">
+                <p>This is a popup!</p>
+              </div>
+
+              <button id="bandleader-hide-btn">
+                <i class="fa-solid fa-circle-xmark"></i>
+              </button>
+            </div>
           </div>
 
           <!-- This Is Admin DropDown End -->
@@ -272,7 +320,6 @@ I'll be gone 50@  miles when the day  is done
               <i class="fa-solid fa-lock fa-2x" id="brandleaderLock"></i>
               <i class="fa-solid fa-unlock fa-2x" id="brandleaderUnlock"></i>
             </div>
-            
 
             <div class="bandleader-song-dummy">
               <h3>12</h3>
@@ -291,6 +338,43 @@ I'll be gone 50@  miles when the day  is done
           </div>
         </div>
       </div>
+      <!-- Open pop-up -->
+      <button id="bMainButton">
+        <i class="fa-solid fa-arrow-down fa-2x bandleader-popup-open-button"></i>
+      </button>
+      <!-- Open pop-up -->
+      <!-- Popup section -->
+      <div id="bPopup" class="">
+        <button id="bCloseButton">X</button>
+        <div class="bandleader-popup-upper">
+          <div class="bandleader-t1">
+            Tempo: <span> 122</span> - bpm - Duration - 4:20
+          </div>
+        </div>
+        <div class="bandleader-popup-lower">
+          <div class="bandleader-popup-lower-one">
+            <button class="bandleader-start-popup-button">Start</button>
+            <button class="bandleader-stop-popup-button">Stop</button>
+          </div>
+          <div class="bandleader-popup-lower-two">
+            <p>123</p>
+          </div>
+          <div class="bandleader-popup-lower-three">
+            <div class="bandleader-popup-lower-three-up">
+              <i class="fa-solid fa-up-long fa-2x"></i>
+            </div>
+            <div class="bandleader-popup-lower-three-down">
+              <i class="fa-solid fa-down-long fa-2x"></i>
+            </div>
+          </div>
+          <div class="bandleader-popup-lower-four">
+            <button class="bandleader-save-popup-button">
+              Save / Update DB
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- End of Popup section -->
     </div>
     <script src="./app.js"></script>
   </body>

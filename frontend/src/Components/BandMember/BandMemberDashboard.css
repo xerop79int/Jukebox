@@ -567,6 +567,7 @@
   .bandleader-right-position {
     right: 20px;
     width: 50%;
+    z-index: 5;
   }
   .bandleader-nav {
     position: absolute;
@@ -1025,6 +1026,17 @@
 }
 .hidden {
   display: none;
+}
+
+.styled-word{
+  color: yellow !important;
+}
+
+.styled-char {
+  /* font-weight: 600; */
+  color: #00468b;
+  font-size: 32px;
+  /* Add any other styles you want */
 }
 
 
