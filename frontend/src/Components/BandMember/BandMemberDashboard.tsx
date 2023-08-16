@@ -249,7 +249,6 @@ const SongList: React.FC = () => {
     <div className="bandleader-main">
        <div className="bandleader-alert-box bandleader-green">
                 <p className='bandleader-alert-message'></p>
-                {/* <span onClick={handleAlertClose} className="close-btn">&times;</span> */}
        </div>
 
 
@@ -291,7 +290,7 @@ const SongList: React.FC = () => {
         </div>
       </div>
 
-      <div className="bandleader-slider-section bandleader-right-position" id="mySection">
+      <div className="bandleader-slider-section" id="mySection">
         <div className="bandleader-button" onClick={handleToggle}>
           <i className="fa-solid fa-circle fa-3x" id="moveButton"></i>
         </div>
