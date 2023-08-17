@@ -961,6 +961,49 @@ class ManagerPlaylistView(APIView):
         movement = req.data.get('movement')
 
 
+        if movement == 'playset':
+            set_name = req.data.get('set_name')
+
+            set = Sets.objects.get(Setname=set_name)
+            songs_in_set = SongsInSet.objects.filter(set=set).order_by("number")
+
+            if songs_in_set.count() >= 2 and songs_in_set.count() > 1:
+                song1 = songs_in_set[0]
+                song2 = songs_in_set[1]
+
+                if Playlist.objects.filter(status='now').exists():
+                    current_now = Playlist.objects.get(status='now')
+                    current_now.status = ""
+                    current_now.save()
+                if Playlist.objects.filter(status='next').exists():
+                    current_next = Playlist.objects.get(status='next')
+                    current_next.status = ""
+                    current_next.save()
+
+            elif songs_in_set == 1:
+                song1 = songs_in_set[0]
+
+                if Playlist.objects.filter(status='now').exists():
+                    current_now = Playlist.objects.get(status='now')
+                    current_now.status = ""
+                    current_now.save()
+
+
+            try:
+                
+                playlist_song1 = Playlist.objects.get(SongsInSet=song1)
+                playlist_song1.status = 'now'
+                playlist_song1.save()
+
+                playlist_song2 = Playlist.objects.get(SongsInSet=song2)
+                playlist_song2.status = 'next'
+                playlist_song2.save()
+            except:
+                pass
+
+            return Response({'success': f'Playing the {set_name}' })
+
+
         if movement == 'next':
             if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='next').exists():
                 if not Playlist.objects.get(status='next').SongsInSet.number > Playlist.objects.all().count():

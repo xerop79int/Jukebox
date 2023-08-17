@@ -754,6 +754,28 @@ const SongList: React.FC = () => {
     )
     .catch(err => console.log(err))
   }
+
+
+  const handlePlaySet = () => {
+    
+    const URL = `http://${backendURL}/playlist`
+
+    const data = {
+      "movement": "playset",
+      "set_name": option
+    }
+
+    axios.post(URL, data, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      handleGettingPlaylist()
+    }
+    )
+    .catch(err => console.log(err))
+
+  }
   
 
 
@@ -866,6 +888,9 @@ const SongList: React.FC = () => {
 
       <div className="bandleader-slider-section" id="mySection">
       <div className="bandleader-buttons-updown arrowww">
+          <div className="bandleader-playset" onClick={handlePlaySet}>
+            <button>Play Set</button>
+          </div>
           <div className="bandleader-uparrow" onClick={e => handlemovement('up')}>
             <i className="fa-solid fa-arrow-up fa-3x"></i>
           </div>
@@ -1009,13 +1034,6 @@ const SongList: React.FC = () => {
                 <i className="fa-solid fa-check fa-2x" id="brandleaderCheck"></i>
                 :null
                 }
-                {/* { song.is_inset === true ?
-                <i className="fa-solid fa-xmark fa-2x" onClick={e => handleSetRemove(song.id)} id="brandleaderCross"></i>: 
-                null}
-                { song.is_inset === false ?
-                <i className="fa-solid fa-check fa-2x" onClick={e => handleSetSubmit(song.id)} id="brandleaderCheck"></i>:
-                null} */}
-                
               </div>
               ))
               :

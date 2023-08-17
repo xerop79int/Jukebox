@@ -1305,6 +1305,24 @@
   background-color: rgb(0, 0, 0);
 } 
 
+.bandleader-playset{
+  color: #fff;
+}
+
+.bandleader-playset button{
+  padding: 20px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  border: white 1px solid;
+  border-radius: 10%;
+  color: white;
+}
+
+.bandleader-playset:hover{  
+  background-color: rgb(0, 0, 0);
+  border-radius: 10%;
+}
+
 .keys-now-next{
   color: #00468b;
   font-size: 20px;
