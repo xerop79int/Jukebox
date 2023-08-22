@@ -19,7 +19,7 @@ import re
 import threading
 from time import sleep
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS

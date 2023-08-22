@@ -214,8 +214,8 @@ const SongList: React.FC = () => {
 
   const handlestyling = (lyric: string) => {
 
-    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA']
-    const styledWords = ['Break', 'Verse', 'Chorus'];
+    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA', 'GS', 'ES', 'AS', 'E5', 'A5', 'G5', 'Am', 'FG', 'FGC', 'F']
+    const styledWords = ['Break', 'Verse', 'Chorus', 'Verse 1', 'Verse 2', 'Verse 3', 'Verse 4', 'Verse 5', 'Outro', 'Bridge']
 
     const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
     const wordRegex = new RegExp(
