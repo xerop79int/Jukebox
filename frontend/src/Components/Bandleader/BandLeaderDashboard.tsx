@@ -148,7 +148,7 @@ const SongList: React.FC = () => {
 
         const currentScrollPosition = Scroll;
         const indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
-        SCROLL.current = indexOfNextNewline;
+        // SCROLL.current = indexOfNextNewline;
         console.log(indexOfNextNewline);
         scrollingdiv.scrollTo({
           top: indexOfNextNewline,
@@ -583,9 +583,9 @@ const SongList: React.FC = () => {
       if (res.data.bps){
         if(isRunning.current === false){
           isRunning.current = true;
-          if (BPS.current !== 0 && Scroll.current !== 0){
-            handleReset();
-          }
+          // if (BPS.current !== 0 && Scroll.current !== 0){
+          //   handleReset();
+          // }
           BPS.current = res.data.bps
           Scroll.current = res.data.Scroll
           handleMeasureAndBeat()
