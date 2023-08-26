@@ -16,10 +16,9 @@ from rest_framework.permissions import AllowAny
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
-import threading
 from time import sleep
 
-from .pdf_to_text import *
+# from .pdf_to_text import *
 
 
 # SIGN IN, SIGN UP AND LOGOUT VIEWS
@@ -74,10 +73,10 @@ class ManagerSignupView(ObtainAuthToken):
             else:
                 user = User.objects.create_user(username=username, email=email, password=password)
                 user.save()
-                if account_type == 'customer':
-                    customer = Customer(user=user, name=name)
-                    customer.save()
-                elif account_type == 'band_leader':
+                # if account_type == 'customer':
+                #     customer = Customer(user=user, name=name)
+                #     customer.save()
+                if account_type == 'band_leader':
                     band_leader = BandLeader(user=user, name=name)
                     band_leader.save()
                 elif account_type == 'band_member':
@@ -616,9 +615,10 @@ class ManagerUploadSongsListView(APIView):
                         song_name = re.sub(r'[^a-zA-Z0-9\s]', '', band_song.song_name)
                         if file_name.lower() == song_name.lower():    
                             try:
-                                # output = write_to_text_file(file, file_name)
-                                # band_song.song_lyrics = output
-                                # band_song.save()
+                                output = write_to_text_file(file, file_name)
+                                band_song.song_lyrics = output
+                                band_song.save()
+                                sleep(5)
                                 print('saved')
                                 i += 1
                                 break

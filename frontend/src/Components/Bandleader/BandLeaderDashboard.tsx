@@ -97,7 +97,7 @@ const SongList: React.FC = () => {
     
 
     if (Measure.current % 4 === 0){
-      SCROLL.current = SCROLL.current + Scroll.current;
+      SCROLL.current = SCROLL.current + Math.floor(Scroll.current);
       handleAutoScrolling(SCROLL.current);
     }
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
@@ -122,15 +122,11 @@ const SongList: React.FC = () => {
 
     if (Beat.current === 1){
       measure1.style.backgroundColor = 'red';
-      measure2.style.backgroundColor = 'red';
-      measure3.style.backgroundColor = 'red';
       const fa4 = document.querySelector('.fa4') as HTMLElement;
       fa4.style.backgroundColor = 'black';
     }
     else{
       measure1.style.backgroundColor = 'black';
-      measure2.style.backgroundColor = 'black';
-      measure3.style.backgroundColor = 'black';
       const fa = document.querySelector('.fa' + (Beat.current - 1)) as HTMLElement;
       fa.style.backgroundColor = 'black';
       const fabeat = document.querySelector('.fa' + Beat.current) as HTMLElement;
@@ -142,13 +138,24 @@ const SongList: React.FC = () => {
     }, BPS.current * 1000);
   }
 
-  const handleAutoScrolling = (SCROLL: number) => {
-    console.log(SCROLL)
+  const handleAutoScrolling = (Scroll: number) => {
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
-    scrollingdiv.scrollTo({
-      top: SCROLL,
-      behavior: 'smooth'
-    })
+    const lyricsTextElement = document.querySelector('.lyric-container') as HTMLElement;
+
+    if (lyricsTextElement) {
+      const lyricsText = lyricsTextElement.textContent;
+      if (lyricsText) {
+
+        const currentScrollPosition = Scroll;
+        const indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
+        SCROLL.current = indexOfNextNewline;
+        console.log(indexOfNextNewline);
+        scrollingdiv.scrollTo({
+          top: indexOfNextNewline,
+          behavior: 'smooth'
+        });
+        }
+      }
 
 
     const URL = `http://${backendURL}/scrollshare`;
@@ -183,8 +190,8 @@ const SongList: React.FC = () => {
     const measure2 = document.querySelector('.measure-2') as HTMLElement;
     const measure3 = document.querySelector('.measure-3') as HTMLElement;
     measure1.style.backgroundColor = 'black';
-    measure2.style.backgroundColor = 'black';
-    measure3.style.backgroundColor = 'black';
+    // measure2.style.backgroundColor = 'black';
+    // measure3.style.backgroundColor = 'black';
     measure1.textContent = '';
     measure2.textContent = '';
     measure3.textContent = '1';
@@ -214,8 +221,8 @@ const SongList: React.FC = () => {
 
   const handlestyling = (lyric: string) => {
 
-    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA']
-    const styledWords = ['Break', 'Verse', 'Chorus'];
+    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'BHAE7V', 'GA', 'GS', 'ES', 'AS', 'E5', 'A5', 'G5', 'Am', 'FG', 'FGC', 'F', 'DE', 'DEA', 'DoA', '#7DA', 'DCE', 'DA', '#7']
+    const styledWords = ['Break', 'Verse', 'Chorus', 'Verse 1', 'Verse 2', 'Verse 3', 'Verse 4', 'Verse 5', 'Outro', 'Bridge']
 
     const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
     const wordRegex = new RegExp(
@@ -880,7 +887,7 @@ const SongList: React.FC = () => {
         </nav>
         <div className="bandleader-verse-sec">
           <div className="bandleader-verse-sec-scroll">
-            <pre dangerouslySetInnerHTML={{ __html: lyric }} >
+            <pre className='lyric-container' dangerouslySetInnerHTML={{ __html: lyric }} >
             </pre>
           </div>
         </div>
