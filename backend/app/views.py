@@ -159,7 +159,7 @@ class ManagerCustomerRequestView(APIView):
             'song_artist': customer_request.song.song_artist,
             'song_duration': customer_request.song.song_durations,
         }
-        
+        print('Hello')
         # get the channel layer
         channel_layer = get_channel_layer()
         # send the data to the group
@@ -950,9 +950,6 @@ class ManagerSongsInSetView(APIView):
 
         return Response({'songs_in_set': data})
 
-# SCROLL = 0
-# MEASURE = 1
-# BEAT = 0
 class ManagerPlaylistView(APIView):
     authentication_classes = []
     

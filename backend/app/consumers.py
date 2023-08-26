@@ -19,6 +19,7 @@ class BandLeaderConsumer(AsyncWebsocketConsumer):
         pass
 
     async def send_data(self, event):
+        print('Data sent to bandleader')
         # Send data to the group
         data = event['data']
         await self.send(text_data=json.dumps(data))

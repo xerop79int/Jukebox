@@ -234,7 +234,7 @@ const SongList: React.FC = () => {
       }
 
       const handleSubmit = () => {
-        const URL = "http://${backendURL}/customerrequest"
+        const URL = `http://${backendURL}/customerrequest`;
 
         const data = {
             "song_id": currentSong?.id,
