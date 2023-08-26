@@ -910,7 +910,7 @@ const SongList: React.FC = () => {
         </div>
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
-            <option value="queue">Songs</option>
+            <option value="queue">Sets</option>
             <option value='search'>Search</option>
             {  Sets.map((set, index) => ( 
             <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>

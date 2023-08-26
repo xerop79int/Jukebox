@@ -1364,7 +1364,7 @@
   border-right-color: transparent;
   border-radius: 44%;
   text-align: center;
-  font-size: 2.45rem;
+  font-size: 30px;
   color: white;
   font-weight: 600;
 }
@@ -1381,7 +1381,7 @@
   border-right-color: transparent;
   border-radius: 50%;
   text-align: center;
-  font-size: 2.45rem;
+  font-size: 39px;
   color: white;
   font-weight: 600;
 }
@@ -1391,7 +1391,7 @@
   right: 0px;
   min-height: 57px;
   min-width: 50px;
-  font-size: 2.45rem;
+  font-size: 39px;
   color: white;
   font-weight: 600;
   /* border: 2px solid black; */

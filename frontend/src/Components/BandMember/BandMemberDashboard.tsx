@@ -106,6 +106,7 @@ const SongList: React.FC = () => {
   useEffect(() => {
     let URL = `http://${backendURL}/songslist?view=likes`;
 
+
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
@@ -201,14 +202,15 @@ const SongList: React.FC = () => {
 
       setOption(e.target.value);
     } 
-    else{
-      setOption(e.target.value);
-      const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
-      updown_arrow.style.right = '-110px';
-      const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
-      songlist.style.alignItems = 'center';
-      songlist.style.padding = '';
-    }
+
+    // else{
+    //   setOption(e.target.value);
+    //   const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
+    //   updown_arrow.style.right = '-110px';
+    //   const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
+    //   songlist.style.alignItems = 'center';
+    //   songlist.style.padding = '';
+    // }
 
     
   }
@@ -218,6 +220,15 @@ const SongList: React.FC = () => {
   const handleToggle = () => {
     const section = document.getElementById("mySection") as HTMLElement;
     section.classList.toggle("bandleader-right-position");
+    const moveButton = document.getElementById("moveButton") as HTMLElement;
+    if(moveButton.classList.contains("fa-rotate-90")){
+      moveButton.classList.remove("fa-rotate-90");
+      moveButton.classList.add("fa-rotate-270");
+    }
+    else if(moveButton.classList.contains("fa-rotate-270")){
+    moveButton.classList.remove("fa-rotate-270");
+    moveButton.classList.add("fa-rotate-90");
+    }
   }
 
 
@@ -282,10 +293,11 @@ const SongList: React.FC = () => {
 
       <div className="bandleader-slider-section" id="mySection">
         <div className="bandleader-button" onClick={handleToggle}>
-          <i className="fa-solid fa-circle fa-3x" id="moveButton"></i>
+          <i className="fa-solid fa-chevron-down fa-rotate-90" id="moveButton"></i>
         </div>
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
+          <option value="">Select</option>
             {  Sets.map((set, index) => ( 
               <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
               ))}
