@@ -980,7 +980,7 @@ class ManagerPlaylistView(APIView):
                     current_next.status = ""
                     current_next.save()
 
-            elif songs_in_set == 1:
+            elif songs_in_set.count() == 1:
                 song1 = songs_in_set[0]
 
                 if Playlist.objects.filter(status='now').exists():
