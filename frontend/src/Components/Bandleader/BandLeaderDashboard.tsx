@@ -141,13 +141,13 @@ const SongList: React.FC = () => {
   const handleAutoScrolling = (Scroll: number) => {
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
     const lyricsTextElement = document.querySelector('.lyric-container') as HTMLElement;
-
+    let indexOfNextNewline = 0;
     if (lyricsTextElement) {
       const lyricsText = lyricsTextElement.textContent;
       if (lyricsText) {
 
         const currentScrollPosition = Scroll;
-        const indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
+        indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
         // SCROLL.current = indexOfNextNewline;
         console.log(indexOfNextNewline);
         scrollingdiv.scrollTo({
@@ -161,7 +161,7 @@ const SongList: React.FC = () => {
     const URL = `http://${backendURL}/scrollshare`;
 
     const data = {
-      scroll: SCROLL
+      scroll: indexOfNextNewline
     }
 
     axios.post(URL, data, {
