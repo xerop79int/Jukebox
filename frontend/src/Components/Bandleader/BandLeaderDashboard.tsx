@@ -98,7 +98,7 @@ const SongList: React.FC = () => {
     
 
     if (Measure.current % 4 === 0){
-      SCROLL.current = SCROLL.current + Math.floor(Scroll.current);
+      SCROLL.current = SCROLL.current + 33
       handleAutoScrolling(SCROLL.current);
     }
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
@@ -141,28 +141,33 @@ const SongList: React.FC = () => {
 
   const handleAutoScrolling = (Scroll: number) => {
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
-    const lyricsTextElement = document.querySelector('.lyric-container') as HTMLElement;
-    let indexOfNextNewline = 0;
-    if (lyricsTextElement) {
-      const lyricsText = lyricsTextElement.textContent;
-      if (lyricsText) {
+    scrollingdiv.scrollTo({
+      top: Scroll,
+      behavior: 'smooth'
+    });
 
-        const currentScrollPosition = Scroll;
-        indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
-        // SCROLL.current = indexOfNextNewline;
-        console.log(indexOfNextNewline);
-        scrollingdiv.scrollTo({
-          top: indexOfNextNewline,
-          behavior: 'smooth'
-        });
-        }
-      }
+    // const lyricsTextElement = document.querySelector('.lyric-container') as HTMLElement;
+    // let indexOfNextNewline = 0;
+    // if (lyricsTextElement) {
+    //   const lyricsText = lyricsTextElement.textContent;
+    //   if (lyricsText) {
+
+    //     const currentScrollPosition = Scroll;
+    //     indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
+    //     // SCROLL.current = indexOfNextNewline;
+    //     console.log(indexOfNextNewline);
+    //     scrollingdiv.scrollTo({
+    //       top: indexOfNextNewline,
+    //       behavior: 'smooth'
+    //     });
+    //     }
+    //   }
 
 
     const URL = `http://${backendURL}/scrollshare`;
 
     const data = {
-      scroll: indexOfNextNewline
+      scroll: Scroll
     }
 
     axios.post(URL, data, {
