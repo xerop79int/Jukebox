@@ -983,6 +983,10 @@ class ManagerPlaylistView(APIView):
                     current_now = Playlist.objects.get(status='now')
                     current_now.status = ""
                     current_now.save()
+                if Playlist.objects.filter(status='next').exists():
+                    current_next = Playlist.objects.get(status='next')
+                    current_next.status = ""
+                    current_next.save()
 
 
             try:
