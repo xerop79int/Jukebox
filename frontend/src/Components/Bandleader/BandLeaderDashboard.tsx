@@ -789,6 +789,12 @@ const SongList: React.FC = () => {
     .catch(err => console.log(err))
 
   }
+
+
+  const handleMetronomeToggle = () => {
+    const metronome = document.querySelector('.bPopup') as HTMLElement;
+    metronome.style.display = metronome.style.display === 'flex' ? 'none' : 'flex';
+  }
   
 
 
@@ -1080,8 +1086,14 @@ const SongList: React.FC = () => {
           </div>
         </div>
       </div>
-
-      <div id="bPopup" className="">
+      
+      <div className="bandleader-metronome-open" onClick={handleMetronomeToggle}>
+          <i className="fa-solid fa-chevron-down fa-rotate-90" id="moveButton"></i>
+      </div>
+      <div className="bPopup" style={{display: 'flex'}}>
+        <div className="bandleader-metronome-close" onClick={handleMetronomeToggle}>
+          <i className="fa-solid fa-chevron-down fa-rotate-270" id="moveButton"></i>
+        </div>
         <div className="bandleader-popup-upper">
           <div className="bandleader-t1">
             Tempo: <span> {nowSong?.bpm}</span> - bpm - Duration - {nowSong?.song_durations}
