@@ -69,13 +69,8 @@ const SongList: React.FC = () => {
               }
             })
             .catch(err => {console.log(err) })
-            
-            
-            
-            
-            
-            
-          }, []);
+               
+  }, []);
           
 
         const socket = new WebSocket(`ws://${backendURL}/ws/customerrequestsresponse/`);
