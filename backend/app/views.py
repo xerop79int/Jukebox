@@ -1189,6 +1189,10 @@ class ManagerModifyBPMView(APIView):
                 now_song = BandSongsList.objects.get(id=now.song.id)
                 now_song.bpm = bpm
                 now_song.save()
+            
+            return Response({'success': 'BPM updated successfully', 'bpm': bpm })
+            
+
 
         return Response({'success': 'BPM updated successfully'})
         

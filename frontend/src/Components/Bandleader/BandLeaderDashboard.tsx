@@ -763,6 +763,7 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
+      handleGettingPlaylist()
     }
     )
     .catch(err => console.log(err))
