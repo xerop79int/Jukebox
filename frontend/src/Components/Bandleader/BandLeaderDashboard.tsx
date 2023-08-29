@@ -535,17 +535,12 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
+      handleGettingPlaylist();
       if (requestQueue.length !== 0) {
       const popup = document.querySelector('#popup') as HTMLInputElement;
       popup.style.right = '-350px';
       setRequestQueue(prevQueue => prevQueue.slice(1));
-      }
-      // else{
-        
-      // }
-
-      
-      
+      }         
     })
     .catch(err => console.log(err))
 
@@ -638,7 +633,8 @@ const SongList: React.FC = () => {
 
     const data = {
       "request_id": movesong,
-      "place": place
+      "place": place,
+      "set_name": option
     }
 
     axios.put(URL, data, {
@@ -833,7 +829,7 @@ const SongList: React.FC = () => {
             <button className="sub-pop-div2 spd" onClick={e => handleCustomerRequestUpdate("Delined, Sorry, but we already played this one", false, 0)}>Declined - Already Played</button>
           </div>
           <div className="pop-up-div3 p-d">
-            <button className="sub-pop-div1 spd" onClick={e => handleCustomerRequestUpdate('Approved number in Que!', true, 2)}>2 - Play After Next</button>
+            <button className="sub-pop-div1 spd" onClick={e => handleCustomerRequestUpdate('Approved 3rd in Que!', true, 2)}>2 - Play After Next</button>
             <button className="sub-pop-div2 spd" onClick={e => handleCustomerRequestUpdate("Delined, Sorry, but there isn't enough time left!", false, 0)}>Declined - Not Enough Time</button>
           </div>
           <div className="pop-up-div4 p-d">

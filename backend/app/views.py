@@ -771,16 +771,17 @@ class ManagerSongsInSetView(APIView):
         place = req.data.get('place')
         locking = req.data.get('locking')
 
-        print(set_name, song_id)
+        try:
+            set = Sets.objects.get(Setname=set_name)
+        except:
+            pass
 
         if locking == 'lock':
-            set = Sets.objects.get(Setname=set_name)
             request = SongsInSet.objects.get(set=set, song__id=song_id)
             request.is_locked = True
             request.save()
             return Response({'success': 'Request locked successfully.'}, status=200)
         elif locking == 'unlock':
-            set = Sets.objects.get(Setname=set_name)
             request = SongsInSet.objects.get(set=set, song__id=song_id)
             request.is_locked = False
             request.save()
@@ -790,7 +791,7 @@ class ManagerSongsInSetView(APIView):
 
         if place > 3:
             song = BandSongsList.objects.get(id=customer_request).id
-            songinset = SongsInSet.objects.get(song=song)
+            songinset = SongsInSet.objects.get(song=song, set=set)
             number = songinset.number
         else:
             request = CustomerRequest.objects.get(id=customer_request)
@@ -857,23 +858,16 @@ class ManagerSongsInSetView(APIView):
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
             
-            if SongsInSet.objects.get(number=number-1).is_locked == True:
+            if SongsInSet.objects.get(number=number-1, set=set).is_locked == True:
                 return Response({'success': 'Previous Song is locked, So this song cannot be moved up'})
-            if SongsInSet.objects.get(number=number).is_locked == True:
+            if SongsInSet.objects.get(number=number,  set=set).is_locked == True:
                 return Response({'success': 'Song is locked'})
             if Playlist.objects.get(status='now').SongsInSet.number == number-1:
                 return Response({'success': 'Song can not be moved'}, status=200)
-            try:
-                set = SongsInSet.objects.get(number=number).set
-                count = SongsInSet.objects.filter(set=set).count()
-                if number == count:
-                    return Response({'success': 'This song is the last song so cannot be moved up'}, status=200)
-            except:
-                pass
             if number == 1:
                 return Response({'success': 'This song is the first in the queue so cannot be moved up'}, status=200)
             if SongsInSet.objects.filter(number=number-1).exists():
-                pre = SongsInSet.objects.get(number=number-1)
+                pre = SongsInSet.objects.get(number=number-1, set=set)
                 pre.number += 1
                 pre.save()
                 SongsInSet.objects.filter(song=song).update(number=number-1)
@@ -882,18 +876,19 @@ class ManagerSongsInSetView(APIView):
         
         if place == 5:
             # check if the song with the number + 1 is the now song and return a response that song can't be moved
+            
             if SongsInSet.objects.filter(number=number+1).exists():
-                if SongsInSet.objects.get(number=number+1).is_locked == True:
+                if SongsInSet.objects.get(number=number+1, set=set).is_locked == True:
                     return Response({'success': 'Next Song is locked, So this song cannot be moved down'})
             
             if SongsInSet.objects.filter(number=number).exists():
-                if SongsInSet.objects.get(number=number).is_locked == True:
+                if SongsInSet.objects.get(number=number, set=set).is_locked == True:
                     return Response({'success': 'Song is locked'})
             if SongsInSet.objects.all().count() == number:
                 return Response({'success': 'This song is the last song so cannot be moved down'}, status=200)
 
             if SongsInSet.objects.filter(number=number+1).exists():
-                next = SongsInSet.objects.get(number=number+1)
+                next = SongsInSet.objects.get(number=number+1, set=set)
                 next.number -= 1
                 next.save()
                 SongsInSet.objects.filter(song=song).update(number=number+1)
