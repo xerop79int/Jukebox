@@ -102,24 +102,8 @@ const SongList: React.FC = () => {
       handleAutoScrolling(SCROLL.current);
     }
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
-    const measure2 = document.querySelector('.measure-2') as HTMLElement;
-    const measure3 = document.querySelector('.measure-3') as HTMLElement;
+    measure1.textContent = Measure.current.toString();
 
-    // check if the measure is in double digit
-    if (Measure.current >= 10 && Measure.current < 100){
-      measure1.textContent = '';
-      measure2.textContent = Measure.current.toString()[0];
-      measure3.textContent = Measure.current.toString()[1];
-    }
-    // check if the measure is in triple digit
-    else if (Measure.current >= 100){
-      measure1.textContent = Measure.current.toString()[0];
-      measure2.textContent = Measure.current.toString()[1];
-      measure3.textContent = Measure.current.toString()[2];
-    }
-    else{
-      measure3.textContent = Measure.current.toString();
-    }
 
     if (Beat.current === 1){
       measure1.style.backgroundColor = 'red';
@@ -193,14 +177,14 @@ const SongList: React.FC = () => {
     SCROLL.current = 0;
 
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
-    const measure2 = document.querySelector('.measure-2') as HTMLElement;
-    const measure3 = document.querySelector('.measure-3') as HTMLElement;
+    // const measure2 = document.querySelector('.measure-2') as HTMLElement;
+    // const measure3 = document.querySelector('.measure-3') as HTMLElement;
     measure1.style.backgroundColor = 'black';
     // measure2.style.backgroundColor = 'black';
     // measure3.style.backgroundColor = 'black';
-    measure1.textContent = '';
-    measure2.textContent = '';
-    measure3.textContent = '1';
+    measure1.textContent = '1';
+    // measure2.textContent = '';
+    // measure3.textContent = '1';
 
     const fa4 = document.querySelector('.fa4') as HTMLElement;
     fa4.style.backgroundColor = 'black';
@@ -853,12 +837,8 @@ const SongList: React.FC = () => {
           <i className="fa-solid fa-arrow-rotate-left fa-2x bandleader-controls" onClick={handleReset}></i>
           <i className="fa-solid fa-arrow-right fa-2x bandleader-controls" onClick={e => handleChangingSong('next')}></i>
           <div className="band-leader-main-button-1-head">
-          <div className="band-leader-main-button-1">
+          <div className="band-leader-measure">
             <div className="band-leader-main-button-circle-1 measure-1 fa1">
-            </div>
-            <div className="band-leader-main-button-circle-2 measure-2 fa1">
-            </div>
-            <div className="band-leader-main-button-circle-3 measure-3 fa1">
             1
             </div>
           </div>
