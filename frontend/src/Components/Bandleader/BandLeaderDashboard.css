@@ -1370,41 +1370,6 @@
   font-weight: 600;
   letter-spacing: 10px;
 }
-.band-leader-main-button-circle-2{
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  min-height: 57px;
-  min-width: 50px;
-  /* border: 2px solid black; */
-  /* background-color: black; */
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-radius: 50%;
-  text-align: center;
-  font-size: 39px;
-  color: white;
-  font-weight: 600;
-}
-.band-leader-main-button-circle-3{
-  position: absolute;
-  top: -4px;
-  right: 0px;
-  min-height: 57px;
-  min-width: 50px;
-  font-size: 39px;
-  color: white;
-  font-weight: 600;
-  /* border: 2px solid black; */
-  /* background-color: black; */
-  border-left-color: transparent;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
 
 
 
