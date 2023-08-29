@@ -811,11 +811,11 @@ class ManagerSongsInSetView(APIView):
                 new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
                 new.save()
 
-                # add the new song to the playlist
-                if Playlist.objects.filter(status='next').exists():
-                    Playlist.objects.filter(status='next').update(status='')
-                playlist = Playlist(SongsInSet=new, status='next')
-                playlist.save()
+                # # add the new song to the playlist
+                # if Playlist.objects.filter(status='next').exists():
+                #     Playlist.objects.filter(status='next').update(status='')
+                # playlist = Playlist(SongsInSet=new, status='next')
+                # playlist.save()
 
         if place == 2:
             if Playlist.objects.filter(status="next").exists():
@@ -831,9 +831,9 @@ class ManagerSongsInSetView(APIView):
                 new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
                 new.save()
 
-                # add the new song to the playlist
-                playlist = Playlist(SongsInSet=new)
-                playlist.save()
+                # # add the new song to the playlist
+                # playlist = Playlist(SongsInSet=new)
+                # playlist.save()
 
         if place == 3:
             if Playlist.objects.filter(status="next").exists():
@@ -850,9 +850,9 @@ class ManagerSongsInSetView(APIView):
                 new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
                 new.save()
 
-                # add the new song to the playlist
-                playlist = Playlist(SongsInSet=new)
-                playlist.save()
+                # # add the new song to the playlist
+                # playlist = Playlist(SongsInSet=new)
+                # playlist.save()
         
 
         if place == 4:
