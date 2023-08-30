@@ -42,7 +42,6 @@ const SongList: React.FC = () => {
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
   const [search, setSearch] = useState<string>("");
-  // const [SongsSet, setSetSongs] = useState<Song[]>([]);
   const [Sets, setSets] = useState<Sets[]>([]);
   const [currentSet, setCurrentSet] = useState<number>(0);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
@@ -130,23 +129,6 @@ const SongList: React.FC = () => {
       behavior: 'smooth'
     });
 
-    // const lyricsTextElement = document.querySelector('.lyric-container') as HTMLElement;
-    // let indexOfNextNewline = 0;
-    // if (lyricsTextElement) {
-    //   const lyricsText = lyricsTextElement.textContent;
-    //   if (lyricsText) {
-
-    //     const currentScrollPosition = Scroll;
-    //     indexOfNextNewline = lyricsText.indexOf('\n\n', currentScrollPosition);
-    //     // SCROLL.current = indexOfNextNewline;
-    //     console.log(indexOfNextNewline);
-    //     scrollingdiv.scrollTo({
-    //       top: indexOfNextNewline,
-    //       behavior: 'smooth'
-    //     });
-    //     }
-    //   }
-
 
     const URL = `http://${backendURL}/scrollshare`;
 
@@ -177,14 +159,8 @@ const SongList: React.FC = () => {
     SCROLL.current = 0;
 
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
-    // const measure2 = document.querySelector('.measure-2') as HTMLElement;
-    // const measure3 = document.querySelector('.measure-3') as HTMLElement;
     measure1.style.backgroundColor = 'black';
-    // measure2.style.backgroundColor = 'black';
-    // measure3.style.backgroundColor = 'black';
     measure1.textContent = '1';
-    // measure2.textContent = '';
-    // measure3.textContent = '1';
 
     const fa4 = document.querySelector('.fa4') as HTMLElement;
     fa4.style.backgroundColor = 'black';
