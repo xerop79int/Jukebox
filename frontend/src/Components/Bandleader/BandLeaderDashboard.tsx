@@ -554,6 +554,9 @@ const SongList: React.FC = () => {
 
 
   const handleChangingSong = (movement: string) => {
+    handleStopingSong();
+    handleReset();
+
     const URL = `http://${backendURL}/playlist`
 
     const data = {
@@ -676,6 +679,12 @@ const SongList: React.FC = () => {
     else if( action === 'decrease'){
       setModifiedBPM(ModifiedBPM - 1)
     }
+    else if( action === 'increase+10'){
+      setModifiedBPM(ModifiedBPM + 10)
+    }
+    else if( action === 'decrease-10'){
+      setModifiedBPM(ModifiedBPM - 10)
+    }
 
 
     const URL = `http://${backendURL}/modifybpm`
@@ -751,7 +760,9 @@ const SongList: React.FC = () => {
 
 
   const handlePlaySet = () => {
-    
+    handleStopingSong();
+    handleReset();
+
     const URL = `http://${backendURL}/playlist`
 
     const data = {
@@ -1090,6 +1101,14 @@ const SongList: React.FC = () => {
             </div>
             <div className="bandleader-popup-lower-three-down" onClick={e => handleModifingBPM('decrease')}>
               <i className="fa-solid fa-down-long fa-2x"></i>
+            </div>
+          </div>
+          <div className="bandleader-popup-lower-three">
+            <div className="bandleader-popup-lower-three-up" onClick={e => handleModifingBPM('increase+10')}>
+              <i className="fa-solid fa-1x">+10</i>
+            </div>
+            <div className="bandleader-popup-lower-three-down" onClick={e => handleModifingBPM('decrease-10')}>
+              <i className="fa-solid fa-1x">-10</i>
             </div>
           </div>
           <div className="bandleader-popup-lower-four">

@@ -403,11 +403,11 @@ const SongList: React.FC = () => {
             <div className="list">
               <div className="list-bar">
                 <select className="dropdown" onChange={e => handleSorting(e.target.value)}>
+                  <option value="duration">Sort By: Song Number</option>
                   <option value="name">Sort By: Song Title</option>
                   <option value="artist">Sort By: Artist</option>
                   <option value="genre">Sort By: Genre</option>
                   <option value="year">Sort By: Release Date</option>
-                  <option value="duration">Sort By: Song Number</option>
                   <option value="this_venue_likes">Sort By: This Venue Likes</option>
                   <option value="all_venue_likes">Sort By: All Venue Likes</option>
                 </select>
