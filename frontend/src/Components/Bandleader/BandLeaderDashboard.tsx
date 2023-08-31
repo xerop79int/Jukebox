@@ -495,7 +495,6 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
-      handleGettingPlaylist();
       if (requestQueue.length !== 0) {
       const popup = document.querySelector('#popup') as HTMLInputElement;
       popup.style.right = '-350px';
@@ -510,7 +509,8 @@ const SongList: React.FC = () => {
 
     const songinsetdata = {
       "request_id": SongRequestid,
-      "place": number
+      "place": number,
+      "set_name": option
     }
 
     axios.put(SonginsetURL, songinsetdata, {
@@ -518,6 +518,7 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log(res.data)
+      handleGettingPlaylist();
     }
     )
     .catch(err => console.log(err))
@@ -927,16 +928,6 @@ const SongList: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
-              
-                {/* <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-2">
-                  <a href="#">Songs</a>
-                  <div className="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-2">
-                    <a href="#" className="bandleader-add-btn">Add</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                  </div>
-                </div> */}
               
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-3">
                   <a href="#">User Settings</a>

@@ -354,6 +354,7 @@ body {
     padding-top: 5px;
     padding-bottom: 5px;
   }
+
   .song-list {
     display: flex;
     flex-direction: column;
@@ -362,14 +363,14 @@ body {
     align-items: center;
   }
   .song-list-main::-webkit-scrollbar {
-    width: 10px;
+    width: 20px;
   }
   .song-list-main::-webkit-scrollbar-track {
     background-color: black;
   }
   .song-list-main::-webkit-scrollbar-thumb {
     background-color: #303030;
-    border-radius: 10px;
+    border-radius: 2px;
   }
   .song-list-main::-webkit-scrollbar-thumb:hover {
     background-color: #727272;
