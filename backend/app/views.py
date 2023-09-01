@@ -774,20 +774,27 @@ class ManagerSongsInSetView(APIView):
                 if Playlist.objects.filter(status='now').exists():
                     number = Playlist.objects.get(status='now').SongsInSet.number
                     set_id = SongsInSet.objects.get(number=number).set.id
+
                     
-                    if Playlist.objects.filter(status='next').exists():
-                        Playlist.objects.filter(status='next').update(status='')
             elif place == 2:
                 if Playlist.objects.filter(status="next").exists():
                     number = Playlist.objects.get(status='next').SongsInSet.number
                     set_id = SongsInSet.objects.get(number=number).set.id
-                print('here')
             elif place == 3:
                 if Playlist.objects.filter(status="next").exists():
                     number = Playlist.objects.get(status='next').SongsInSet.number
                     set_id = SongsInSet.objects.get(number=number).set.id
                     number = SongsInSet.objects.filter(set__id=set_id).count()
-        
+            
+            should_next_update = True
+            while True:
+                if SongsInSet.objects.filter(number=number).exists():
+                    song_in_set = SongsInSet.objects.get(number=number+1)
+                    if song_in_set.is_locked == True:
+                        number += 1
+                        should_next_update = False
+                    else:
+                        break
             
             count = int(number) + 1
             all_songs_in_set = SongsInSet.objects.filter(number__gte=count)
@@ -806,7 +813,9 @@ class ManagerSongsInSetView(APIView):
                     new_playlist = Playlist(SongsInSet=song_in_set)
                     new_playlist.save()
             
-            if place == 1:
+            if should_next_update == True:
+                if Playlist.objects.filter(status='next').exists():
+                        Playlist.objects.filter(status='next').update(status='')
                 Playlist.objects.filter(SongsInSet=new).update(status='next')
                 
                 
