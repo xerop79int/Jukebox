@@ -817,49 +817,51 @@ class ManagerSongsInSetView(APIView):
                 if Playlist.objects.filter(status='next').exists():
                         Playlist.objects.filter(status='next').update(status='')
                 Playlist.objects.filter(SongsInSet=new).update(status='next')
-                
-                
-
-
-        # if place == 2:
             
-
-        #         count = int(number) + 1
-        #         all_songs_in_set = SongsInSet.objects.filter(number__gte=count)
-        #         for song_in_set in all_songs_in_set:
-        #             song_in_set.number = int(song_in_set.number) + 1
-        #             song_in_set.save()
-
-        #         new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
-        #         new.save()
-
-        #         all_songs_in_set = SongsInSet.objects.all().order_by('number')
-        #         for song_in_set in all_songs_in_set:
-        #             if Playlist.objects.filter(SongsInSet=song_in_set).exists():
-        #                 continue
-        #             else:
-        #                 new_playlist = Playlist(SongsInSet=song_in_set)
-        #                 new_playlist.save()
-
-        # if place == 3:
+            data = []
+            if Playlist.objects.filter(status='now').exists():
+                now = Playlist.objects.get(status='now').SongsInSet
+                now_song = BandSongsList.objects.get(id=now.song.id)
+                now_data = {
+                    'id': now_song.id,
+                    'number': now.number,
+                    'song_number': now_song.song_number,
+                    'song_name': now_song.song_name,
+                    'song_artist': now_song.song_artist,
+                    'song_genre': now_song.song_genre,
+                    'song_durations': now_song.song_durations,
+                    'img': str(now_song.song_cover.url)
+                }
+                data.append(now_data)
             
+            if Playlist.objects.filter(status='next').exists():
+                next = Playlist.objects.get(status='next').SongsInSet
+                next_song = BandSongsList.objects.get(id=next.song.id)
+                next_data = {
+                    'id': next_song.id,
+                    'number': next.number,
+                    'song_number': next_song.song_number,
+                    'song_name': next_song.song_name,
+                    'song_artist': next_song.song_artist,
+                    'song_genre': next_song.song_genre,
+                    'song_durations': next_song.song_durations,
+                    'img': str(next_song.song_cover.url)
+                }
+                data.append(next_data)
+            
+            
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)('customer_frontend', {
+                'type': 'send_playlist',
+                'playlist': data,
+            })
 
-        #         count = int(number) + 1
-        #         all_songs_in_set = SongsInSet.objects.filter(number__gte=count)
-        #         for song_in_set in all_songs_in_set:
-        #             song_in_set.number = int(song_in_set.number) + 1
-        #             song_in_set.save()
-
-        #         new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
-        #         new.save()
-
-        #         all_songs_in_set = SongsInSet.objects.all().order_by('number')
-        #         for song_in_set in all_songs_in_set:
-        #             if Playlist.objects.filter(SongsInSet=song_in_set).exists():
-        #                 continue
-        #             else:
-        #                 new_playlist = Playlist(SongsInSet=song_in_set)
-        #                 new_playlist.save()
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+                'type': 'send_playlist',
+                'playlist': data,
+            })
+                
         
 
         if place == 4:
@@ -1061,6 +1063,19 @@ class ManagerPlaylistView(APIView):
                     'img': str(next_song.song_cover.url)
                 }
                 data.append(next_data)
+            
+            
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)('customer_frontend', {
+                'type': 'send_playlist',
+                'playlist': data,
+            })
+
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+                'type': 'send_playlist',
+                'playlist': data,
+            })
 
             if Playlist.objects.filter(status='now').exists():
                 now = Playlist.objects.get(status='now').SongsInSet

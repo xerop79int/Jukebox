@@ -39,9 +39,7 @@ const SongList: React.FC = () => {
 
   const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
   const [songs, setSongs] = useState<Song[]>([]);
-  const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
-  const [search, setSearch] = useState<string>("");
   const [Sets, setSets] = useState<Sets[]>([]);
   const [currentSet, setCurrentSet] = useState<number>(0);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
@@ -58,6 +56,7 @@ const SongList: React.FC = () => {
   const isRunning = useRef<boolean>(false);
   const BPS = useRef<number>(0);
   const Scroll = useRef<number>(0);
+  const Search = useRef<string>('');
 
   
 
@@ -296,19 +295,16 @@ const SongList: React.FC = () => {
   
   const handleSearch = () => {
 
-    const URL = `http://${backendURL}/songslist?search=${search}`
+    const URL = `http://${backendURL}/songslist?search=${Search.current}`
     axios.get(URL, {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {  
       console.log(res.data)
-      setSearchedSongs(res.data.band_songs);
-      setSearch("");
-      const search = document.querySelector('.search') as HTMLInputElement;
-      search.value = "";
-      setOption('search');
+      setSongs(res.data.band_songs);
     })
     .catch(err => console.log(err))
+
   }
 
   const handleGettingSongsInSet = (id: number) => {
@@ -465,7 +461,6 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {
-      console.log(res.data)
       const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
       const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
       alertMessage.innerHTML = res.data.success
@@ -961,8 +956,8 @@ const SongList: React.FC = () => {
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
             <div className="bandleader-search-bar">
-              <input type="text" placeholder="Search..." />
-              <button className="bandleader-search-submit">Submit</button>
+              <input type="text" placeholder="Search..." onChange={e => Search.current = e.target.value}/>
+              <button className="bandleader-search-submit" onClick={handleSearch}>Submit</button>
             </div>
           </div>
         </div>

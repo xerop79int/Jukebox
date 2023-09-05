@@ -46,6 +46,10 @@ class BandMemberConsumer(AsyncWebsocketConsumer):
         # Send data to the group
         scroll = event['scroll']
         await self.send(text_data=json.dumps(scroll))
+    
+    async def send_playlist(self, event):
+        playlist = {'playlist': event['playlist']}
+        await self.send(text_data=json.dumps(playlist))
 
 
 class CustomerConsumer(AsyncWebsocketConsumer):
@@ -72,6 +76,5 @@ class CustomerConsumer(AsyncWebsocketConsumer):
         
     
     async def send_playlist(self, event):
-        print('Sending playlist')
         playlist = {'playlist': event['playlist']}
         await self.send(text_data=json.dumps(playlist))
