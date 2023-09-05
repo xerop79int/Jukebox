@@ -979,7 +979,6 @@ class ManagerPlaylistView(APIView):
                     current_next.status = ""
                     current_next.save()
             elif songs_in_set.count() >= 2:
-                print('here')
                 song1 = songs_in_set[0]
                 song2 = songs_in_set[1]
 
