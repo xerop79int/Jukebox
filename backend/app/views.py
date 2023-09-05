@@ -663,79 +663,44 @@ class ManagerSongsInSetView(APIView):
         
         set_id = req.data.get('set_id')
         song_id = req.data.get('song_id')
+        set = Sets.objects.get(id=set_id)
 
-        # Check if the song is already in the set
-        if SongsInSet.objects.filter(set__id=set_id, song__id=song_id).exists():
-            song_to_del = SongsInSet.objects.get(set__id=set_id, song_id=song_id)
-            if SongsInSet.objects.filter(number=song_to_del.number+1).exists():
-                next_song = SongsInSet.objects.get(number=song_to_del.number + 1)
-                next_song_playlist = Playlist.objects.get(SongsInSet=next_song)
-                next_song_playlist.status = Playlist.objects.get(SongsInSet=song_to_del).status
-                next_song.number = next_song.number-1
-                next_song.save()
-                next_song_playlist.save()
-            song_to_del.delete()
-            return Response({'success': 'Song has been removed'}, status=200)
-        else:
-            set = Sets.objects.get(id=set_id)
-            song = BandSongsList.objects.get(id=song_id)
+        if SongsInSet.objects.filter(set=set, song_id=song_id).exists():
+            del_song = SongsInSet.objects.filter(set=set, song_id=song_id).first()
+            Playlist.objects.filter(SongsInSet=del_song).delete()
+            del_song.delete()
+
+            all_songs_in_set = SongsInSet.objects.filter(set=set).order_by('number')
+            count = 1
+            if all_songs_in_set.exists():
+                first = all_songs_in_set.first()
+                if Playlist.objects.filter(SongsInSet=first).exists():
+                    Playlist.objects.filter(SongsInSet=first).update(status='now')
+                if all_songs_in_set.count() > 1:
+                    second = all_songs_in_set[1]
+                    if Playlist.objects.filter(SongsInSet=second).exists():
+                        Playlist.objects.filter(SongsInSet=second).update(status='next')
+            for song in all_songs_in_set:
+                song.number = count
+                song.save()
+                count += 1
             
-            
-            All_Sets = Sets.objects.all().order_by('id')
-            count = 0
-            for i in All_Sets:
-                if i.id == set_id:
-                    count += SongsInSet.objects.filter(set=i).count() + 1
-                    break
-                else:
-                    count += SongsInSet.objects.filter(set=i).count()
+            return Response({'success': 'Song removed successfully.'}, status=200)
 
+        if SongsInSet.objects.filter(set=set).exists():
+            all_songs_in_set = SongsInSet.objects.filter(set=set).order_by('number')
+            count = 1
+            for song in all_songs_in_set:
+                song.number = count
+                song.save()
+                count += 1
+        
+        number = SongsInSet.objects.filter(set=set).count() + 1
+        song = SongsInSet(number=number, set_id=set_id, song_id=song_id)
+        song.save()
 
-            # get all the songs with number greater or equal to the count and update the number
-            # the code is not working properly because it is updating the number again if it is already updated
-            all_songs_in_set = SongsInSet.objects.filter(number__gte=count)
-            for song_in_set in all_songs_in_set:
-                song_in_set.number = int(song_in_set.number) + 1
-                song_in_set.save()
-
-            
-            songs_in_set = SongsInSet(number=count, set=set, song=song)
-            songs_in_set.save()
-
-
-
-            # get all the songs in the set and order them by number then add them to the playlist
-            # if the song is already in the Playlist but the number is different then update the number
-
-            all_songs_in_set = SongsInSet.objects.all().order_by('number')
-            for song_in_set in all_songs_in_set:
-                if Playlist.objects.filter(SongsInSet__id=song_in_set.id).exists():
-                    Playlist.objects.filter(SongsInSet__id=song_in_set.id).delete()
-                    playlist = Playlist(SongsInSet=song_in_set)
-                    playlist.save()
-                else:
-                    playlist = Playlist(SongsInSet=song_in_set)
-                    playlist.save()
-            
-            if ShowStatus.objects.filter(has_show_started=True).exists():
-                pass
-            else:
-                if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='now').exclude(SongsInSet__number=1).exists():
-                    Playlist.objects.filter(status='now').update(status='')
-                    Playlist.objects.filter(SongsInSet__number=1).update(status='now')
-                elif Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='now').exclude(SongsInSet__number=2).exists():
-                    Playlist.objects.filter(status='now').update(status='')
-                    Playlist.objects.filter(SongsInSet__number=2).update(status='next')
-                else:
-                    if Playlist.objects.filter(SongsInSet__number=1).exists():
-                        Playlist.objects.filter(SongsInSet__number=1).update(status='now')
-                    if Playlist.objects.filter(SongsInSet__number=2).exists():
-                        Playlist.objects.filter(SongsInSet__number=2).update(status='next')
-                    
-
-
-
-            return Response({'success': 'Song added successfully to ' + set.Setname}, status=200)
+        return Response({'success': 'Song added successfully to ' + set.Setname}, status=200)
+        
 
     def put(self, req):
         customer_request = req.data.get('request_id')

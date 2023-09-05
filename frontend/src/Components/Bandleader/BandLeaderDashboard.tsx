@@ -461,6 +461,7 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {
+      handleGettingPlaylist();
       const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
       const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
       alertMessage.innerHTML = res.data.success
