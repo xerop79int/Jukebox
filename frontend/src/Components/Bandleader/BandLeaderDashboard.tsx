@@ -324,7 +324,6 @@ const SongList: React.FC = () => {
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
 
     // check if the e.target.value has a substring of 'set'
-    console.log(e.target.value)
     if(e.target.value.includes('Set')){
       // split the string
       const splitString = e.target.value.split(' ')[1];
@@ -339,7 +338,7 @@ const SongList: React.FC = () => {
       const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
       songlist.style.alignItems = 'flex-start';
       songlist.style.padding = '0 2rem';
-    } 
+    }
     else{
       setOption(e.target.value);
       const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
@@ -410,6 +409,12 @@ const SongList: React.FC = () => {
  
 
   const handleEditSet = (id: number) => {
+    const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
+    updown_arrow.style.right = '-110px';
+    const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
+    songlist.style.alignItems = 'center';
+    songlist.style.padding = '';
+    
     setCurrentSet(id);
     
     let URL = `http://${backendURL}/songslist?view=likes&set_id=${id}`
