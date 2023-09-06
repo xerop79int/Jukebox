@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth import login
@@ -137,6 +138,7 @@ class ManagerVenueView(APIView):
 class ManagerCustomerRequestView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [AllowAny]
+
 
     def post(self, req):
         customer_name = req.data.get('customer_name').lower()

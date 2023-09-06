@@ -53,10 +53,13 @@ const SongList: React.FC = () => {
 
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
-      console.log(data)
       if(data.playlist){
         setNowSong(data.playlist[0])
         setNextSong(data.playlist[1])
+        if(option){
+          const id = parseInt(option.split(' ')[1]);
+          handleGettingSongsInSet(id);
+        }
       }
       else{
         handleAutoScrolling(data)
@@ -308,7 +311,6 @@ const SongList: React.FC = () => {
             {  Sets.map((set, index) => ( 
               <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
               ))}
-            <option value='search'>Search</option>
           </select>
 
 

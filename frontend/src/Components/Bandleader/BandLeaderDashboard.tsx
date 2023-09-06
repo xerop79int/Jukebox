@@ -520,6 +520,11 @@ const SongList: React.FC = () => {
     .then(res => {
       console.log(res.data)
       handleGettingPlaylist();
+
+      if (option){
+        const id = parseInt(option.split(' ')[1]);
+        handleGettingSongsInSet(id)
+      }
     }
     )
     .catch(err => console.log(err))
@@ -889,7 +894,6 @@ const SongList: React.FC = () => {
         <div className="bandleader-nav">
           <select className="bandleader-dropdown" value={option} onChange={handleOptions}>
             <option value="queue">Sets</option>
-            <option value='search'>Search</option>
             {  Sets.map((set, index) => ( 
             <option key={set.id} value={`Set ` + set.id}>{set.set_name}</option>
             ))}

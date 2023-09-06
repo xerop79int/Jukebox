@@ -62,6 +62,7 @@ const Upload: React.FC = () => {
                 <input onChange={handleFileChange} type="file" multiple className="uplaod-file" required />
             </div>
             <div className='upload-button-container'>
+            <button onClick={e => window.location.href = '/bandleader'} className="submit-file">Return</button>
             <button onClick={handlesubmitdatafile} className="submit-file">Submit Data File</button>
             <button onClick={handlesubmitPDFs} className="submit-file">Submit PDFs</button>
             </div>

@@ -12,8 +12,7 @@ admin.site.register(SongsSet)
 admin.site.register(Sets)
 admin.site.register(Venue)
 admin.site.register(LikedBandSongsListInAllVenues)
-# admin.site.register(SongsInSet)
-# admin.site.register(Playlist)
+
 
 @admin.register(SongsInSet)
 class SongsInSet(admin.ModelAdmin):
