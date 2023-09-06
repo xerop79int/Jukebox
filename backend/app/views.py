@@ -727,16 +727,9 @@ class ManagerSongsInSetView(APIView):
             request.save()
             return Response({'success': 'Request unlocked successfully.'}, status=200)
 
-        # if place > 3:
-        #     song = BandSongsList.objects.get(id=customer_request).id
-        #     songinset = SongsInSet.objects.get(song=song, set=set)
-        #     number = songinset.number
-        # else:
-        #     request = CustomerRequest.objects.get(id=customer_request)
-        #     song_id = request.song.id
+        
 
-        # Code for customer request
-        if place >= 1 or place <=3:
+        if place >= 1 and place <=3:
             
             if place == 1:
                 if Playlist.objects.filter(status='now').exists():
@@ -834,8 +827,11 @@ class ManagerSongsInSetView(APIView):
                 'type': 'send_playlist',
                 'playlist': data,
             })
-                
         
+        if place > 3:
+            song = BandSongsList.objects.get(id=customer_request).id
+            songinset = SongsInSet.objects.get(song=song, set=set)
+            number = songinset.number
 
         # Song Movement
         if place == 4:
