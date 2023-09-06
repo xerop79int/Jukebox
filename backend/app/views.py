@@ -828,12 +828,13 @@ class ManagerSongsInSetView(APIView):
                 'playlist': data,
             })
         
+
+        # Song Movement Code
         if place > 3:
             song = BandSongsList.objects.get(id=customer_request).id
             songinset = SongsInSet.objects.get(song=song, set=set)
             number = songinset.number
 
-        # Song Movement
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
             
