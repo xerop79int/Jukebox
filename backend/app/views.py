@@ -740,16 +740,19 @@ class ManagerSongsInSetView(APIView):
             
             if place == 1:
                 if Playlist.objects.filter(status='now').exists():
-                    number = Playlist.objects.get(status='now').SongsInSet.number
-                    set = SongsInSet.objects.get(number=number).set 
+                    song_in_set = Playlist.objects.get(status='now').SongsInSet
+                    number = song_in_set.number
+                    set = song_in_set.set 
             elif place == 2:
                 if Playlist.objects.filter(status="next").exists():
-                    number = Playlist.objects.get(status='next').SongsInSet.number
-                    set = SongsInSet.objects.get(number=number).set 
+                    song_in_set = Playlist.objects.get(status='next').SongsInSet
+                    number = song_in_set.number
+                    set = song_in_set.set
             elif place == 3:
                 if Playlist.objects.filter(status="next").exists():
-                    number = Playlist.objects.get(status='next').SongsInSet.number
-                    set = SongsInSet.objects.get(number=number).set 
+                    song_in_set = Playlist.objects.get(status='next').SongsInSet
+                    number = song_in_set.number
+                    set = song_in_set.set
                     number = SongsInSet.objects.filter(set=set).count()
             
             should_next_update = True
@@ -763,7 +766,7 @@ class ManagerSongsInSetView(APIView):
                         break
                 else:
                     break
-                
+
             if SongsInSet.objects.filter(number=number+1).exists():
                 delete = SongsInSet.objects.get(number=number+1, set=set)
                 delete.delete()
