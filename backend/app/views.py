@@ -727,49 +727,53 @@ class ManagerSongsInSetView(APIView):
             request.save()
             return Response({'success': 'Request unlocked successfully.'}, status=200)
 
-        if place > 3:
-            song = BandSongsList.objects.get(id=customer_request).id
-            songinset = SongsInSet.objects.get(song=song, set=set)
-            number = songinset.number
-        else:
-            request = CustomerRequest.objects.get(id=customer_request)
-            song_id = request.song.id
+        # if place > 3:
+        #     song = BandSongsList.objects.get(id=customer_request).id
+        #     songinset = SongsInSet.objects.get(song=song, set=set)
+        #     number = songinset.number
+        # else:
+        #     request = CustomerRequest.objects.get(id=customer_request)
+        #     song_id = request.song.id
 
+        # Code for customer request
         if place >= 1 or place <=3:
             
             if place == 1:
                 if Playlist.objects.filter(status='now').exists():
                     number = Playlist.objects.get(status='now').SongsInSet.number
-                    set_id = SongsInSet.objects.get(number=number).set.id
-
-                    
+                    set = SongsInSet.objects.get(number=number).set 
             elif place == 2:
                 if Playlist.objects.filter(status="next").exists():
                     number = Playlist.objects.get(status='next').SongsInSet.number
-                    set_id = SongsInSet.objects.get(number=number).set.id
+                    set = SongsInSet.objects.get(number=number).set 
             elif place == 3:
                 if Playlist.objects.filter(status="next").exists():
                     number = Playlist.objects.get(status='next').SongsInSet.number
-                    set_id = SongsInSet.objects.get(number=number).set.id
-                    number = SongsInSet.objects.filter(set__id=set_id).count()
+                    set = SongsInSet.objects.get(number=number).set 
+                    number = SongsInSet.objects.filter(set=set).count()
             
             should_next_update = True
             while True:
-                if SongsInSet.objects.filter(number=number).exists():
-                    song_in_set = SongsInSet.objects.get(number=number+1)
+                if SongsInSet.objects.filter(number=number+1).exists():
+                    song_in_set = SongsInSet.objects.get(number=number+1, set=set)
                     if song_in_set.is_locked == True:
                         number += 1
                         should_next_update = False
                     else:
                         break
-            
-            count = int(number) + 1
-            all_songs_in_set = SongsInSet.objects.filter(number__gte=count)
-            for song_in_set in all_songs_in_set:
-                song_in_set.number = int(song_in_set.number) + 1
-                song_in_set.save()
-
-            new = SongsInSet(number=int(number)+1, set_id=set_id, song_id=song_id)
+                else:
+                    break
+                
+            if SongsInSet.objects.filter(number=number+1).exists():
+                delete = SongsInSet.objects.get(number=number+1, set=set)
+                delete.delete()
+            elif place == 3:
+                delete = SongsInSet.objects.get(number=number, set=set)
+                delete.delete()
+                number -= 1
+            request = CustomerRequest.objects.get(id=customer_request)
+            song = request.song
+            new = SongsInSet(number=int(number+1), set=set, song_id=song.id)
             new.save()
 
             all_songs_in_set = SongsInSet.objects.all().order_by('number')
@@ -780,11 +784,10 @@ class ManagerSongsInSetView(APIView):
                     new_playlist = Playlist(SongsInSet=song_in_set)
                     new_playlist.save()
             
-            if should_next_update == True:
-                if Playlist.objects.filter(status='next').exists():
-                        Playlist.objects.filter(status='next').update(status='')
+            if should_next_update == True and place == 1:
                 Playlist.objects.filter(SongsInSet=new).update(status='next')
             
+
             data = []
             if Playlist.objects.filter(status='now').exists():
                 now = Playlist.objects.get(status='now').SongsInSet
@@ -831,6 +834,7 @@ class ManagerSongsInSetView(APIView):
                 
         
 
+        # Song Movement
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
             
@@ -899,6 +903,8 @@ class ManagerSongsInSetView(APIView):
 
     def get(self, req):
         set_id = req.GET.get('set_id')
+        if not set_id:
+            return Response({'error': 'No set id found.'})
         songs_in_set = SongsInSet.objects.filter(set__id=set_id).order_by('number')
         data = []
         count = 0
