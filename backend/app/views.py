@@ -673,7 +673,6 @@ class ManagerSongsInSetView(APIView):
             del_song.delete()
 
             all_songs_in_set = SongsInSet.objects.filter(set=set).order_by('number')
-            count = 1
             if all_songs_in_set.exists():
                 first = all_songs_in_set.first()
                 if Playlist.objects.filter(SongsInSet=first).exists():
@@ -682,6 +681,7 @@ class ManagerSongsInSetView(APIView):
                     second = all_songs_in_set[1]
                     if Playlist.objects.filter(SongsInSet=second).exists():
                         Playlist.objects.filter(SongsInSet=second).update(status='next')
+            count = 1
             for song in all_songs_in_set:
                 song.number = count
                 song.save()
@@ -837,7 +837,7 @@ class ManagerSongsInSetView(APIView):
 
         if place == 4:
             # check if the song with the number - 1 is the now song and return a response that song can't be moved
-            
+            print(set)
             if SongsInSet.objects.get(number=number-1, set=set).is_locked == True:
                 return Response({'success': 'Previous Song is locked, So this song cannot be moved up'})
             if SongsInSet.objects.get(number=number,  set=set).is_locked == True:
@@ -856,8 +856,9 @@ class ManagerSongsInSetView(APIView):
         
         if place == 5:
             # check if the song with the number + 1 is the now song and return a response that song can't be moved
-            
-            if SongsInSet.objects.filter(number=number+1).exists():
+            print(set)
+            if SongsInSet.objects.filter(number=number+1, set=set).exists():
+                print(SongsInSet.objects.filter(number=number+1, set=set))
                 if SongsInSet.objects.get(number=number+1, set=set).is_locked == True:
                     return Response({'success': 'Next Song is locked, So this song cannot be moved down'})
             
@@ -956,7 +957,11 @@ class ManagerPlaylistView(APIView):
                 song2 = songs_in_set[1]
             
             # add all the songs in the set to the playlist
+            count = 1
             for song_in_set in songs_in_set:
+                song_in_set.number = count
+                song_in_set.save()
+                count += 1
                 if Playlist.objects.filter(SongsInSet=song_in_set).exists():
                     continue
                 playlist = Playlist(SongsInSet=song_in_set)

@@ -322,7 +322,7 @@ const SongList: React.FC = () => {
   }
 
   const handleOptions = (e: React.ChangeEvent<HTMLSelectElement>) => {
-
+    setMovesong(0)
     // check if the e.target.value has a substring of 'set'
     if(e.target.value.includes('Set')){
       // split the string
@@ -584,6 +584,7 @@ const SongList: React.FC = () => {
    
     const song = document.querySelector(`.song-${id}`) as HTMLElement;
     song.style.border = '4px solid green'
+
 
     setTimeout(function() {
       alert.style.display = 'none';
