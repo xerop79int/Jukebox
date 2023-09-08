@@ -583,7 +583,7 @@ const SongList: React.FC = () => {
 
    
     const song = document.querySelector(`.song-${id}`) as HTMLElement;
-    song.style.border = '2px solid green'
+    song.style.border = '4px solid green'
 
     setTimeout(function() {
       alert.style.display = 'none';

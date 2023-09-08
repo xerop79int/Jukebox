@@ -769,7 +769,7 @@ class ManagerSongsInSetView(APIView):
                 number -= 1
             request = CustomerRequest.objects.get(id=customer_request)
             song = request.song
-            new = SongsInSet(number=int(number+1), set=set, song_id=song.id)
+            new = SongsInSet(number=int(number+1), set=set, song_id=song.id, is_locked=True)
             new.save()
 
             all_songs_in_set = SongsInSet.objects.all().order_by('number')
@@ -842,8 +842,8 @@ class ManagerSongsInSetView(APIView):
                 return Response({'success': 'Previous Song is locked, So this song cannot be moved up'})
             if SongsInSet.objects.get(number=number,  set=set).is_locked == True:
                 return Response({'success': 'Song is locked'})
-            if Playlist.objects.get(status='now').SongsInSet.number == number-1:
-                return Response({'success': 'Song can not be moved'}, status=200)
+            # if Playlist.objects.get(status='now').SongsInSet.number == number-1:
+            #     return Response({'success': 'Song can not be moved'}, status=200)
             if number == 1:
                 return Response({'success': 'This song is the first in the queue so cannot be moved up'}, status=200)
             if SongsInSet.objects.filter(number=number-1).exists():
