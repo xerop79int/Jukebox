@@ -306,8 +306,7 @@ class ManagerCustomerSongsListView(APIView):
             data = []
             for band_song in band_songs:
                 if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
-                    venue = Venue.objects.get(name=venue)
-                    count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song, venue=venue).count()
+                    count = LikedBandSongsList.objects.filter(band_song=band_song).count()
                     liked = True
                 else:
                     count = 0
