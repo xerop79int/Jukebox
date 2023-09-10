@@ -54,14 +54,14 @@ const SongList: React.FC = () => {
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
       if(data.playlist){
-        setNowSong(data.playlist[0])
-        setNextSong(data.playlist[1])
+        handleGettingPlaylist();
         if(option){
           const id = parseInt(option.split(' ')[1]);
           handleGettingSongsInSet(id);
         }
       }
       else{
+        handleGettingPlaylist();
         handleAutoScrolling(data)
       }
     };

@@ -55,8 +55,8 @@ const SongList: React.FC = () => {
       
     useEffect(() => {
 
-      
-        let URL = `http://${backendURL}/customersongslist`;
+        let venue = localStorage.getItem('venue_name');
+        let URL = `http://${backendURL}/customersongslist?venue=${venue}`;
     
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)

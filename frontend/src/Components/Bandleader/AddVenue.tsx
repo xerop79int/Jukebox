@@ -25,9 +25,10 @@ const AddVenue = () => {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then(res => {
-            console.log(res)
-            // save the venue_name in the local storage
             localStorage.setItem('venue_name', venue)
+            // refresh the page
+            window.location.reload()
+            setVenue("")
         })
         .catch(err => {
             console.log(err)
@@ -54,6 +55,7 @@ const AddVenue = () => {
     const SelectVenue = (e: any) => {
         // save the venue_name in the local storage
         localStorage.setItem('venue_name', selectVenue)
+        window.location.href = "/bandleader"
     }
 
 

@@ -111,7 +111,10 @@ class ManagerVenueView(APIView):
             return Response({'error': 'You are not a band leader.'})
         venue_name = req.data.get('venue_name')
 
-        venue = Venue(name=venue_name);
+        if Venue.objects.filter(name=venue_name).exists():
+            return Response({'Success': 'Venue already exists.'})
+
+        venue = Venue(name=venue_name)
         venue.save()
 
         return Response({'success': 'Venue has been added successfully.'})
@@ -238,6 +241,8 @@ class ManagerCustomerSongsListView(APIView):
         sort = req.GET.get('sort')
         view = req.GET.get('view')
         search = req.GET.get('search')
+        venue = req.GET.get('venue')
+
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
         elif sort == 'artist':
@@ -253,7 +258,8 @@ class ManagerCustomerSongsListView(APIView):
             data = []
             for band_song in band_songs:
                 if LikedBandSongsList.objects.filter(band_song=band_song).exists():
-                    count = LikedBandSongsList.objects.filter(band_song=band_song).count()
+                    venue = Venue.objects.get(name=venue)
+                    count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song, venue=venue).count()
                 else:
                     count = 0
                 song_data = {
@@ -299,8 +305,9 @@ class ManagerCustomerSongsListView(APIView):
 
             data = []
             for band_song in band_songs:
-                if LikedBandSongsList.objects.filter(band_song=band_song).exists():
-                    count = LikedBandSongsList.objects.filter(band_song=band_song).count()
+                if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
+                    venue = Venue.objects.get(name=venue)
+                    count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song, venue=venue).count()
                     liked = True
                 else:
                     count = 0
