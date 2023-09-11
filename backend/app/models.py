@@ -4,6 +4,7 @@ from django.conf import settings
 
 class Venue(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
+    is_selected = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -81,6 +82,7 @@ class LikedBandSongsListInAllVenues(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     liked = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return self.band_song.song_name

@@ -55,8 +55,8 @@ const SongList: React.FC = () => {
       
     useEffect(() => {
 
-        let venue = localStorage.getItem('venue_name');
-        let URL = `http://${backendURL}/customersongslist?venue=${venue}`;
+
+        let URL = `http://${backendURL}/customersongslist`;
     
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
@@ -205,7 +205,7 @@ const SongList: React.FC = () => {
     
         const data = {
             "song_id": id,
-            "venue_name": "Just Venue Testing"
+            // "venue_name": "Just Venue Testing"
         }
 
         axios.post(URL, data)

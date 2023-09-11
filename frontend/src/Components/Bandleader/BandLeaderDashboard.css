@@ -369,9 +369,9 @@
   .song-dummy:hover h3 {
     color: #808080;
   } */
-
-
-
+  body{
+    display: full-screen;
+  }
   * {
     margin: 0;
     padding: 0;

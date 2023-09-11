@@ -43,7 +43,6 @@ const AddVenue = () => {
         })
         .then(res => {
             setVenueList(res.data.venue)
-
         })
         .catch(err => {
             console.log(err)
@@ -54,8 +53,22 @@ const AddVenue = () => {
 
     const SelectVenue = (e: any) => {
         // save the venue_name in the local storage
-        localStorage.setItem('venue_name', selectVenue)
-        window.location.href = "/bandleader"
+
+        const URL = `http://${backendURL}/venue`
+
+        const data = {
+            'venue_name': selectVenue
+        }
+
+        axios.put(URL, data, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            // refresh the page
+            window.location.href = "/bandleader"
+            setVenue("")
+        })
+        
     }
 
 

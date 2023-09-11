@@ -266,28 +266,28 @@ const SongList: React.FC = () => {
 
       <div className="bandleader-sub-main">
         <nav>
-          { nowSong ? (
+        { nowSong ? (
           <div className="bandleader-nav-child1">
-            <h3>Now</h3>
+            <h3 style={{paddingTop: '0.2rem'}}>Now</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
                 <h4>{nowSong?.number} - {nowSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nowSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue"> {nowSong.song_year} - {nowSong?.song_genre} - {nowSong.cortes} - {nowSong.bpm} - {nowSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue">  <span className='keys-now-next'> {nowSong.cortes} </span> <span className='bpm-now-next'>- {nowSong.bpm}</span> </h5>
             </div>
           </div>
           ): null}
 
           { nextSong ? (
           <div className="bandleader-nav-child2">
-            <h3>Next</h3>
+            <h3 style={{paddingTop: '0.2rem'}}>Next</h3>
             <div className="bandleader-song-title-queue">
               <div className="bandleader-songtitle-queue">
-                <h4>{nextSong?.number} - {nextSong?.song_name} -</h4>
+                <h4 >{nextSong?.number} - {nextSong?.song_name} -</h4>
                 <p style={{textTransform: 'capitalize'}}>{nextSong?.song_artist} - </p>
               </div>
-              <h5 className="bandleader-songdetail-queue">{nextSong.song_year} - {nextSong?.song_genre} - {nextSong.cortes} - {nextSong.bpm} - {nextSong?.song_durations}</h5>
+              <h5 className="bandleader-songdetail-queue"> <span className='keys-now-next'>{nextSong.cortes}</span> <span className='bpm-now-next'>- {nextSong.bpm}</span></h5>
             </div>
           </div>
           ): null}

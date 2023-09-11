@@ -218,6 +218,16 @@ const SongList: React.FC = () => {
   }
 
   useEffect(() => {
+
+    // function fullscreen(){
+    //   document.documentElement.requestFullscreen().catch((err) => {
+    //     console.log(err)
+    //   })
+    // }
+
+    // fullscreen();
+
+
     // check if options have set word in it
     let  URL = `http://${backendURL}/songslist?view=likes`;
 
