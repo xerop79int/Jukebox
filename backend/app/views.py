@@ -251,8 +251,8 @@ class ManagerLikedBandSongsListView(APIView):
 
 # Customer Songs List View   
 class ManagerCustomerSongsListView(APIView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [AllowAny]
+    authentication_classes = []
+    # permission_classes = [AllowAny]
 
     def get(self, req):
         sort = req.GET.get('sort')

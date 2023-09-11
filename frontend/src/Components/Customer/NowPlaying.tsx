@@ -258,7 +258,7 @@ const SongList: React.FC = () => {
     }
 
     const handleSearch = () => {
-      const URL = `http://${backendURL}/songslist?search=${search}`
+      const URL = `http://${backendURL}/customersongslist?search=${search}`
       axios.get(URL, {
         headers: { Authorization: `Token ${localStorage.getItem('token')}` },
       })
