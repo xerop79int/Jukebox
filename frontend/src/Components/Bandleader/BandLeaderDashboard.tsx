@@ -99,6 +99,27 @@ const SongList: React.FC = () => {
       SCROLL.current = SCROLL.current + 33
       handleAutoScrolling(SCROLL.current);
     }
+
+    const URL = `http://${backendURL}/scrollshare`;
+
+    const data = {
+      scroll: SCROLL.current,
+      measure: Measure.current,
+      beat: Beat.current
+    }
+
+    axios.post(URL, data, {
+        headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then((response) => {
+      console.log(response);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    }
+    )
+
     const measure1 = document.querySelector('.measure-1') as HTMLElement;
     measure1.textContent = Measure.current.toString();
 
@@ -127,25 +148,6 @@ const SongList: React.FC = () => {
       top: Scroll,
       behavior: 'smooth'
     });
-
-
-    const URL = `http://${backendURL}/scrollshare`;
-
-    const data = {
-      scroll: Scroll
-    }
-
-    axios.post(URL, data, {
-        headers: { Authorization: `Token ${localStorage.getItem('token')}` },
-    })
-    .then((response) => {
-      console.log(response);
-    }
-    )
-    .catch((error) => {
-      console.log(error);
-    }
-    )
   }
 
   const handleStopingSong = () => {
@@ -178,6 +180,25 @@ const SongList: React.FC = () => {
       top: 0,
       behavior: 'smooth'
     })
+
+    const URL = `http://${backendURL}/scrollshare`;
+    const data = {
+      scroll: SCROLL.current,
+      measure: Measure.current,
+      beat: Beat.current
+    }
+
+    axios.post(URL, data, {
+        headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then((response) => {
+      console.log(response);
+    }
+    )
+    .catch((error) => {
+      console.log(error);
+    }
+    )
 
 
   }
@@ -218,15 +239,6 @@ const SongList: React.FC = () => {
   }
 
   useEffect(() => {
-
-    // function fullscreen(){
-    //   document.documentElement.requestFullscreen().catch((err) => {
-    //     console.log(err)
-    //   })
-    // }
-
-    // fullscreen();
-
 
     // check if options have set word in it
     let  URL = `http://${backendURL}/songslist?view=likes`;
@@ -548,7 +560,6 @@ const SongList: React.FC = () => {
 
   const handleChangingSong = (movement: string) => {
     handleStopingSong();
-    handleReset();
 
     const URL = `http://${backendURL}/playlist`
 

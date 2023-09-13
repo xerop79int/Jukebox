@@ -1174,6 +1174,8 @@ class ManagerScrollShareView(APIView):
 
     def post(self, req):
         scroll = req.data.get('scroll')
+        measure = req.data.get('measure')
+        beat = req.data.get('beat')
 
         print(scroll)
 
@@ -1182,6 +1184,8 @@ class ManagerScrollShareView(APIView):
         async_to_sync(channel_layer.group_send)('bandmember_frontend', {
             'type': 'send_data',
             'scroll': scroll,
+            'measure': measure,
+            'beat': beat
         })
 
         return Response({'success': 'Scroll sent successfully'})

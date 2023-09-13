@@ -47,12 +47,17 @@ const SongList: React.FC = () => {
 
   const [lyric, setLyric]= useState<string>(``);
 
+  const Measure = React.useRef<number>(1);
+  const Beat = React.useRef<number>(1);
+  const SCROLL = React.useRef<number>(0);
+
 
   useEffect(() => {
     const socket = new WebSocket(`ws://${backendURL}/ws/bandmember/`);
 
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
+      console.log(data)
       if(data.playlist){
         handleGettingPlaylist();
         if(option){
@@ -61,12 +66,66 @@ const SongList: React.FC = () => {
         }
       }
       else{
-        handleGettingPlaylist();
-        handleAutoScrolling(data)
+        // handleGettingPlaylist();
+        Measure.current = data.measure;
+        Beat.current = data.beat;
+        SCROLL.current = data.scroll;
+        handleMeasureAndBeat();
       }
     };
 
   }, []);
+
+  const handleMeasureAndBeat = () => {
+    
+
+    if (Measure.current % 4 === 0){
+      handleAutoScrolling(SCROLL.current);
+    }
+
+
+    const measure1 = document.querySelector('.measure-1') as HTMLElement;
+    if (measure1){
+    measure1.textContent = Measure.current.toString();
+    }
+    else{
+      return;
+    }
+
+    if (Beat.current === 0 && Measure.current === 1 && SCROLL.current === 0){
+      const fa4 = document.querySelector('.fa4') as HTMLElement;
+      const fa1 = document.querySelector('.fa1') as HTMLElement;
+      const fa2 = document.querySelector('.fa2') as HTMLElement;
+      const fa3 = document.querySelector('.fa3') as HTMLElement;
+      if (fa4 && fa2 && fa3 && fa1){
+        fa4.style.backgroundColor = 'black';
+        fa1.style.backgroundColor = 'black';
+        fa2.style.backgroundColor = 'black';
+        fa3.style.backgroundColor = 'black';
+      }
+      return;
+    }
+
+
+    if (Beat.current === 1){
+      measure1.style.backgroundColor = 'red';
+      const fa4 = document.querySelector('.fa4') as HTMLElement;
+      if (fa4){
+        fa4.style.backgroundColor = 'black';
+      }
+    }
+    else{
+      measure1.style.backgroundColor = 'black';
+      const fa = document.querySelector('.fa' + (Beat.current - 1)) as HTMLElement;
+      if (fa){
+      fa.style.backgroundColor = 'black';
+      }
+      const fabeat = document.querySelector('.fa' + Beat.current) as HTMLElement;
+      if (fabeat){
+      fabeat.style.backgroundColor = 'red';
+      }
+    }
+  }
 
 
   const handleAutoScrolling = (SCROLL: number) => {
@@ -265,6 +324,18 @@ const SongList: React.FC = () => {
 
 
       <div className="bandleader-sub-main">
+        <div className="bandmember-main-buttons">
+          <div className="band-member-main-button-1-head">
+          <div className="band-member-measure">
+            <div className="band-member-main-button-circle-1 measure-1 fa1">
+            1
+            </div>
+          </div>
+          </div>
+          <i className="fa-solid fa2 fa-2x">2</i>
+          <i className="fa-solid fa3 fa-2x">3</i>
+          <i className="fa-solid fa4 fa-2x">4</i>
+        </div>
         <nav>
         { nowSong ? (
           <div className="bandleader-nav-child1">
