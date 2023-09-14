@@ -626,7 +626,6 @@ class ManagerUploadSongsListView(APIView):
                                 output = write_to_text_file(file, file_name)
                                 band_song.song_lyrics = output
                                 band_song.save()
-                                sleep(5)
                                 print('saved')
                                 i += 1
                                 break

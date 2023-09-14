@@ -11,6 +11,9 @@ import shutil
 import re
 import sys
 
+current_script_path = os.path.abspath(__file__)
+current_directory = os.path.dirname(current_script_path)
+os.chdir(current_directory)
 os.chmod('./tesseract.AppImage', stat.S_IRUSR | stat.S_IXUSR | stat.S_IWUSR | stat.S_IWGRP | stat.S_IRGRP | stat.S_IXGRP | stat.S_IWOTH | stat.S_IROTH | stat.S_IXOTH)
 
 OUTPUT_DIR = 'output_dir/'
@@ -196,19 +199,14 @@ def read_pdf_file(pdf_file):
 	shutil.rmtree(OUTPUT_DIR)
 	return text
 
-def pdf_title_to_text_title(pdf_file):
-	text_file = pdf_file.replace('.pdf', '').replace('official', '').replace('chords', '').strip()
-	return text_file.lower() + '.txt'
-
-def write_to_text_file(pdf_file):
-	text_file = pdf_title_to_text_title(pdf_file)
-	text = read_pdf_file(pdf_file)
+def write_to_text_file(pdf_file, file_name):
+	with open(file_name + '.pdf', 'wb') as file:
+		for chunk in pdf_file.chunks():
+			file.write(chunk)
+	saved_pdf_file = file_name + '.pdf' 
+	text = read_pdf_file(saved_pdf_file)
 	text = extract_page_numbers(text)
 	text = replace_weird_chord_characters(text)
 	body = get_body(text)
 	
 	return body + '\n'
-
-
-# pdf_file = sys.argv[1]
-# write_to_text_file(pdf_file)
