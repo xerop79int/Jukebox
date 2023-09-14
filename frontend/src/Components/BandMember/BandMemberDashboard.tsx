@@ -39,7 +39,6 @@ const SongList: React.FC = () => {
   const [searchedSongs, setSearchedSongs] = useState<Song[]>([]);
   const [option, setOption] = useState<string>('queue');
   const [search, setSearch] = useState<string>("");
-  // const [SongsSet, setSetSongs] = useState<Song[]>([]);
   const [Sets, setSets] = useState<Sets[]>([]);
   const [selectedSetSongs, setSelectedSetSongs] = useState<Song[]>([]);
   const [nowSong, setNowSong] = useState<Song>();
