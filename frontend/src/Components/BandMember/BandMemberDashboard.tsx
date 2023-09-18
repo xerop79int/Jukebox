@@ -102,6 +102,7 @@ const SongList: React.FC = () => {
         fa2.style.backgroundColor = 'black';
         fa3.style.backgroundColor = 'black';
       }
+      handleAutoScrolling(SCROLL.current);
       return;
     }
 
