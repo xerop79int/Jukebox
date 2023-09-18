@@ -86,19 +86,7 @@ const SongList: React.FC = () => {
       Beat.current = Beat.current + 1;
     }
 
-    // make SCROLL, Measure and Beat as zero when it reached the bottom
-    const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
-    if (scrollingdiv.scrollTop + scrollingdiv.clientHeight >= scrollingdiv.scrollHeight) {
-      isRunning.current = false;
-      return;
-      // Perform actions when the bottom is reached
-  }
-    
 
-    if (Measure.current % 4 === 0){
-      SCROLL.current = SCROLL.current + 33
-      handleAutoScrolling(SCROLL.current);
-    }
 
     const URL = `http://${backendURL}/scrollshare`;
 
@@ -112,7 +100,38 @@ const SongList: React.FC = () => {
         headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then((response) => {
-      console.log(response);
+
+      // updating the metronome(Measure and Beat GUI) after data is sent to band members
+
+          // make SCROLL, Measure and Beat as zero when it reached the bottom
+        const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+        if (scrollingdiv.scrollTop + scrollingdiv.clientHeight >= scrollingdiv.scrollHeight) {
+          isRunning.current = false;
+          return;
+        }
+        
+
+        if (Measure.current % 4 === 0){
+          SCROLL.current = SCROLL.current + 33
+          handleAutoScrolling(SCROLL.current);
+        }
+
+        const measure1 = document.querySelector('.measure-1') as HTMLElement;
+        measure1.textContent = Measure.current.toString();
+
+
+        if (Beat.current === 1){
+          measure1.style.backgroundColor = 'red';
+          const fa4 = document.querySelector('.fa4') as HTMLElement;
+          fa4.style.backgroundColor = 'black';
+        }
+        else{
+          measure1.style.backgroundColor = 'black';
+          const fa = document.querySelector('.fa' + (Beat.current - 1)) as HTMLElement;
+          fa.style.backgroundColor = 'black';
+          const fabeat = document.querySelector('.fa' + Beat.current) as HTMLElement;
+          fabeat.style.backgroundColor = 'red';
+        }
     }
     )
     .catch((error) => {
@@ -120,22 +139,7 @@ const SongList: React.FC = () => {
     }
     )
 
-    const measure1 = document.querySelector('.measure-1') as HTMLElement;
-    measure1.textContent = Measure.current.toString();
-
-
-    if (Beat.current === 1){
-      measure1.style.backgroundColor = 'red';
-      const fa4 = document.querySelector('.fa4') as HTMLElement;
-      fa4.style.backgroundColor = 'black';
-    }
-    else{
-      measure1.style.backgroundColor = 'black';
-      const fa = document.querySelector('.fa' + (Beat.current - 1)) as HTMLElement;
-      fa.style.backgroundColor = 'black';
-      const fabeat = document.querySelector('.fa' + Beat.current) as HTMLElement;
-      fabeat.style.backgroundColor = 'red';
-    }
+    
 
     setTimeout(() => {
       handleMeasureAndBeat();
@@ -575,9 +579,6 @@ const SongList: React.FC = () => {
       if (res.data.bps){
         if(isRunning.current === false){
           isRunning.current = true;
-          // if (BPS.current !== 0 && Scroll.current !== 0){
-          //   handleReset();
-          // }
           BPS.current = res.data.bps
           Scroll.current = res.data.Scroll
           handleMeasureAndBeat()
