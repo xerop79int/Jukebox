@@ -61,8 +61,8 @@ const SongList: React.FC = () => {
         const checknowplaylistsong = handleGettingPlaylist();
         axios.get(URL)
             .then(res => {
-              console.log(res.data)
               setSongs(res.data.band_songs);
+              console.log(res.data.band_songs[0])
               if(!checknowplaylistsong){
                 setdDisplayNow(true)
                 handleCurrentSong(res.data.band_songs[0], res.data.band_songs[0].id);
@@ -136,7 +136,6 @@ const SongList: React.FC = () => {
         })
             .then(res => {
               setCurrentSong(res.data.playlist[0])
-              // setNowSong(res.data.playlist[0])
               setNextSong(res.data.playlist[1])
               return true
   

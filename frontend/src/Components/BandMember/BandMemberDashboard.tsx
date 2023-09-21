@@ -20,15 +20,6 @@ interface Sets {
     id: number;
     set_name: string;
 }
-
-interface SongRequest{
-  customer_name: string;
-  song_number: number;
-  song_name: string;
-  song_artist: string;
-  song_durations: string;
-  id: number;
-}
 // Create a queue to store the requests
 
 
@@ -56,13 +47,8 @@ const SongList: React.FC = () => {
 
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
-      console.log(data)
       if(data.playlist){
-        handleGettingPlaylist();
-        if(option){
-          const id = parseInt(option.split(' ')[1]);
-          handleGettingSongsInSet(id);
-        }
+        handleGettingPlaylist(); 
       }
       else{
         // handleGettingPlaylist();
@@ -131,6 +117,9 @@ const SongList: React.FC = () => {
   const handleAutoScrolling = (SCROLL: number) => {
     console.log(SCROLL)
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
+    if(scrollingdiv === null){
+      return;
+    }
     scrollingdiv.scrollTo({
       top: SCROLL,
       behavior: 'smooth'
@@ -262,26 +251,12 @@ const SongList: React.FC = () => {
 
     // check if the e.target.value has a substring of 'set'
     if(e.target.value.includes('Set')){
-      // split the string
       const splitString = e.target.value.split(' ')[1];
-      // convert the string to a number
       const id = parseInt(splitString);
-      // call the handleSet function
+
       handleGettingSongsInSet(id);
-
       setOption(e.target.value);
-    } 
-
-    // else{
-    //   setOption(e.target.value);
-    //   const updown_arrow = document.querySelector('.bandleader-buttons-updown') as HTMLInputElement;
-    //   updown_arrow.style.right = '-110px';
-    //   const songlist = document.querySelector('.bandleader-sub-songlist') as HTMLInputElement;
-    //   songlist.style.alignItems = 'center';
-    //   songlist.style.padding = '';
-    // }
-
-    
+    }    
   }
 
 
@@ -399,10 +374,7 @@ const SongList: React.FC = () => {
         <div className="bandleader-songlist">
           <div className="bandleader-sub-songlist">
 
-         
-            
-
-             { option.includes('Set') ? 
+             { option.includes('Set') && selectedSetSongs ? 
              selectedSetSongs.map((song: Song) => (
               <div key={song.id} className="bandleader-song-dummy">
               <h3>{song.number}</h3>

@@ -564,6 +564,9 @@ const SongList: React.FC = () => {
 
   const handleChangingSong = (movement: string) => {
     handleStopingSong();
+    if (movement === 'next' || movement === 'previous'){
+    handleReset();
+    }
 
     const URL = `http://${backendURL}/playlist`
 

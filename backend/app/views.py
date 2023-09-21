@@ -272,6 +272,7 @@ class ManagerCustomerSongsListView(APIView):
             band_songs = BandSongsList.objects.all()
        
         if view == 'likes':
+            print('like')
             data = []
             for band_song in band_songs:
                 if Venue.objects.filter(is_selected=True).exists():
@@ -295,6 +296,7 @@ class ManagerCustomerSongsListView(APIView):
                 }
                 data.append(song_data)
         elif search:
+            print('search')
             data = []
             for band_song in band_songs:
                 if search.lower() in band_song.song_name.lower():
@@ -322,22 +324,23 @@ class ManagerCustomerSongsListView(APIView):
                     }
                     data.append(song_data)
         else:
-
             data = []
             for band_song in band_songs:
                 if Venue.objects.filter(is_selected=True).exists():
                     venue = Venue.objects.get(is_selected=True)
                     if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song, venue=venue).exists():
                         count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song, venue=venue).count()
+                        all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).count()
                         liked = True
                     else:
                         count = 0
+                        all_venues_count = 0
                         liked = False
                 
-                if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
-                    all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).count()
-                else:
-                    all_venues_count = 0
+                # if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).exists():
+                #     all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song).count()
+                # else:
+                #     all_venues_count = 0
                 song_data = {
                     'id': band_song.id,
                     'song_number': band_song.song_number,
@@ -354,6 +357,7 @@ class ManagerCustomerSongsListView(APIView):
                     'img': str(band_song.song_cover.url)
                 }
                 data.append(song_data)
+            
                 
         return Response({'band_songs': data})
 
@@ -937,9 +941,12 @@ class ManagerSongsInSetView(APIView):
 
     def get(self, req):
         set_id = req.GET.get('set_id')
-        if not set_id:
+
+        try:
+            songs_in_set = SongsInSet.objects.filter(set__id=set_id).order_by('number')
+        except:
             return Response({'error': 'No set id found.'})
-        songs_in_set = SongsInSet.objects.filter(set__id=set_id).order_by('number')
+        
         data = []
         count = 0
         for song_in_set in songs_in_set:
@@ -1100,9 +1107,10 @@ class ManagerPlaylistView(APIView):
                 BEAT_DURATION = 60 / bpm
                 BEATS_PER_LINE = LINE_DURATION / BEAT_DURATION
                 auto_scroll_value = BEATS_PER_LINE * SCROLL_SPEED
-                self.bps = 60 / bpm
+                bps = 60 / bpm
+                print(bps)
 
-            return Response({'success': 'Playlist updated successfully', 'bps': self.bps, 'Scroll': auto_scroll_value})
+            return Response({'success': 'Playlist updated successfully', 'bps': bps, 'Scroll': auto_scroll_value})
                 
 
         return Response({'success': 'Playlist updated successfully'})
@@ -1116,8 +1124,8 @@ class ManagerPlaylistView(APIView):
 
             if Venue.objects.filter(is_selected=True).exists():
                 venue = Venue.objects.get(is_selected=True)
-                if LikedBandSongsListInAllVenues.objects.filter(venue=venue).exists():
-                    count = LikedBandSongsListInAllVenues.objects.filter(venue=venue).count()
+                if LikedBandSongsListInAllVenues.objects.filter(band_song=now_song, venue=venue).exists():
+                    count = LikedBandSongsListInAllVenues.objects.filter(band_song=now_song, venue=venue).count()
                 else:
                     count = 0
             
@@ -1125,6 +1133,7 @@ class ManagerPlaylistView(APIView):
                 all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=now_song).count()
             else:
                 all_venues_count = 0
+            
             now_data = {
                 'id': now_song.id,
                 'number': now.number,
