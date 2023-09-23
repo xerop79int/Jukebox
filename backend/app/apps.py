@@ -5,6 +5,7 @@ class CustomerConfig(AppConfig):
     name = 'app'
 
     def ready(self):
-        from app.models import CustomerRequest, Playlist
+        from app.models import CustomerRequest, Playlist, Sets
         CustomerRequest.objects.all().delete()
         Playlist.objects.all().delete()
+        Sets.objects.all().delete()

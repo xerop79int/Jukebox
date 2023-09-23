@@ -51,6 +51,7 @@ const SongList: React.FC = () => {
         handleGettingPlaylist(); 
       }
       else{
+        console.log(data.Scroll)
         // handleGettingPlaylist();
         Measure.current = data.measure;
         Beat.current = data.beat;
@@ -115,7 +116,6 @@ const SongList: React.FC = () => {
 
 
   const handleAutoScrolling = (SCROLL: number) => {
-    console.log(SCROLL)
     const scrollingdiv = document.querySelector('.bandleader-verse-sec-scroll') as HTMLElement;
     if(scrollingdiv === null){
       return;

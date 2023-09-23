@@ -749,7 +749,8 @@ class ManagerSongsInSetView(APIView):
         locking = req.data.get('locking')
 
         try:
-            set = Sets.objects.get(Setname=set_name)
+            set_id = set_name.split(' ')[-1]
+            set = Sets.objects.get(id=set_id)
         except:
             pass
 
@@ -977,7 +978,9 @@ class ManagerPlaylistView(APIView):
 
         if movement == 'playset':
             set_name = req.data.get('set_name')
-            set = Sets.objects.get(Setname=set_name)
+            set_id = set_name.split(' ')[-1]
+            set = Sets.objects.get(id=set_id)
+            set_name = set.Setname
             songs_in_set = SongsInSet.objects.filter(set=set).order_by("number")
 
             if Playlist.objects.filter(status='now').exists():

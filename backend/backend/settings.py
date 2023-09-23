@@ -157,17 +157,19 @@ STATIC_URL = 'static/'
 #     host_https
 # ]
 
-ALLOWED_HOSTS = [host_ip, 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 host_http = f'http://{host_ip}:3000'
 host_https = f'https://{host_ip}:3000'
 
-CORS_ORIGIN_WHITELIST = [
-    host_http,
-    host_https,
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-]
+# allow all hosts during development
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_WHITELIST = [
+#     host_http,
+#     host_https,
+#     'http://localhost:3000',
+#     'http://127.0.0.1:3000'
+# ]
 # CORS_ALLOW_HEADERS = [
 #     'accept',
 #     'accept-encoding',

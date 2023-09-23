@@ -86,6 +86,11 @@ const SongList: React.FC = () => {
       Beat.current = Beat.current + 1;
     }
 
+    if (Measure.current % 4 === 0){
+      SCROLL.current = SCROLL.current + 33
+      handleAutoScrolling(SCROLL.current);
+    }
+
 
 
     const URL = `http://${backendURL}/scrollshare`;
@@ -111,10 +116,7 @@ const SongList: React.FC = () => {
         }
         
 
-        if (Measure.current % 4 === 0){
-          SCROLL.current = SCROLL.current + 33
-          handleAutoScrolling(SCROLL.current);
-        }
+        
 
         const measure1 = document.querySelector('.measure-1') as HTMLElement;
         measure1.textContent = Measure.current.toString();
@@ -237,6 +239,7 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {
+      console.log (res.data)
       setSets(res.data.sets);
     })
     .catch(err => console.log(err))
