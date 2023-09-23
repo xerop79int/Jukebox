@@ -977,6 +977,7 @@ class ManagerPlaylistView(APIView):
 
 
         if movement == 'playset':
+            data = []
             set_name = req.data.get('set_name')
             set_id = set_name.split(' ')[-1]
             set = Sets.objects.get(id=set_id)
@@ -1023,10 +1024,17 @@ class ManagerPlaylistView(APIView):
             except:
                 pass
 
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+                'type': 'send_playlist',
+                'playlist': data,
+            })
+
             return Response({'success': f'Playing the {set_name}' })
 
 
         if movement == 'next':
+            data = []
             if Playlist.objects.filter(status='now').exists() and Playlist.objects.filter(status='next').exists():
                 if not Playlist.objects.get(status='next').SongsInSet.number > Playlist.objects.all().count():
                     
@@ -1036,8 +1044,15 @@ class ManagerPlaylistView(APIView):
                     if SongsInSet.objects.filter(number=current_next.number+1, set=current_next.set).exists():
                         next = SongsInSet.objects.get(number=current_next.number+1, set=current_next.set)
                         Playlist.objects.filter(SongsInSet=next).update(status='next')
+                    
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+                        'type': 'send_playlist',
+                        'playlist': data,
+                    })
                     return Response({'success': 'Playlist updated successfully'})
         if movement == 'previous':
+            data = []
             if Playlist.objects.filter(status='now').exists():
                 if Playlist.objects.get(status='now').SongsInSet.number != 1:
                     Playlist.objects.filter(status='next').update(status='')
@@ -1046,6 +1061,12 @@ class ManagerPlaylistView(APIView):
                     if SongsInSet.objects.filter(number=current_now.number-1, set=current_now.set).exists():
                         previous = SongsInSet.objects.get(number=current_now.number-1, set=current_now.set)
                         Playlist.objects.filter(SongsInSet=previous).update(status='now')
+                    
+                    channel_layer = get_channel_layer()
+                    async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+                        'type': 'send_playlist',
+                        'playlist': data,
+                    })
                     return Response({'success': 'Playlist updated successfully'})
         if movement == 'play':
             # Send Now and next song to the customer frontend
