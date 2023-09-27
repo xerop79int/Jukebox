@@ -216,13 +216,9 @@ const SongList: React.FC = () => {
   const handlestyling = (lyric: string) => {
 
     const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'B', 'C#', 'Am7', 'Em', 'D13', 'Bm', 'E', 'F#m', 'C', 'c', 'H', 'BHAE7V', 'GA', 'GS', 'ES', 'AS', 'E5', 'A5', 'G5', 'Am', 'FG', 'FGC', 'F', 'DE', 'DEA', 'DoA', '#7DA', 'DCE', 'DA', '#7', '/', '# ', '#', 'EA', 'AE',]
-    const styledWords = ['Break', 'Verse', 'Chorus', 'Verse 1', 'Verse 2', 'Verse 3', 'Verse 4', 'Verse 5', 'Outro', 'Bridge']
 
     const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
-    const wordRegex = new RegExp(
-      `\\[(${styledWords.join('|')})\\]`,
-      'g'
-    );
+    const wordRegex = /\[([^\]]+)\]/g;
 
     let replacelyric = lyric.replace(regex, '<span  style="color: #00468b;font-size: 32px;">$&</span>');
     replacelyric = replacelyric.replace(wordRegex, '<span style="color: yellow;">$&</span>');
