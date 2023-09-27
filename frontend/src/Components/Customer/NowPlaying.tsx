@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import tipjar from './img/tip jar.png';
 import "./NowPlaying.css";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 interface Song {
     id: number;
@@ -51,26 +52,35 @@ const SongList: React.FC = () => {
     const [search, setSearch] = useState<string>("");
     const [likedtiming, setLikedTiming] = useState<boolean>(false);
     const [nextSong, setNextSong] = useState<Song>();
-    const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);    
+    const [responseQueue, setResponseQueue] = useState<SongResponse[]>([]);
+    const display = useRef(true);
+    const handle = useFullScreenHandle();
+
+    const handleFullScreen = () => {
+      axios.get(`http://${backendURL}/display`)
+      .then(res => {
+        console.log(res.data)
+        document.documentElement.requestFullscreen();
+      })
+    }
       
     useEffect(() => {
 
+      let URL = `http://${backendURL}/customersongslist`;
 
-        let URL = `http://${backendURL}/customersongslist`;
-    
-        const checknowplaylistsong = handleGettingPlaylist();
-        axios.get(URL)
-            .then(res => {
-              setSongs(res.data.band_songs);
-              console.log(res.data.band_songs[0])
-              if(!checknowplaylistsong){
-                setdDisplayNow(true)
-                handleCurrentSong(res.data.band_songs[0], res.data.band_songs[0].id);
-              }
-            })
-            .catch(err => {console.log(err) })
-               
-  }, []);
+      const checknowplaylistsong = handleGettingPlaylist();
+      axios.get(URL)
+          .then(res => {
+            console.log(res.data.band_songs[0])
+            setSongs(res.data.band_songs);
+            if(!checknowplaylistsong){
+              setdDisplayNow(true)
+              handleCurrentSong(res.data.band_songs[0], res.data.band_songs[0].id);
+            }
+          })
+          .catch(err => {console.log(err) })
+
+    }, []);
           
 
         const socket = new WebSocket(`ws://${backendURL}/ws/customerrequestsresponse/`);
@@ -272,7 +282,7 @@ const SongList: React.FC = () => {
     }
 
       return (
-        <div>
+        <div onClick={handleFullScreen}>
           {/* <Sidenav /> */}
             <div className="alert-box green">
                 <p className='alert-message'></p>
@@ -312,7 +322,9 @@ const SongList: React.FC = () => {
               </div>
               { displaynow ? (
                 <div className="icons" style={{height: "150px", marginTop: "20px"}}>
-                <div className="like-icon icon" onClick={e => currentSong?.id && handleLike(currentSong?.id)}>
+                <div className="like-icon icon" 
+                onClick={e => currentSong?.id && handleLike(currentSong?.id)}
+                >
                   <i className="fa-solid fa-thumbs-up fa-2x like-btn"></i>
                 </div>
                 <div className="tip-icon icon">

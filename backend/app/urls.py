@@ -15,4 +15,6 @@ urlpatterns = [
     path('venue', ManagerVenueView.as_view()),
     path('scrollshare', ManagerScrollShareView.as_view()),
     path('modifybpm', ManagerModifyBPMView.as_view()),
+    path('display', ManagerDisplayView.as_view()),
+    path('displaymetronome', ManagerDisplayMetronomeView.as_view()),
 ]

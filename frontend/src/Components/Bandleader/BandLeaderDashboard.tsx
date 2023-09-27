@@ -58,7 +58,9 @@ const SongList: React.FC = () => {
   const Scroll = useRef<number>(0);
   const Search = useRef<string>('');
 
-  
+  const handlefullscreen = () => {
+    document.documentElement.requestFullscreen();
+  }
 
   const [lyric, setLyric] = useState<string>(``);
 
@@ -213,7 +215,7 @@ const SongList: React.FC = () => {
 
   const handlestyling = (lyric: string) => {
 
-    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'Bm', 'E', 'F#m', 'C', 'c', 'H', 'BHAE7V', 'GA', 'GS', 'ES', 'AS', 'E5', 'A5', 'G5', 'Am', 'FG', 'FGC', 'F', 'DE', 'DEA', 'DoA', '#7DA', 'DCE', 'DA', '#7', '/', '# ', '#', 'EA', 'AE',]
+    const styledChars = ['D', 'A', 'G', 'A7', 'E7', 'B', 'C#', 'Am7', 'Em', 'D13', 'Bm', 'E', 'F#m', 'C', 'c', 'H', 'BHAE7V', 'GA', 'GS', 'ES', 'AS', 'E5', 'A5', 'G5', 'Am', 'FG', 'FGC', 'F', 'DE', 'DEA', 'DoA', '#7DA', 'DCE', 'DA', '#7', '/', '# ', '#', 'EA', 'AE',]
     const styledWords = ['Break', 'Verse', 'Chorus', 'Verse 1', 'Verse 2', 'Verse 3', 'Verse 4', 'Verse 5', 'Outro', 'Bridge']
 
     const regex = new RegExp(`\\b(${styledChars.join('|')})\\b`, 'g'); 
@@ -799,6 +801,31 @@ const SongList: React.FC = () => {
     const metronome = document.querySelector('.bPopup') as HTMLElement;
     metronome.style.display = metronome.style.display === 'flex' ? 'none' : 'flex';
   }
+
+  const handleBandmemberMetronome = () => {
+
+    const URL = `http://${backendURL}/displaymetronome`
+
+    axios.get(URL, {
+      headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+    })
+    .then(res => {
+      console.log(res.data)
+      const metronome = document.querySelector('.displaymetronome') as HTMLElement;
+      if(res.data.displaymetronome){
+        metronome.textContent = 'Hide Metronome';
+      }
+      else{
+        metronome.textContent = 'Show Metronome';
+      }
+      // const metronome = document.querySelector('.bPopup') as HTMLElement;
+      // metronome.style.display = 'none';
+    }
+    )
+    .catch(err => console.log(err))
+
+  }
+
   
 
 
@@ -984,6 +1011,12 @@ const SongList: React.FC = () => {
 
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
                   <a href="/addsinglesong">Admin Portal</a>
+                </div>
+                <div>
+                  <a className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
+                </div>
+                <div>
+                  <a style={{pointerEvents: 'none'}}>Version 0.6</a>
                 </div>
               </div>
               

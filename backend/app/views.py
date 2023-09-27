@@ -1268,7 +1268,30 @@ class ManagerModifyBPMView(APIView):
         return Response({'success': 'BPM updated successfully'})
         
 
+class ManagerDisplayView(APIView):
+    authentication_classes = []
 
+    def get(self, req):
+        display = True
+
+        return Response({'display': display})
+
+metronome = True
+class ManagerDisplayMetronomeView(APIView):
+    authentication_classes = []
+
+    def get(self, req):
+        global metronome
+        metronome = not metronome
+        display = metronome
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)('bandmember_frontend', {
+            'type': 'send_metronome',
+            'displaymetronome': display
+        })
+
+        return Response({'displaymetronome': display})
     
 
 

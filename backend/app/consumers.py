@@ -53,6 +53,11 @@ class BandMemberConsumer(AsyncWebsocketConsumer):
     async def send_playlist(self, event):
         playlist = {'playlist': event['playlist']}
         await self.send(text_data=json.dumps(playlist))
+    
+    async def send_metronome(self, event):
+        print('Sending metronome')
+        metronome = {'metronome': event['displaymetronome']}
+        await self.send(text_data=json.dumps(metronome))
 
 
 class CustomerConsumer(AsyncWebsocketConsumer):
