@@ -1095,5 +1095,52 @@
   letter-spacing: 10px;
 }
 
+.bandleader-about{
+  position: absolute;
+  width: 50rem;
+  height: 30rem;
+  background-color: white;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+
+}
+.bandleader-about h1{
+  color: black;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.bandleader-about p{
+  color: black;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.bandleader-about-button{
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  bottom: 20px;
+  right: 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+
 
 

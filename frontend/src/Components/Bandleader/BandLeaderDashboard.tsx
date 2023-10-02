@@ -59,7 +59,16 @@ const SongList: React.FC = () => {
   const Search = useRef<string>('');
 
   const handlefullscreen = () => {
+    if(document.fullscreenElement){
+      document.exitFullscreen();
+      const fullscreen = document.querySelector('.fullscreen') as HTMLElement;
+      fullscreen.textContent = 'Fullscreen';
+    }
+    else{
     document.documentElement.requestFullscreen();
+    const fullscreen = document.querySelector('.fullscreen') as HTMLElement;
+    fullscreen.textContent = 'Exit Fullscreen';
+    }
   }
 
   const [lyric, setLyric] = useState<string>(``);
@@ -822,6 +831,11 @@ const SongList: React.FC = () => {
 
   }
 
+  const handleAbout = () => {
+    const about = document.querySelector('.bandleader-about') as HTMLElement;
+    about.style.display = about.style.display === 'flex' ? 'none' : 'flex';
+  }
+
   
 
 
@@ -829,6 +843,17 @@ const SongList: React.FC = () => {
 
 
   return (
+    <div>
+
+      <div className="bandleader-about">
+        <div className="bandleader-about-child">
+          <h1>Band Leader Dashboard</h1>
+          <p>Version 0.6<br/>Release Date: <br/> Copyright Steven Rock (c) 2023</p>
+        </div>
+        <button className="bandleader-about-button" onClick={handleAbout}>Close</button>
+      </div>
+
+
     <div className="bandleader-main">
        <div className="bandleader-alert-box bandleader-green">
                 <p className='bandleader-alert-message'></p>
@@ -1012,7 +1037,10 @@ const SongList: React.FC = () => {
                   <a className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
                 </div>
                 <div>
-                  <a style={{pointerEvents: 'none'}}>Version 0.6</a>
+                <a className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
+                </div>
+                <div>
+                  <a onClick={handleAbout}>About</a>
                 </div>
               </div>
               
@@ -1148,6 +1176,7 @@ const SongList: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 

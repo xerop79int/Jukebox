@@ -42,7 +42,16 @@ const SongList: React.FC = () => {
   const SCROLL = React.useRef<number>(0);
 
   const handlefullscreen = () => {
+    if(document.fullscreenElement){
+      document.exitFullscreen();
+      const fullscreen = document.querySelector('.fullscreen') as HTMLElement;
+      fullscreen.textContent = 'Fullscreen';
+    }
+    else{
     document.documentElement.requestFullscreen();
+    const fullscreen = document.querySelector('.fullscreen') as HTMLElement;
+    fullscreen.textContent = 'Exit Fullscreen';
+    }
   }
 
   useEffect(() => {
@@ -284,6 +293,22 @@ const SongList: React.FC = () => {
     }
   }
 
+  const handleAdminBTN = () => {
+    const adminDropDownContent = document.getElementById('bandleader-show') as HTMLElement;
+    
+    if (adminDropDownContent.style.display === 'block'){
+      adminDropDownContent.style.display = 'none';
+    }
+    else{
+      adminDropDownContent.style.display = 'block';
+    }
+  }
+
+  const handleAbout = () => {
+    const about = document.querySelector('.bandleader-about') as HTMLElement;
+    about.style.display = about.style.display === 'flex' ? 'none' : 'flex';
+  }
+
 
 
  
@@ -300,6 +325,16 @@ const SongList: React.FC = () => {
 
 
   return (
+    <div>
+
+      <div className="bandleader-about">
+        <div className="bandleader-about-child">
+          <h1>Band Member Dashboard</h1>
+          <p>Version 0.6<br/>Release Date: <br/> Copyright Steven Rock (c) 2023</p>
+        </div>
+        <button className="bandleader-about-button" onClick={handleAbout}>Close</button>
+      </div>
+
     <div className="bandleader-main">
        <div className="bandleader-alert-box bandleader-green">
                 <p className='bandleader-alert-message'></p>
@@ -368,7 +403,23 @@ const SongList: React.FC = () => {
               ))}
           </select>
 
+          <div className="bandleader-admin-dropdown" onClick={handleAdminBTN} id="bandleader-btn">
 
+
+            <button className="bandleader-drop-button bandleader-dropdown-btn">Admin &nbsp; <i className="fa-solid fa-chevron-down"></i></button>
+
+
+              <div className="bandleader-dropdown-content" id="bandleader-show" >
+
+                <div>
+                <a className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
+                </div>
+                <div>
+                  <a onClick={handleAbout}>About</a>
+                </div>
+              </div>
+              
+          </div>
 
           <div className="bandleader-search-container">
             <button className="bandleader-search-button">
@@ -407,6 +458,7 @@ const SongList: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 
