@@ -294,7 +294,27 @@ const SongList: React.FC = () => {
           console.log(res.data)
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
-          handlestyling(res.data.playlist[0].lyric)
+          if (res.data.playlist[0].lyric === null){
+            const lyric = document.querySelector('.lyric-container') as HTMLInputElement;
+            lyric.innerHTML = "";
+            const alertMessage = document.querySelector('.bandleader-alert-message') as HTMLElement;
+            alertMessage.innerHTML = "No lyric for this song"
+            const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+            alert.style.display = "block";
+            alert.style.backgroundColor = "red";
+            alert.style.color = "white";
+            alert.style.border = "1px solid red";
+            setTimeout(function() {
+              alert.style.display = 'none';
+            }, 4000);
+          }
+          else{
+            const alert = document.querySelector('.bandleader-alert-box') as HTMLElement;
+            if(alert.style.display === "block"){
+              alert.style.display = "none";
+            }
+            handlestyling(res.data.playlist[0].lyric)
+          }
           setModifiedBPM(parseInt(res.data.playlist[0].bpm))
         })
         .catch(err => {console.log(err)})
