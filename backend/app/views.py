@@ -18,6 +18,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
 from time import sleep
+from django.db.models import Count
 
 # from .pdf_to_text import *
 
@@ -260,6 +261,7 @@ class ManagerCustomerSongsListView(APIView):
         search = req.GET.get('search')
         venue = req.GET.get('venue')
 
+        
         if sort == 'name':
             band_songs = BandSongsList.objects.all().order_by('song_name')
         elif sort == 'artist':
@@ -268,6 +270,53 @@ class ManagerCustomerSongsListView(APIView):
             band_songs = BandSongsList.objects.all().order_by('song_genre')
         elif sort == 'year':
             band_songs = BandSongsList.objects.all().order_by('song_year').reverse()
+        elif sort == 'this_venue_likes':
+            if Venue.objects.filter(is_selected=True).exists():
+                venue = Venue.objects.get(is_selected=True)
+                sorted_band_songs = LikedBandSongsListInAllVenues.objects.values(
+                    'band_song'
+                ).annotate(
+                    like_count=Count('band_song', filter=models.Q(venue=venue, liked=True))
+                ).order_by('-like_count')
+
+                data = []
+                for band_song in sorted_band_songs:
+                    band_song_obj = BandSongsList.objects.get(id=band_song['band_song'])
+                    if LikedBandSongsListInAllVenues.objects.filter(band_song=band_song_obj, venue=venue).exists():
+                        count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song_obj, venue=venue).count()
+                        all_venues_count = LikedBandSongsListInAllVenues.objects.filter(band_song=band_song_obj).count()
+                        liked = True
+                    else:
+                        count = 0
+                        all_venues_count = 0
+                        liked = False
+                    
+                    song_data = {
+                        'id': band_song_obj.id,
+                        'song_number': band_song_obj.song_number,
+                        'song_name': band_song_obj.song_name,
+                        'song_artist': band_song_obj.song_artist,
+                        'song_genre': band_song_obj.song_genre,
+                        'song_durations': band_song_obj.song_durations,
+                        'count': count,
+                        'all_venues_count': all_venues_count,
+                        'liked': liked,
+                        'song_year': band_song_obj.song_year,
+                        'cortes': band_song_obj.cortes,
+                        'bpm': band_song_obj.bpm,
+                        'img': str(band_song_obj.song_cover.url)
+                    }
+                    data.append(song_data)
+                
+                print(data)
+                return Response({'band_songs': data})
+
+                
+            else:
+                return Response({'error': 'No venue selected.'})
+        elif sort == 'all_venues_likes':
+            band_songs = BandSongsList.objects.all().order_by('song_name')
+
         else:
             band_songs = BandSongsList.objects.all()
        
