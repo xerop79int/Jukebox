@@ -37,7 +37,7 @@ class BandMember(models.Model):
 
 class BandSongsList(models.Model):
     band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
-    song_number = models.CharField(max_length=200, null=True, blank=True)
+    song_number = models.IntegerField(null=True, blank=True)
     song_name = models.CharField(max_length=200, null=True, blank=True)
     song_artist = models.CharField(max_length=200, null=True, blank=True)
     song_genre = models.CharField(max_length=200, null=True, blank=True)

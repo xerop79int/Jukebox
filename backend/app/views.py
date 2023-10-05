@@ -318,7 +318,7 @@ class ManagerCustomerSongsListView(APIView):
             band_songs = BandSongsList.objects.all().order_by('song_name')
 
         else:
-            band_songs = BandSongsList.objects.all()
+            band_songs = BandSongsList.objects.all().order_by('song_number')
        
         if view == 'likes':
             print('like')
