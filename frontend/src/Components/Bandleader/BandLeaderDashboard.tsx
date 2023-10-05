@@ -1011,7 +1011,7 @@ const SongList: React.FC = () => {
               <div className="bandleader-dropdown-content" id="bandleader-show" >
 
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-1" >
-                  <a>Sets</a>
+                  <a href='#'>Sets</a>
                   <div className="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-1">
                     <a href="#" className="bandleader-add-btn"
                      onClick={handleSetAdd}
@@ -1020,7 +1020,7 @@ const SongList: React.FC = () => {
                       <a href="#">Edit</a>
                       <div className="bandleader-dropdown-submenu-content-edit">
                         { Sets.map((set, index) => (
-                          <a key={set.id} onClick={e => handleEditSet(set.id)}>{set.set_name}</a>
+                          <a href='#' key={set.id} onClick={e => handleEditSet(set.id)}>{set.set_name}</a>
                         ))}
                       </div>
                     </div>
@@ -1028,7 +1028,7 @@ const SongList: React.FC = () => {
                       <a href="#">Delete</a>
                       <div className="bandleader-dropdown-submenu-content-edit">
                         { Sets.map((set, index) => (
-                          <a key={set.id} onClick={e => handleDeleteSet(set.id)}>{set.set_name}</a>
+                          <a href='#' key={set.id} onClick={e => handleDeleteSet(set.id)}>{set.set_name}</a>
                         ))}
                       </div>
                     </div>
