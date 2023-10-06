@@ -81,6 +81,8 @@ const AddVenue = () => {
                 <a href="/editsong">&nbsp;Edit Song &nbsp;</a>
                 <a href="/bandleader">&nbsp;Bandleader Dashboard</a>
                 <a href="/upload">&nbsp;&nbsp;Upload</a>
+                <a href="/backup">&nbsp;&nbsp;Backup</a>
+                <a href="/load">&nbsp;&nbsp;Load</a>
             </div>
             <div className="admin-venue-nav-logout">
                 <button>

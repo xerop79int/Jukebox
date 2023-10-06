@@ -27,6 +27,7 @@
     text-decoration: none;
     color: white;
     font-weight: 800;
+    padding-left: 20px;
   }
   .admin-venue-nav-links a:hover {
     cursor: pointer;

@@ -872,7 +872,7 @@ const SongList: React.FC = () => {
       <div className="bandleader-about">
         <div className="bandleader-about-child">
           <h1>Jukebox Cover Band System</h1>
-          <p>Version 0.6<br/>Release Date: 04/10/2023<br/> Copyright Steven Rock (c) 2023</p>
+          <p>Version 0.7<br/>Release Date: 04/10/2023<br/> Copyright Steven Rock (c) 2023</p>
         </div>
         <button className="bandleader-about-button" onClick={handleAbout}>Close</button>
       </div>
@@ -1044,25 +1044,19 @@ const SongList: React.FC = () => {
                   </div>
                 </div>
               
-                <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
-                  <a href="#">Network Setting</a>
-                  <div className="bandleader-dropdown-submenu-content bandleader-dropdown-submenu-content-4">
-                    <a href="#" className="bandleader-add-btn">Add</a>
-                    <a href="#">Edit</a>
-                    <a href="#">Delete</a>
-                  </div>
+                <div>
+                <a className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
                 </div>
-
+                
+                <div>
+                  <a className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
+                </div>
 
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
                   <a href="/addsinglesong">Admin Portal</a>
                 </div>
-                <div>
-                  <a className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
-                </div>
-                <div>
-                <a className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
-                </div>
+                
+                
                 <div>
                   <a onClick={handleAbout}>About</a>
                 </div>
