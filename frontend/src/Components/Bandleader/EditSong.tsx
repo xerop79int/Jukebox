@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import './EditSong.css'
 import axios from 'axios';
+import NavbarAdminPortal from './NavbarAdminPortal';
 
 interface Song {
     id: number;
@@ -57,22 +58,7 @@ const EditSong = () => {
 
     return(
         <div className="admin-display-song-main">
-        <div className="admin-display-song-navbar">
-            <div className="admin-display-song-nav-links">
-                <a href="/addsinglesong">Add Song &nbsp;</a>
-                <a href="/addvenue">&nbsp;Add or Select Venue &nbsp;</a>
-                <a href="/editsong">&nbsp;Edit Song &nbsp;</a>
-                <a href="/bandleader">&nbsp;Bandleader Dashboard</a>
-                <a href="/upload">&nbsp;&nbsp;Upload</a>
-                <a href="/backup">&nbsp;&nbsp;Backup</a>
-                <a href="/load">&nbsp;&nbsp;Load</a>
-            </div>
-            <div className="admin-display-song-nav-logout">
-                <button>
-                    LOGOUT
-                </button>
-            </div>
-        </div>
+        <NavbarAdminPortal />
         <div className="admin-display-song-sub-main">
             <div className="admin-display-song-list-1">
                 <div className="admin-display-song-list-1-scroll">

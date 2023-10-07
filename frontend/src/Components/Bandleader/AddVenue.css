@@ -10,52 +10,6 @@
     align-items: center;
     padding-top: 100px;
   }
-  .admin-venue-navbar {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 70px;
-    background-color: #353935;
-  }
-  .admin-venue-nav-links {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 20px;
-  }
-  .admin-venue-nav-links a {
-    text-decoration: none;
-    color: white;
-    font-weight: 800;
-    padding-left: 20px;
-  }
-  .admin-venue-nav-links a:hover {
-    cursor: pointer;
-    color: wheat;
-  }
-  .admin-venue-nav-logout {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 20px;
-  }
-  .admin-venue-nav-logout button {
-    width: 100px;
-    height: 40px;
-    border-radius: 10px;
-    outline: none;
-    border: none;
-    font-weight: 700;
-    background-color: #606060;
-    color: white;
-  }
-  .admin-venue-nav-logout button:hover {
-    cursor: pointer;
-  }
-  .admin-venue-nav-logout button:active {
-    background-color: wheat;
-    color: black;
-  }
   .admin-venue-sub-main {
     width: 100%;
     height: auto;

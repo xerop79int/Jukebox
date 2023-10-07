@@ -1,6 +1,7 @@
 import './AddVenue.css'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import NavbarAdminPortal from './NavbarAdminPortal';
 
 interface Venue {
     id: number,
@@ -74,22 +75,7 @@ const AddVenue = () => {
 
     return(
         <div className="admin-venue-main">
-        <div className="admin-venue-navbar">
-            <div className="admin-venue-nav-links">
-                <a href="/addsinglesong">Add Song &nbsp;</a>
-                <a href="/addvenue">&nbsp;Add or Select Venue &nbsp;</a>
-                <a href="/editsong">&nbsp;Edit Song &nbsp;</a>
-                <a href="/bandleader">&nbsp;Bandleader Dashboard</a>
-                <a href="/upload">&nbsp;&nbsp;Upload</a>
-                <a href="/backup">&nbsp;&nbsp;Backup</a>
-                <a href="/load">&nbsp;&nbsp;Load</a>
-            </div>
-            <div className="admin-venue-nav-logout">
-                <button>
-                    LOGOUT
-                </button>
-            </div>
-        </div>
+        <NavbarAdminPortal />
         <div className="admin-venue-sub-main">
             <div className="admin-venue-input">
                 <div className="admin-venue-sub-input">
