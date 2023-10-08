@@ -17,8 +17,10 @@ from rest_framework.permissions import AllowAny
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 import re
-from time import sleep
 from django.db.models import Count
+import os
+import shutil
+from datetime import datetime
 
 # from .pdf_to_text import *
 
@@ -1343,4 +1345,35 @@ class ManagerDisplayMetronomeView(APIView):
         return Response({'displaymetronome': display})
     
 
+class ManagerBackupView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = []
+
+    def get(self, req):
+
+        # get the directory of the django project
+        current_directory = os.getcwd()
+        # check if the db.sqlite3 file exists
+        if os.path.isfile(current_directory + '/db.sqlite3'):
+            # create a backup folder if it does not exist
+            if not os.path.exists(current_directory + '/backup'):
+                os.makedirs(current_directory + '/backup')
+            
+            # check if the backup folder has more any file in it
+            if len(os.listdir(current_directory + '/backup')) > 0:
+                # delete all the files in the backup folder
+                return Response({'error': 'Backup already exists.'})
+            # create a backup file with the current date and time
+            shutil.copyfile(current_directory + '/db.sqlite3', current_directory + '/backup/backup_' + datetime.now().strftime("%d-%m-%Y_%H-%M-%S") + '.sqlite3')
+        else:
+            return Response({'error': 'No database file found.'})
+        return Response({'success': 'Backup created successfully'})
+    
+    def delete(self, req):
+        
+        current_directory = os.getcwd()
+        if os.path.exists(current_directory + '/backup'):
+            shutil.rmtree(current_directory + '/backup')
+        
+        return Response({'success': 'Backup deleted successfully'})
 
