@@ -9,6 +9,7 @@ import AddSingleSong from './Components/Bandleader/AddSingleSong';
 import AddVenue from './Components/Bandleader/AddVenue';
 import EditSong from './Components/Bandleader/EditSong';
 import Backup from './Components/Bandleader/Backup';
+import Restore from './Components/Bandleader/Restore';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react'
 import "@fontsource/dejavu-sans";
@@ -29,6 +30,7 @@ function App() {
         <Route path='/editsong/:song_id' element={<AddSingleSong />} />
         <Route path='/bandmember' element={<BandMemberDashboard />} />
         <Route path='/backup' element={<Backup />} />
+        <Route path='/load' element={<Restore />} />
       </Routes>
     </Router>
     </ChakraProvider>

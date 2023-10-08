@@ -18,4 +18,5 @@ urlpatterns = [
     path('display', ManagerDisplayView.as_view()),
     path('displaymetronome', ManagerDisplayMetronomeView.as_view()),
     path('backup', ManagerBackupView.as_view()),
+    path('restore', ManagerRestoreView.as_view()),
 ]

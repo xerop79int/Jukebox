@@ -1377,3 +1377,23 @@ class ManagerBackupView(APIView):
         
         return Response({'success': 'Backup deleted successfully'})
 
+class ManagerRestoreView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = []
+
+    def get(self, req):
+
+        # get the directory of the django project
+        current_directory = os.getcwd()
+        # check if the backup folder exists
+        if os.path.exists(current_directory + '/backup'):
+            # check if the backup folder has more any file in it
+            if len(os.listdir(current_directory + '/backup')) > 0:
+                # delete all the files in the backup folder
+                shutil.copyfile(current_directory + '/backup/' + os.listdir(current_directory + '/backup')[0], current_directory + '/db.sqlite3')
+            else:
+                return Response({'error': 'No backup file found.'})
+        else:
+            return Response({'error': 'No backup file found.'})
+        return Response({'success': 'Backup restored successfully'})
+
