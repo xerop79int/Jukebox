@@ -1045,11 +1045,11 @@ const SongList: React.FC = () => {
                 </div>
               
                 <div>
-                <a className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
+                <a href='#' className='fullscreen' onClick={handlefullscreen}>Full Screen</a>
                 </div>
                 
                 <div>
-                  <a className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
+                  <a href='#' className='displaymetronome' onClick={handleBandmemberMetronome}>Hide Metronome</a>
                 </div>
 
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
@@ -1058,7 +1058,7 @@ const SongList: React.FC = () => {
                 
                 
                 <div>
-                  <a onClick={handleAbout}>About</a>
+                  <a href='#' onClick={handleAbout}>About</a>
                 </div>
               </div>
               
