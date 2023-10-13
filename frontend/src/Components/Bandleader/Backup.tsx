@@ -31,8 +31,6 @@ const Backup = () => {
                     message.innerHTML = "Backup already exists<br/>Do you want to overwrite?"
                     const buttons = document.querySelector('.bandleader-backup-buttons') as HTMLElement;
                     buttons.style.display = 'flex';
-                    // const successIcon = document.querySelector('.success-icon') as HTMLElement;
-                    // successIcon.style.display = 'block';
 
                    
                 }
@@ -40,7 +38,6 @@ const Backup = () => {
             .catch((error) => {
                 console.log(error);
             })
-
     }, [])
 
     const handleUpdateBackup = () => {
