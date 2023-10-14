@@ -1353,29 +1353,43 @@ class ManagerBackupView(APIView):
 
         # get the directory of the django project
         current_directory = os.getcwd()
+        # go back two directories in the current directory
+        parent_dir = os.path.abspath(os.path.join(current_directory, os.pardir))
+        grandparent_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
+        
+
         # check if the db.sqlite3 file exists
         if os.path.isfile(current_directory + '/db.sqlite3'):
             # create a backup folder if it does not exist
-            if not os.path.exists(current_directory + '/backup'):
-                os.makedirs(current_directory + '/backup')
+            
+            if not os.path.exists(os.path.join(grandparent_dir, 'JukeBox_backup')):
+                os.makedirs(os.path.join(grandparent_dir, 'JukeBox_backup'))
             
             # check if the backup folder has more any file in it
-            if len(os.listdir(current_directory + '/backup')) > 0:
+            if len(os.listdir(os.path.join(grandparent_dir, 'JukeBox_backup'))) > 0:
                 # delete all the files in the backup folder
                 return Response({'error': 'Backup already exists.'})
             # create a backup file with the current date and time
-            shutil.copyfile(current_directory + '/db.sqlite3', current_directory + '/backup/backup_' + datetime.now().strftime("%d-%m-%Y_%H-%M-%S") + '.sqlite3')
+
+            shutil.copyfile(current_directory + '/db.sqlite3', os.path.join(grandparent_dir, 'JukeBox_backup') + '/backup_' + datetime.now().strftime("%d-%m-%Y_%H-%M-%S") + '.sqlite3')
         else:
             return Response({'error': 'No database file found.'})
         return Response({'success': 'Backup created successfully'})
+        
     
     def delete(self, req):
         
         current_directory = os.getcwd()
-        if os.path.exists(current_directory + '/backup'):
-            shutil.rmtree(current_directory + '/backup')
+        parent_dir = os.path.abspath(os.path.join(current_directory, os.pardir))
+        grandparent_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
         
-        return Response({'success': 'Backup deleted successfully'})
+        # check if the backup folder exists
+        if(os.path.join(grandparent_dir, 'JukeBox_backup')):
+            shutil.rmtree(os.path.join(grandparent_dir, 'JukeBox_backup'))
+        
+            return Response({'success': 'Backup deleted successfully'})
+        else:
+            return Response({'error': 'No backup file found.'})
 
 class ManagerRestoreView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -1385,12 +1399,17 @@ class ManagerRestoreView(APIView):
 
         # get the directory of the django project
         current_directory = os.getcwd()
-        # check if the backup folder exists
-        if os.path.exists(current_directory + '/backup'):
+        parent_dir = os.path.abspath(os.path.join(current_directory, os.pardir))
+        grandparent_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
+
+        restore_dir = os.path.join(grandparent_dir, 'JukeBox_backup')
+
+        if os.path.exists(os.path.join(grandparent_dir, 'JukeBox_backup')):
             # check if the backup folder has more any file in it
-            if len(os.listdir(current_directory + '/backup')) > 0:
+            if len(os.listdir(os.path.join(grandparent_dir, 'JukeBox_backup'))) > 0:
                 # delete all the files in the backup folder
-                shutil.copyfile(current_directory + '/backup/' + os.listdir(current_directory + '/backup')[0], current_directory + '/db.sqlite3')
+                restore_file = os.path.join(restore_dir, os.listdir(restore_dir)[0])
+                shutil.copyfile(restore_file, current_directory + '/db.sqlite3')
             else:
                 return Response({'error': 'No backup file found.'})
         else:

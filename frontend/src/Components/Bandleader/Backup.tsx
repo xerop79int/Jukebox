@@ -11,6 +11,7 @@ const Backup = () => {
 
         axios.get(url)
             .then((response) => {
+                console.log(response.data);
                 if(response.data.success){
                     const container = document.querySelector('.bandleader-backup-container') as HTMLElement;
                     container.style.display = 'flex';
@@ -45,6 +46,7 @@ const Backup = () => {
 
         axios.delete(url)
             .then((response) => {
+                console.log(response.data);
                 if(response.data.success){
                     let url = "http://localhost:5000/backup";
                     axios.get(url)
