@@ -11,7 +11,9 @@ interface Venue {
 const AddVenue = () => {
 
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
-    const [venue, setVenue] = useState("")
+    const [venuename, setVenueName] = useState("")
+    const [venueaddress, setVenueAddress] = useState("")
+    const [venuedate, setVenueDate] = useState("")
     const [venueList, setVenueList] = useState<Venue[]>([])
     const [selectVenue, setSelectVenue] = useState("") 
 
@@ -19,17 +21,18 @@ const AddVenue = () => {
         const URL = `http://${backendURL}/venue`
 
         const data = {
-            'venue_name': venue
+            'venue_name': venuename,
+            'venue_address': venueaddress,
+            'venue_date': venuedate
         }
 
         axios.post(URL, data, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then(res => {
-            localStorage.setItem('venue_name', venue)
             // refresh the page
             window.location.reload()
-            setVenue("")
+            setVenueName("")
         })
         .catch(err => {
             console.log(err)
@@ -43,7 +46,10 @@ const AddVenue = () => {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then(res => {
+            if(res.data.venue.length > 0)
+            {
             setVenueList(res.data.venue)
+            }
         })
         .catch(err => {
             console.log(err)
@@ -67,7 +73,7 @@ const AddVenue = () => {
         .then(res => {
             // refresh the page
             window.location.href = "/bandleader"
-            setVenue("")
+            setVenueName("")
         })
         
     }
@@ -82,9 +88,9 @@ const AddVenue = () => {
                     <p className="admin-venue-input-headiung">
                         Add a New Venue
                     </p>
-                    <textarea onChange={e => setVenue(e.target.value)} className="admin-venue-input-field">
-
-                    </textarea>
+                    <input onChange={e => setVenueName(e.target.value)} placeholder='Venue Name' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='Venue Address' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueDate(e.target.value)} placeholder='Venue Date' className="admin-venue-input-field" />
                     <button onClick={handleSubmitVenue} className="admin-venue-input-button">
                         Submit
                     </button>

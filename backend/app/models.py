@@ -5,13 +5,14 @@ from django.conf import settings
 class Venue(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     is_selected = models.BooleanField(default=False)
+    address = models.CharField(max_length=400, null=True, blank=True)
+    date = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
 
 class Customer(models.Model):
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     phone_number = models.CharField(max_length=200, null=True, blank=True)
 
@@ -58,19 +59,11 @@ class CustomerRequest(models.Model):
     is_approved = models.BooleanField(default=False)
     status = models.CharField(max_length=200, null=True, blank=True)
 
-
     def __str__(self):
         return self.customer_name + ' - ' + self.song.song_name
 
-class SongsSet(models.Model):
-    band_leader = models.ForeignKey(BandLeader, on_delete=models.CASCADE)
-    song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.band_leader.name + ' - ' + self.song.song_name
 
 class LikedBandSongsList(models.Model):
-    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     liked = models.BooleanField(default=False)
 
@@ -78,7 +71,6 @@ class LikedBandSongsList(models.Model):
         return self.band_song.song_name
 
 class LikedBandSongsListInAllVenues(models.Model):
-    # customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     band_song = models.ForeignKey(BandSongsList, on_delete=models.CASCADE)
     liked = models.BooleanField(default=False)
@@ -88,6 +80,7 @@ class LikedBandSongsListInAllVenues(models.Model):
         return self.band_song.song_name
     
 class Sets(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
     Setname = models.CharField(max_length=200)
 
     def __str__(self):

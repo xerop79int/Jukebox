@@ -21,6 +21,7 @@ from django.db.models import Count
 import os
 import shutil
 from datetime import datetime
+from time import sleep
 
 # from .pdf_to_text import *
 
@@ -113,11 +114,13 @@ class ManagerVenueView(APIView):
         except:
             return Response({'error': 'You are not a band leader.'})
         venue_name = req.data.get('venue_name')
+        venue_address = req.data.get('venue_address')
+        venue_date = req.data.get('venue_date')
 
         if Venue.objects.filter(name=venue_name).exists():
             return Response({'Success': 'Venue already exists.'})
 
-        venue = Venue(name=venue_name)
+        venue = Venue(name=venue_name, address=venue_address, date=venue_date)
         venue.save()
 
         return Response({'success': 'Venue has been added successfully.'})
@@ -136,6 +139,7 @@ class ManagerVenueView(APIView):
         venue = Venue.objects.get(name=venue_name)
         venue.is_selected = True
         venue.save()
+        Playlist.objects.all().delete()
 
         return Response({'success': 'Venue has been activated successfully.'})
     
@@ -147,7 +151,7 @@ class ManagerVenueView(APIView):
             for venue in venues:
                 data.append({
                     'id': venue.id,
-                    'name': venue.name,
+                    'name': venue.name
                 })
             return Response({'venue': data})
         else:
@@ -157,7 +161,7 @@ class ManagerVenueView(APIView):
 
 
 # CUSTOMER VIEWS
-
+Customer_Requests = []
 class ManagerCustomerRequestView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [AllowAny]
@@ -184,6 +188,13 @@ class ManagerCustomerRequestView(APIView):
             'song_artist': customer_request.song.song_artist,
             'song_duration': customer_request.song.song_durations,
         }
+
+        if Customer_Requests:
+            Customer_Requests.append(data)
+            print(Customer_Requests)
+            return Response({'success': 'Request sent successfully.'})
+        
+        Customer_Requests.append(data)
         # get the channel layer
         channel_layer = get_channel_layer()
         # send the data to the group
@@ -223,6 +234,18 @@ class ManagerCustomerRequestView(APIView):
             'type': 'send_data',
             'data': data
         })
+        
+        Customer_Requests.pop(0)
+        # get the channel layer
+        if Customer_Requests:
+            # get the channel layer
+            channel_layer = get_channel_layer()
+            # send the data to the group
+            async_to_sync(channel_layer.group_send)('bandleader_frontend', {
+                'type': 'send_data',
+                'data': Customer_Requests[0]
+            })
+
 
         return Response({'success': 'Request updated successfully.'})
 
@@ -376,6 +399,7 @@ class ManagerCustomerSongsListView(APIView):
                     data.append(song_data)
         else:
             data = []
+            count = 0
             for band_song in band_songs:
                 if Venue.objects.filter(is_selected=True).exists():
                     venue = Venue.objects.get(is_selected=True)
@@ -528,6 +552,7 @@ class ManagerBandSongsListView(APIView):
        
         if view == 'likes':
             data = []
+            count = 0
             for band_song in band_songs:
                 if Venue.objects.filter(is_selected=True).exists():
                     venue = Venue.objects.get(is_selected=True)
@@ -707,12 +732,16 @@ class ManagerSetsView(APIView):
         #     band_leader = BandLeader.objects.get(user=req.user)
         # except:
         #     return Response({'error': 'You are not a band leader.'})
-        count = Sets.objects.all().count()
+        try:
+            venue = Venue.objects.get(is_selected=True)
+        except:
+            return Response({'error': 'No venue selected.'})
+        count = Sets.objects.filter(venue=venue).count()
         name = req.data.get('name') + str(count + 1)
         if not name:
             return Response({'error': 'No name found.'})
         else:
-            sets = Sets(Setname=name)
+            sets = Sets(Setname=name, venue=venue)
             sets.save()
             return Response({'success': 'Set created successfully.'}, status=200)
     
@@ -731,8 +760,13 @@ class ManagerSetsView(APIView):
     
     def get(self, req):
         
-        sets = Sets.objects.all()
+        try:
+            venue = Venue.objects.get(is_selected=True)
+            sets = Sets.objects.filter(venue=venue)
+        except:
+            return Response({'error': 'No venue selected.'})
         data = []
+        print(sets)
         for set in sets:
             set_data = {
                 'id': set.id,

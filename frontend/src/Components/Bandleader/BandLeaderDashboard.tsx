@@ -78,8 +78,9 @@ const SongList: React.FC = () => {
 
     socket.onmessage = function(event) {
       const data = JSON.parse(event.data);
-      console.log(data);
-      setRequestQueue([data]);
+      setTimeout(() => {
+        setRequestQueue([data]);
+      }, 1000);
     };
 
   }, []);
@@ -251,7 +252,10 @@ const SongList: React.FC = () => {
     })
     .then(res => {
       console.log (res.data)
+      if(res.data.sets.length > 0)
+      {
       setSets(res.data.sets);
+      }
     })
     .catch(err => console.log(err))
   }
@@ -555,12 +559,8 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Token ${localStorage.getItem('token')}` },
     })
     .then(res => {
-      console.log(res.data)
-      if (requestQueue.length !== 0) {
       const popup = document.querySelector('#popup') as HTMLInputElement;
       popup.style.right = '-350px';
-      setRequestQueue(prevQueue => prevQueue.slice(1));
-      }         
     })
     .catch(err => console.log(err))
 

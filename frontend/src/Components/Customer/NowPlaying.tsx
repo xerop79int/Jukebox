@@ -282,7 +282,9 @@ const SongList: React.FC = () => {
     }
 
       return (
-        <div onClick={handleFullScreen}>
+        <div 
+        // onClick={handleFullScreen}
+        >
           {/* <Sidenav /> */}
             <div className="alert-box green">
                 <p className='alert-message'></p>
