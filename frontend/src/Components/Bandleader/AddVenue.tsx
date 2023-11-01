@@ -86,31 +86,62 @@ const AddVenue = () => {
             <div className="admin-venue-input">
                 <div className="admin-venue-sub-input">
                     <p className="admin-venue-input-headiung">
-                        Add a New Venue
+                        Add Venue
                     </p>
                     <input onChange={e => setVenueName(e.target.value)} placeholder='Venue Name' className="admin-venue-input-field" />
                     <input onChange={e => setVenueAddress(e.target.value)} placeholder='Venue Address' className="admin-venue-input-field" />
-                    <input onChange={e => setVenueDate(e.target.value)} placeholder='Venue Date' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='City' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='State' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='Contact Name (Optional)' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='Phone Number (Optional)' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='Facebook (Optional)' className="admin-venue-input-field" />
+                    <input onChange={e => setVenueAddress(e.target.value)} placeholder='https:// (Optional)' className="admin-venue-input-field" />
+                    {/* <input onChange={e => setVenueDate(e.target.value)} placeholder='Venue Date' className="admin-venue-input-field" /> */}
                     <button onClick={handleSubmitVenue} className="admin-venue-input-button">
                         Submit
                     </button>
                 </div>
             </div>
-            <div className="admin-venue-dropdown">
-                <div className="admin-venue-sub-dropdown">
-                    <p className="admin-venue-dropdown-headiung">
-                        Choice from the Existing Venues
-                    </p>
-                    <select className="admin-venue-dropdown-menu" onChange={e => setSelectVenue(e.target.value)}>
-                    <option value="">Select Venue</option>
-                    { venueList.map((venue) => {
-                        return <option key={venue.id} value={venue.name}>{venue.name}</option>
-                    })}
-                    </select>
-                    
-                    <button onClick={SelectVenue} className="admin-venue-dropdown-button">
-                        Select
-                    </button>
+
+            <div className="admin-edit-delete-container">
+                <p className="admin-venue-dropdown-headiung">
+                    Edit/Delete Venue
+                </p>
+                <div className="admin-venue-dropdown">
+                    <div className="admin-venue-sub-dropdown">
+                        
+                        <select className="admin-venue-dropdown-menu" onChange={e => setSelectVenue(e.target.value)}>
+                        <option value="">Select Venue</option>
+                        { venueList.map((venue) => {
+                            return <option key={venue.id} value={venue.name}>{venue.name}</option>
+                        })}
+                        </select>
+                        <input onChange={e => setVenueName(e.target.value)} placeholder='Venue Name' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='Venue Address' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='City' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='State' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='Contact Name (Optional)' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='Phone Number (Optional)' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='Facebook (Optional)' className="admin-venue-input-field" />
+                        <input onChange={e => setVenueAddress(e.target.value)} placeholder='https:// (Optional)' className="admin-venue-input-field" />
+                        {/* <input onChange={e => setVenueDate(e.target.value)} placeholder='Venue Date' className="admin-venue-input-field" /> */}
+                        
+                        {/* <button onClick={SelectVenue} className="admin-venue-dropdown-button">
+                            Select
+                        </button> */}
+                    </div>
+                    <div>
+                        <button onClick={SelectVenue} className="admin-venue-dropdown-button">
+                            Select
+                        </button>
+                        <button onClick={SelectVenue} className="admin-venue-dropdown-button">
+                            Delete
+                        </button>
+                        <button onClick={SelectVenue} className="admin-venue-dropdown-button">
+                            Update
+                        </button>
+                        
+                    </div>
                 </div>
             </div>
         </div>

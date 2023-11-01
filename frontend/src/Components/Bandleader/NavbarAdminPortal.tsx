@@ -5,13 +5,15 @@ const NavbarAdminPortal = () => {
     return(
         <div className="admin-song-request-navbar">
             <div className="admin-song-request-nav-links">
-                <a href="/addsinglesong">Add Song &nbsp;</a>
-                <a href="/addvenue">&nbsp;Add or Select Venue &nbsp;</a>
-                <a href="/editsong">&nbsp;Edit Song &nbsp;</a>
-                <a href="/bandleader">&nbsp;Bandleader Dashboard</a>
-                <a href="/upload">&nbsp;&nbsp;Upload</a>
-                <a href="/backup">&nbsp;&nbsp;Backup</a>
-                <a href="/load">&nbsp;&nbsp;Load</a>
+                <a href="/bandleader">Bandleader Dashboard</a>
+                <a href="/addsinglesong">Add Song</a>
+                <a href="/editsong">Edit Song</a>
+                <a href="/addvenue">Venues</a>
+                <a href="/upload">Upload</a>
+                <a href="/backup">Backup</a>
+                <a href="/load">Load</a>
+                <a href="/show">Shows</a>
+                <a href="#">Show Schedule</a>
             </div>
             <div className="admin-song-request-nav-logout">
                 <button>
