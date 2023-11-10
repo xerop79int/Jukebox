@@ -11,6 +11,7 @@ admin.site.register(LikedBandSongsList)
 admin.site.register(Sets)
 admin.site.register(Venue)
 admin.site.register(LikedBandSongsListInAllVenues)
+admin.site.register(Show)
 
 
 @admin.register(SongsInSet)

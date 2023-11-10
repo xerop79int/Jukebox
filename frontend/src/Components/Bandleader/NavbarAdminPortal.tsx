@@ -13,7 +13,7 @@ const NavbarAdminPortal = () => {
                 <a href="/backup">Backup</a>
                 <a href="/load">Load</a>
                 <a href="/show">Shows</a>
-                <a href="#">Show Schedule</a>
+                <a href="/showschedule">Show Schedule</a>
             </div>
             <div className="admin-song-request-nav-logout">
                 <button>

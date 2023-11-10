@@ -13,6 +13,7 @@ urlpatterns = [
     path('songsinset', ManagerSongsInSetView.as_view()),
     path('playlist', ManagerPlaylistView.as_view()),
     path('venue', ManagerVenueView.as_view()),
+    path('show', ManagerShowView.as_view()),
     path('scrollshare', ManagerScrollShareView.as_view()),
     path('modifybpm', ManagerModifyBPMView.as_view()),
     path('display', ManagerDisplayView.as_view()),

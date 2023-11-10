@@ -8,6 +8,7 @@ import Upload from './Components/Bandleader/Upload';
 import AddSingleSong from './Components/Bandleader/AddSingleSong';
 import AddVenue from './Components/Bandleader/AddVenue';
 import Show from './Components/Bandleader/AddShow';
+import ShowSchedule from './Components/Bandleader/AddShowSchedule';
 import EditSong from './Components/Bandleader/EditSong';
 import Backup from './Components/Bandleader/Backup';
 import Restore from './Components/Bandleader/Restore';
@@ -28,6 +29,7 @@ function App() {
         <Route path='/addsinglesong' element={<AddSingleSong />} /> 
         <Route path='/addvenue' element={<AddVenue />} /> 
         <Route path='/show' element={<Show />} />
+        <Route path='/showschedule' element={<ShowSchedule />} />
         <Route path='/editsong' element={<EditSong />} />
         <Route path='/editsong/:song_id' element={<AddSingleSong />} />
         <Route path='/bandmember' element={<BandMemberDashboard />} />

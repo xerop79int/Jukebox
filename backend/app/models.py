@@ -6,7 +6,24 @@ class Venue(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     is_selected = models.BooleanField(default=False)
     address = models.CharField(max_length=400, null=True, blank=True)
-    date = models.CharField(max_length=200, null=True, blank=True)
+    city = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=200, null=True, blank=True)
+    zipcode = models.CharField(max_length=200, null=True, blank=True)
+    phone_number = models.CharField(max_length=200, null=True, blank=True)
+    contact_name = models.CharField(max_length=200, null=True, blank=True)
+    facebook = models.CharField(max_length=200, null=True, blank=True)
+    url = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Show(models.Model):
+    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
+    facebook_event = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -80,7 +97,8 @@ class LikedBandSongsListInAllVenues(models.Model):
         return self.band_song.song_name
     
 class Sets(models.Model):
-    venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
+    show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True, blank=True)
+    # venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
     Setname = models.CharField(max_length=200)
 
     def __str__(self):

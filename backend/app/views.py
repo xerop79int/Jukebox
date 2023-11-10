@@ -115,12 +115,18 @@ class ManagerVenueView(APIView):
             return Response({'error': 'You are not a band leader.'})
         venue_name = req.data.get('venue_name')
         venue_address = req.data.get('venue_address')
-        venue_date = req.data.get('venue_date')
+        venue_city = req.data.get('venue_city')
+        venue_state = req.data.get('venue_state')
+        venue_zip = req.data.get('venue_zip')
+        venue_contact = req.data.get('venue_contact_name')
+        venue_phone = req.data.get('venue_phone_number')
+        venue_facebook = req.data.get('venue_facebook')
+        venue_url = req.data.get('venue_url')
 
         if Venue.objects.filter(name=venue_name).exists():
             return Response({'Success': 'Venue already exists.'})
 
-        venue = Venue(name=venue_name, address=venue_address, date=venue_date)
+        venue = Venue(name=venue_name, address=venue_address, city=venue_city, state=venue_state, zipcode=venue_zip, contact_name=venue_contact, phone_number=venue_phone, facebook=venue_facebook, url=venue_url)
         venue.save()
 
         return Response({'success': 'Venue has been added successfully.'})
@@ -130,21 +136,62 @@ class ManagerVenueView(APIView):
             band_leader = BandLeader.objects.get(user=req.user)
         except:
             return Response({'error': 'You are not a band leader.'})
-        
-        if Venue.objects.filter(is_selected=True).exists():
-            venue = Venue.objects.get(is_selected=True)
-            venue.is_selected = False
-            venue.save()
+        venue_id = req.data.get('venue_id')
         venue_name = req.data.get('venue_name')
-        venue = Venue.objects.get(name=venue_name)
-        venue.is_selected = True
+        venue_address = req.data.get('venue_address')
+        venue_city = req.data.get('venue_city')
+        venue_state = req.data.get('venue_state')
+        venue_zip = req.data.get('venue_zip')
+        venue_contact = req.data.get('venue_contact_name')
+        venue_phone = req.data.get('venue_phone_number')
+        venue_facebook = req.data.get('venue_facebook')
+        venue_url = req.data.get('venue_url')
+
+        venue = Venue.objects.get(id=venue_id)
+        venue.name = venue_name
+        venue.address = venue_address
+        venue.city = venue_city
+        venue.state = venue_state
+        venue.zipcode = venue_zip
+        venue.contact_name = venue_contact
+        venue.phone_number = venue_phone
+        venue.facebook = venue_facebook
+        venue.url = venue_url
         venue.save()
-        Playlist.objects.all().delete()
+        # Playlist.objects.all().delete()
 
         return Response({'success': 'Venue has been activated successfully.'})
     
+    def delete(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+        venue_name = req.GET.get('venue_name')
+        print(venue_name)
+        venue = Venue.objects.get(name=venue_name)
+        venue.delete()
+        return Response({'success': 'Venue has been deleted successfully.'})
+
     def get(self, req):
         # check if the Venue model is empty
+        selected_venue = req.GET.get('selected_venue')
+        if selected_venue:
+            venue = Venue.objects.get(name=selected_venue)
+            # convert the venue object to json
+            venue = {
+                'id': venue.id,
+                'name': venue.name,
+                'address': venue.address,
+                'city': venue.city,
+                'state': venue.state,
+                'zipcode': venue.zipcode,
+                'contact_name': venue.contact_name,
+                'phone_number': venue.phone_number,
+                'facebook': venue.facebook,
+                'url': venue.url,
+            }
+            return Response({'success': 'Venue has been activated successfully.', 'venue': venue})
         if Venue.objects.all().exists():
             venues = Venue.objects.all()
             data = []
@@ -158,6 +205,105 @@ class ManagerVenueView(APIView):
             return Response({'error': 'No venues found.'})
 
 
+class ManagerShowView(APIView):
+
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+
+        show_name = req.data.get('show_name')
+        show_date = req.data.get('show_date')
+        show_start_time = req.data.get('show_start_time')
+        show_end_time = req.data.get('show_end_time')
+        show_facebook = req.data.get('show_facebook_event_name')
+        show_venue = req.data.get('show_venue')
+        show_venue = Venue.objects.get(name=show_venue)
+
+        show = Show(name=show_name, date=show_date, start_time=show_start_time, end_time=show_end_time, facebook_event=show_facebook, venue=show_venue)
+        show.save()
+        return Response({'success': 'Show has been added successfully.'})
+    
+    def put(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+
+        selected_show = req.data.get('selected_show')
+        show_name = req.data.get('show_name')
+        show_date = req.data.get('show_date')
+        show_start_time = req.data.get('show_start_time')
+        show_end_time = req.data.get('show_end_time')
+        show_facebook = req.data.get('show_facebook_event_name')
+        show_venue = req.data.get('show_venue')
+        print(show_venue)
+        show_venue = Venue.objects.get(name=show_venue)
+
+        show = Show.objects.get(name=selected_show)
+        show.name = show_name     
+        show.date = show_date
+        show.start_time = show_start_time
+        show.end_time = show_end_time
+        show.facebook_event = show_facebook
+        show.venue = show_venue
+        show.save()
+        return Response({'success': 'Show has been updated successfully.'})
+    
+    def delete(self, req):
+        try:
+            band_leader = BandLeader.objects.get(user=req.user)
+        except:
+            return Response({'error': 'You are not a band leader.'})
+
+        show_name = req.GET.get('show_name')
+        print(show_name)
+        show = Show.objects.get(name=show_name)
+        show.delete()
+        return Response({'success': 'Show has been deleted successfully.'})
+
+    def get(self, req):
+
+        show = req.GET.get('selected_show')
+        if show:
+            show = Show.objects.get(name=show)
+            show = {
+                'id': show.id,
+                'name': show.name,
+                'date': show.date,
+                'start_time': show.start_time,
+                'end_time': show.end_time,
+                'facebook_event_name': show.facebook_event,
+                'venue': {
+                    'id': show.venue.id,
+                    'name': show.venue.name
+                }
+            }
+            return Response({'success': 'Show has been activated successfully.', 'show': show})
+        
+        # check if the Venue model is empty
+        if Show.objects.all().exists():
+            shows = Show.objects.all()
+            data = []
+            for show in shows:
+                data.append({
+                    'id': show.id,
+                    'name': show.name,
+                    'date': show.date,
+                    'start_time': show.start_time,
+                    'end_time': show.end_time,
+                    'facebook_event': show.facebook_event,
+                    'city': show.venue.city,
+                    'state': show.venue.state,
+                    'venue': show.venue.name
+                })
+            return Response({'show': data})
+        else:
+            return Response({'error': 'No shows found.'})
 
 
 # CUSTOMER VIEWS
@@ -400,6 +546,8 @@ class ManagerCustomerSongsListView(APIView):
         else:
             data = []
             count = 0
+            all_venues_count = 0
+            liked = False
             for band_song in band_songs:
                 if Venue.objects.filter(is_selected=True).exists():
                     venue = Venue.objects.get(is_selected=True)
