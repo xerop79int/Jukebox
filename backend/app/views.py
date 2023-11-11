@@ -233,26 +233,47 @@ class ManagerShowView(APIView):
             band_leader = BandLeader.objects.get(user=req.user)
         except:
             return Response({'error': 'You are not a band leader.'})
+        
+        start = req.data.get('start')
+        if start:
+            if Show.objects.filter(is_selected=True).exists():
+                show = Show.objects.get(is_selected=True)
+                show.is_selected = False
+                show.save()
 
-        selected_show = req.data.get('selected_show')
-        show_name = req.data.get('show_name')
-        show_date = req.data.get('show_date')
-        show_start_time = req.data.get('show_start_time')
-        show_end_time = req.data.get('show_end_time')
-        show_facebook = req.data.get('show_facebook_event_name')
-        show_venue = req.data.get('show_venue')
-        print(show_venue)
-        show_venue = Venue.objects.get(name=show_venue)
+                venue = Venue.objects.get(name=show.venue.name)
+                venue.is_selected = False
+                venue.save()
 
-        show = Show.objects.get(name=selected_show)
-        show.name = show_name     
-        show.date = show_date
-        show.start_time = show_start_time
-        show.end_time = show_end_time
-        show.facebook_event = show_facebook
-        show.venue = show_venue
-        show.save()
-        return Response({'success': 'Show has been updated successfully.'})
+            show_name = req.data.get('show_name')
+            print(show_name)
+            show = Show.objects.get(name=show_name)
+            show.is_selected = True
+            show.save()
+            venue = Venue.objects.get(name=show.venue.name)
+            venue.is_selected = True
+            venue.save()
+            return Response({'success': 'Show has been activated successfully.'})
+        else:
+            selected_show = req.data.get('selected_show')
+            show_name = req.data.get('show_name')
+            show_date = req.data.get('show_date')
+            show_start_time = req.data.get('show_start_time')
+            show_end_time = req.data.get('show_end_time')
+            show_facebook = req.data.get('show_facebook_event_name')
+            show_venue = req.data.get('show_venue')
+            print(show_venue)
+            show_venue = Venue.objects.get(name=show_venue)
+
+            show = Show.objects.get(name=selected_show)
+            show.name = show_name     
+            show.date = show_date
+            show.start_time = show_start_time
+            show.end_time = show_end_time
+            show.facebook_event = show_facebook
+            show.venue = show_venue
+            show.save()
+            return Response({'success': 'Show has been updated successfully.'})
     
     def delete(self, req):
         try:
@@ -881,15 +902,15 @@ class ManagerSetsView(APIView):
         # except:
         #     return Response({'error': 'You are not a band leader.'})
         try:
-            venue = Venue.objects.get(is_selected=True)
+            show = Show.objects.get(is_selected=True)
         except:
             return Response({'error': 'No venue selected.'})
-        count = Sets.objects.filter(venue=venue).count()
+        count = Sets.objects.filter(show=show).count()
         name = req.data.get('name') + str(count + 1)
         if not name:
             return Response({'error': 'No name found.'})
         else:
-            sets = Sets(Setname=name, venue=venue)
+            sets = Sets(Setname=name, show=show)
             sets.save()
             return Response({'success': 'Set created successfully.'}, status=200)
     
@@ -909,8 +930,8 @@ class ManagerSetsView(APIView):
     def get(self, req):
         
         try:
-            venue = Venue.objects.get(is_selected=True)
-            sets = Sets.objects.filter(venue=venue)
+            show = Show.objects.get(is_selected=True)
+            sets = Sets.objects.filter(show=show)
         except:
             return Response({'error': 'No venue selected.'})
         data = []

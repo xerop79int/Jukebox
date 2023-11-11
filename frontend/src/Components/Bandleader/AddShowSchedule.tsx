@@ -39,6 +39,30 @@ const ShowSchedule = () => {
     }
     , [])
 
+    const handleShowStart = (name: any) => {
+        
+        let URL = `http://${backendURL}/show`
+
+        const data = {
+            'show_name': name,
+            'start': true
+        }
+
+        axios.put(URL, data, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            window.location.href = `/bandleader`
+            // if(res.data.show.length > 0)
+            // {
+            // setShowList(res.data.show)
+            // }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
     return(
         <div className="admin-show-schedule-main">
             <NavbarAdminPortal />
@@ -61,7 +85,7 @@ const ShowSchedule = () => {
                         <p className='show-schedule-sub-p'>{show.state}</p>
                         <p className='show-schedule-sub-p'>{show.start_time}</p>
                         <p className='show-schedule-sub-p'>{show.end_time}</p>
-                        <button className='admin-show-schedule-input-button start-button'>Start</button>
+                        <button onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
                     </div>
                     )
                     })}

@@ -24,6 +24,7 @@ class Show(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     facebook_event = models.CharField(max_length=200, null=True, blank=True)
+    is_selected = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
