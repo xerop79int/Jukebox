@@ -198,7 +198,9 @@ class ManagerVenueView(APIView):
             for venue in venues:
                 data.append({
                     'id': venue.id,
-                    'name': venue.name
+                    'name': venue.name,
+                    'city': venue.city,
+                    'state': venue.state,
                 })
             return Response({'venue': data})
         else:
@@ -222,10 +224,25 @@ class ManagerShowView(APIView):
         show_end_time = req.data.get('show_end_time')
         show_facebook = req.data.get('show_facebook_event_name')
         show_venue = req.data.get('show_venue')
+        sets = req.data.get('sets')
+        
         show_venue = Venue.objects.get(name=show_venue)
+
+        show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
 
         show = Show(name=show_name, date=show_date, start_time=show_start_time, end_time=show_end_time, facebook_event=show_facebook, venue=show_venue)
         show.save()
+        # remove all the empty from sets list
+        sets = list(filter(None, sets))
+        print(sets)
+        for set in sets:
+            print(set)
+            set = Sets.objects.get(id=set)
+            # name = f"Set {Sets.objects.filter(show=show).count() + 1}"
+            # create a duplicate set
+            new_set = Sets(Setname=set.Setname, show=show)
+            new_set.save()
+            
         return Response({'success': 'Show has been added successfully.'})
     
     def put(self, req):
@@ -262,10 +279,27 @@ class ManagerShowView(APIView):
             show_end_time = req.data.get('show_end_time')
             show_facebook = req.data.get('show_facebook_event_name')
             show_venue = req.data.get('show_venue')
-            print(show_venue)
-            show_venue = Venue.objects.get(name=show_venue)
+            sets = req.data.get('sets')
 
-            show = Show.objects.get(name=selected_show)
+            show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
+            sets = list(filter(None, sets))
+            show_venue = Venue.objects.get(name=show_venue)
+            show = Show.objects.get(id=selected_show)
+            pre_sets = Sets.objects.filter(show=show)
+
+            # delete all the previous sets
+            for set in pre_sets:
+                set.delete()
+
+            for set in sets:
+                set = Sets.objects.get(id=set)
+                # name = f"Set {Sets.objects.filter(show=show).count() + 1}"
+                # create a duplicate set
+                new_set = Sets(Setname=set.Setname, show=show)
+                new_set.save()
+            
+            
+
             show.name = show_name     
             show.date = show_date
             show.start_time = show_start_time
@@ -281,31 +315,79 @@ class ManagerShowView(APIView):
         except:
             return Response({'error': 'You are not a band leader.'})
 
-        show_name = req.GET.get('show_name')
-        print(show_name)
-        show = Show.objects.get(name=show_name)
+        show_id = req.GET.get('show_id')
+        show = Show.objects.get(id=show_id)
         show.delete()
         return Response({'success': 'Show has been deleted successfully.'})
 
     def get(self, req):
 
         show = req.GET.get('selected_show')
+        future = req.GET.get('future')
+        past = req.GET.get('past')
         if show:
-            show = Show.objects.get(name=show)
+            show = Show.objects.get(id=show)
+            day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
+            formatted_date = show.date.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+            sets = Sets.objects.filter(show=show)
+            sets_data = []
+            for set in sets:
+                sets_data.append({
+                    'id': set.id,
+                    'set_name': set.Setname,
+                })
             show = {
                 'id': show.id,
                 'name': show.name,
-                'date': show.date,
+                'date': show.date.strftime('%m-%d-%Y'),
+                'formatted_date': formatted_date,
                 'start_time': show.start_time,
                 'end_time': show.end_time,
                 'facebook_event_name': show.facebook_event,
+                'sets': sets_data,
                 'venue': {
                     'id': show.venue.id,
-                    'name': show.venue.name
+                    'name': show.venue.name,
+                    'city': show.venue.city,
+                    'state': show.venue.state,
                 }
             }
             return Response({'success': 'Show has been activated successfully.', 'show': show})
         
+        if future:
+            shows = Show.objects.filter(date__gte=datetime.today())
+            data = []
+            for show in shows:
+                data.append({
+                    'id': show.id,
+                    'name': show.name,
+                    'date': show.date.strftime('%m-%d-%Y'),
+                    'start_time': show.start_time,
+                    'end_time': show.end_time,
+                    'facebook_event': show.facebook_event,
+                    'city': show.venue.city,
+                    'state': show.venue.state,
+                    'venue': show.venue.name
+                })
+            return Response({'show': data})
+
+        if past:
+            shows = Show.objects.filter(date__lte=datetime.today())
+            data = []
+            for show in shows:
+                data.append({
+                    'id': show.id,
+                    'name': show.name,
+                    'date': show.date.strftime('%m-%d-%Y'),
+                    'start_time': show.start_time,
+                    'end_time': show.end_time,
+                    'facebook_event': show.facebook_event,
+                    'city': show.venue.city,
+                    'state': show.venue.state,
+                    'venue': show.venue.name
+                })
+            return Response({'show': data})
+
         # check if the Venue model is empty
         if Show.objects.all().exists():
             shows = Show.objects.all()
@@ -896,23 +978,19 @@ class ManagerSetsView(APIView):
     # permission_classes = [permissions.IsAuthenticated]
 
     def post(self, req):
-        print(req.user)
-        # try:
-        #     band_leader = BandLeader.objects.get(user=req.user)
-        # except:
-        #     return Response({'error': 'You are not a band leader.'})
         try:
             show = Show.objects.get(is_selected=True)
-        except:
-            return Response({'error': 'No venue selected.'})
-        count = Sets.objects.filter(show=show).count()
-        name = req.data.get('name') + str(count + 1)
-        if not name:
-            return Response({'error': 'No name found.'})
-        else:
+            count = Sets.objects.filter(show=show).count()
+            name = req.data.get('name') + str(count + 1)
             sets = Sets(Setname=name, show=show)
             sets.save()
             return Response({'success': 'Set created successfully.'}, status=200)
+        except:
+            count = Sets.objects.filter(show=None).count()
+            name = req.data.get('name') + str(count + 1)
+            sets = Sets(Setname=name)
+            sets.save()
+            return Response({'success': 'Major Set created successfully.'}, status=200)
     
     def delete(self, req):
         try:
@@ -932,17 +1010,27 @@ class ManagerSetsView(APIView):
         try:
             show = Show.objects.get(is_selected=True)
             sets = Sets.objects.filter(show=show)
+            data = []
+            for set in sets:
+                set_data = {
+                    'id': set.id,
+                    'set_name': set.Setname
+                }
+                data.append(set_data)
+            return Response({'sets': data})
         except:
-            return Response({'error': 'No venue selected.'})
-        data = []
-        print(sets)
-        for set in sets:
-            set_data = {
-                'id': set.id,
-                'set_name': set.Setname
-            }
-            data.append(set_data)
-        return Response({'sets': data})
+            sets = Sets.objects.filter(show=None)
+            data = []
+            for set in sets:
+                set_data = {
+                    'id': set.id,
+                    'set_name': set.Setname
+                }
+                data.append(set_data)
+            return Response({'sets': data})
+            
+        
+        
 
 class ManagerSongsInSetView(APIView):
     authentication_classes = [TokenAuthentication]

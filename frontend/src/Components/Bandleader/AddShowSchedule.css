@@ -83,8 +83,8 @@
     width: 50% !important;
   }
   .start-button{
+    display: block;
     min-width: 100px;
-    /* padding: 2rem 5rem */
   }
   .geekmark {
 
@@ -99,6 +99,10 @@
     .show-schedule-classbox:checked{
         opacity: 1;
     }
+  
+  .future-show{
+    display: none;
+  }
   /* .show-schedule-classbox:checked{
     background-color: black;
   } */

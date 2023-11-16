@@ -21,7 +21,7 @@ const ShowSchedule = () => {
     const [showList, setShowList] = useState<Show[]>([]);
     useEffect(() => {
 
-        let URL = `http://${backendURL}/show`
+        let URL = `http://${backendURL}/show?future=true`
 
         axios.get(URL, {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
@@ -63,6 +63,51 @@ const ShowSchedule = () => {
         })
     }
 
+    const handlePastShow = () => {
+
+        let URL = `http://${backendURL}/show?past=true`
+
+        axios.get(URL, {
+            headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            console.log(res.data.show)
+            if(res.data.show.length > 0)
+            {
+                setShowList(res.data.show)
+                setTimeout(() => {
+                    const startButton = document.querySelectorAll<HTMLInputElement>('#start-button');
+                    if (startButton.length > 0) {
+                        startButton.forEach(button => {
+                            button.style.display = 'none';
+                        })
+                    }
+                }, 30)
+                const futureButton = document.querySelector<HTMLButtonElement>('.future-show');
+                if(futureButton)
+                    futureButton.style.display = 'block';
+                const pastButton = document.querySelector<HTMLButtonElement>('.past-show');
+                if(pastButton)
+                    pastButton.style.display = 'none';
+            }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+
+        
+
+        
+    }
+
+    const handleFutureShow = () => {
+        // refresh page
+        window.location.reload();
+    }
+
+
+
+
     return(
         <div className="admin-show-schedule-main">
             <NavbarAdminPortal />
@@ -72,20 +117,36 @@ const ShowSchedule = () => {
                         <p className="admin-show-schedule-heading">
                             Upcoming Shows Schedule
                         </p>
-                        <button className='admin-show-schedule-input-button'>Past</button>
+                        <button onClick={handlePastShow} className='admin-show-schedule-input-button past-show'>Past</button>
+                        <button onClick={handleFutureShow} className='admin-show-schedule-input-button future-show'>Future</button>
                     </div>
                     {showList.map((show, index) => {
                     return(
                     <div key={show.id} className='admin-show-schedule-details-container'>
                         <input type="checkbox" className='show-schedule-classbox' />
-                        <p>{show.venue}</p>
-                        <p>{show.name}</p>
-                        <p>{show.date}</p>
-                        <p>{show.city}</p>
+                        <div>
+                            <input type="checkbox" className='show-schedule-classbox' />
+                            <p>{show.venue}</p>
+                        </div>
+                        <div>
+                            <input type="checkbox" className='show-schedule-classbox' />
+                            <p>{show.name}</p>
+                        </div>
+                        <div>
+                            <input type="checkbox" className='show-schedule-classbox' />
+                            <p>{show.date}</p>
+                        </div>
+                        <div>
+                            <input type="checkbox" className='show-schedule-classbox' />
+                            <p>{show.city}</p>
+                        </div>
+                        
+                        
+                        
                         <p className='show-schedule-sub-p'>{show.state}</p>
                         <p className='show-schedule-sub-p'>{show.start_time}</p>
                         <p className='show-schedule-sub-p'>{show.end_time}</p>
-                        <button onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
+                        <button id='start-button' onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
                     </div>
                     )
                     })}

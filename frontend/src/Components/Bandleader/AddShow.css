@@ -86,7 +86,7 @@
     background-color: #1c1c1c;
     border-radius: 50px;
     margin: 20px;
-    padding-top: 40px;
+    padding-top: 15px;
   }
   .admin-show-dropdown {
       display: flex;
@@ -146,5 +146,52 @@
   .admin-show-input-label{
     color: white;
     font-weight: 700;
+  }
+
+  .admin-day-date-format{
+    width: 95%;
+    font-size: 1.5rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    border: 1px solid #303030;
+    background-color: #303030;
+    padding: 3px;
+  }
+
+  .admin-show-city-state-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .admin-show-city-state-container p{
+    width: 100%;
+    font-size: 1.5rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    /* margin-left: 5px; */
+    border: 1px solid #303030;
+    background-color: #303030;
+    padding: 3px;
+  }
+
+
+  .admin-show-dropdown-sets {
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    outline: none;
+    border: none;
+    background-color: #23242a;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 5px;
   }
   
