@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './AddShowSchedule.css'
 import axios from 'axios';
 import NavbarAdminPortal from './NavbarAdminPortal';
+import html2canvas from 'html2canvas';
 
 interface Show {
     id: number,
@@ -19,6 +20,7 @@ const ShowSchedule = () => {
 
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [showList, setShowList] = useState<Show[]>([]);
+    const containerRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
 
         let URL = `http://${backendURL}/show?future=true`
@@ -106,6 +108,90 @@ const ShowSchedule = () => {
     }
 
 
+    const handlePNG = async () => {
+        const container = containerRef.current;
+        if (!container) return;
+        
+            
+          
+
+        // get al the admin-show-schedule-details-container elements and filter out the ones that are checked
+        const showScheduleDetailsContainer = document.querySelectorAll('#shows') as NodeListOf<HTMLInputElement>;
+        console.log(showScheduleDetailsContainer)
+        const checkedShows = Array.from(showScheduleDetailsContainer).filter(show => {
+            const checkbox = show.querySelector<HTMLInputElement>('.show-schedule-classbox');
+            if(checkbox?.checked)
+                return true;
+            else
+                return false;
+        })
+
+        checkedShows.forEach(show => {
+            const checkbox = show.querySelector<HTMLInputElement>('.show-schedule-classbox');
+            if(checkbox)
+                checkbox.style.display = 'none';
+            const p = show.querySelectorAll<HTMLParagraphElement>('p');
+            p.forEach(p => {
+                p.style.backgroundColor = '#1c1c1c';
+                p.style.color = 'white';
+            })
+        })
+        
+        const canvasPromises = Array.from(checkedShows).map((div) =>
+            html2canvas(div, { scrollY: -window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  })
+        );
+
+        const canvases = await Promise.all(canvasPromises);
+        // Create a single canvas to composite all the images
+        const combinedCanvas = document.createElement('canvas');
+        const ctx = combinedCanvas.getContext('2d');
+
+
+
+        combinedCanvas.width = container.offsetWidth;
+        combinedCanvas.height = container.offsetHeight;
+
+        // Draw each captured canvas onto the combined canvas
+        let yOffset = 0;
+        canvases.forEach((canvas) => {
+            if (ctx) {
+                ctx.drawImage(canvas, 120, yOffset);
+                yOffset += canvas.height;
+            }
+        });
+
+        // Convert the combined canvas to a data URL
+        const dataUrl = combinedCanvas.toDataURL('image/png');
+
+        // Create a link element
+        const link = document.createElement('a');
+        link.href = dataUrl;
+
+        // Set the download attribute with a desired filename
+        link.download = 'combined_screenshot.png';
+
+        // Append the link to the document and trigger a click
+        document.body.appendChild(link);
+        link.click();
+
+        // Remove the link from the document
+        document.body.removeChild(link);
+
+        
+        
+        checkedShows.forEach(show => {
+            const checkbox = show.querySelector<HTMLInputElement>('.show-schedule-classbox');
+            if(checkbox)
+                checkbox.style.display = 'block';
+            const p = show.querySelectorAll<HTMLParagraphElement>('p');
+            p.forEach(p => {
+                p.style.backgroundColor = '#303030';
+                p.style.color = '#8f8d8d';
+            })
+        })
+    }
+
+
 
 
     return(
@@ -120,36 +206,39 @@ const ShowSchedule = () => {
                         <button onClick={handlePastShow} className='admin-show-schedule-input-button past-show'>Past</button>
                         <button onClick={handleFutureShow} className='admin-show-schedule-input-button future-show'>Future</button>
                     </div>
-                    {showList.map((show, index) => {
-                    return(
-                    <div key={show.id} className='admin-show-schedule-details-container'>
+                    {/* <div>
                         <input type="checkbox" className='show-schedule-classbox' />
-                        <div>
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        <input type="checkbox" className='show-schedule-classbox' />
+                        
+                    </div> */}
+                    <div className='admin-show-container' ref={containerRef}>
+                        {showList.map((show, index) => {
+                        return(
+                        <div key={show.id} id='shows' className='admin-show-schedule-details-container'>
                             <input type="checkbox" className='show-schedule-classbox' />
                             <p>{show.venue}</p>
-                        </div>
-                        <div>
-                            <input type="checkbox" className='show-schedule-classbox' />
                             <p>{show.name}</p>
-                        </div>
-                        <div>
-                            <input type="checkbox" className='show-schedule-classbox' />
                             <p>{show.date}</p>
-                        </div>
-                        <div>
-                            <input type="checkbox" className='show-schedule-classbox' />
                             <p>{show.city}</p>
+                            
+                            <p className='show-schedule-sub-p'>{show.state}</p>
+                            <p className='show-schedule-sub-p'>{show.start_time}</p>
+                            <p className='show-schedule-sub-p'>{show.end_time}</p>
+                            <button id='start-button' onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
                         </div>
-                        
-                        
-                        
-                        <p className='show-schedule-sub-p'>{show.state}</p>
-                        <p className='show-schedule-sub-p'>{show.start_time}</p>
-                        <p className='show-schedule-sub-p'>{show.end_time}</p>
-                        <button id='start-button' onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
+                        )
+                        })}
                     </div>
-                    )
-                    })}
+                    <div className='admin-show-schedule-publish-button-container'>
+                        <button onClick={handlePNG} className='admin-show-schedule-publish-Button'>Publish as .png</button>
+                        <button className='admin-show-schedule-publish-Button'>Publish to Email List</button>
+                        <button className='admin-show-schedule-publish-Button'>Publish to Facebook Post</button>
+                    </div>
                 </div>
             </div>
         </div>

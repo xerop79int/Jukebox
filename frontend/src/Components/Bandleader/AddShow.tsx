@@ -152,7 +152,6 @@ const Show = () => {
     }
 
     const SelectShow = (e: any) => {
-        // save the venue_name in the local storage
 
         const URL = `http://${backendURL}/show?selected_show=${selectShow}`
 
@@ -185,10 +184,6 @@ const Show = () => {
             date.textContent = res.data.show.formatted_date
 
 
-            // setSets(res.data.show.sets)
-
-
-
             let i = 0
             res.data.show.sets.forEach((s: any) => {
                 Sets.forEach((set: any) => {
@@ -209,12 +204,6 @@ const Show = () => {
             });
 
             
-
-            
-
-
-            
-
 
             setShowName(res.data.show.name)
             setShowDate(res.data.show.date)
@@ -258,20 +247,6 @@ const Show = () => {
         }
     }
 
-    // const handleSets = (e: any, set: string) => {
-    //     const setDict: any = {}
-    //     setDict[set] = e.target.value
-
-    //     // Check if set already exists in setList
-    //     const index = setList.findIndex((s) => Object.keys(s)[0] === set);
-    //     if (index !== -1) {
-    //         // Remove set from setList
-    //         setList.splice(index, 1);
-    //     }
-        
-    //     // Add new set to setList
-    //     setList.push(setDict);
-    // }
 
     const handleDate = (e: any) => {
         setShowDate(e.target.value)
