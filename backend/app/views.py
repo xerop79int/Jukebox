@@ -234,14 +234,17 @@ class ManagerShowView(APIView):
         show.save()
         # remove all the empty from sets list
         sets = list(filter(None, sets))
-        print(sets)
         for set in sets:
-            print(set)
+
             set = Sets.objects.get(id=set)
             # name = f"Set {Sets.objects.filter(show=show).count() + 1}"
             # create a duplicate set
             new_set = Sets(Setname=set.Setname, show=show)
             new_set.save()
+            songs  = SongsInSet.objects.filter(set=set)
+            for song in songs:
+                song = SongsInSet(number=song.number, set=new_set, song=song.song, is_locked=song.is_locked)
+                song.save()
             
         return Response({'success': 'Show has been added successfully.'})
     
@@ -297,6 +300,10 @@ class ManagerShowView(APIView):
                 # create a duplicate set
                 new_set = Sets(Setname=set.Setname, show=show)
                 new_set.save()
+                songs  = SongsInSet.objects.filter(set=set)
+                for song in songs:
+                    song = SongsInSet(number=song.number, set=new_set, song=song.song, is_locked=song.is_locked)
+                    song.save()
             
             
 
