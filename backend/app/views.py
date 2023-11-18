@@ -228,7 +228,7 @@ class ManagerShowView(APIView):
         
         show_venue = Venue.objects.get(name=show_venue)
 
-        show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
+        # show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
 
         show = Show(name=show_name, date=show_date, start_time=show_start_time, end_time=show_end_time, facebook_event=show_facebook, venue=show_venue)
         show.save()
@@ -284,7 +284,7 @@ class ManagerShowView(APIView):
             show_venue = req.data.get('show_venue')
             sets = req.data.get('sets')
 
-            show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
+            # show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
             sets = list(filter(None, sets))
             show_venue = Venue.objects.get(name=show_venue)
             show = Show.objects.get(id=selected_show)
@@ -346,7 +346,7 @@ class ManagerShowView(APIView):
             show = {
                 'id': show.id,
                 'name': show.name,
-                'date': show.date.strftime('%m-%d-%Y'),
+                'date': show.date,
                 'formatted_date': formatted_date,
                 'start_time': show.start_time,
                 'end_time': show.end_time,
@@ -364,13 +364,16 @@ class ManagerShowView(APIView):
         if future:
             shows = Show.objects.filter(date__gte=datetime.today())
             data = []
+            
             for show in shows:
+                day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
+                formatted_date = show.date.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
                 data.append({
                     'id': show.id,
                     'name': show.name,
-                    'date': show.date.strftime('%m-%d-%Y'),
-                    'start_time': show.start_time,
-                    'end_time': show.end_time,
+                    'date': formatted_date,
+                    'start_time': show.start_time.strftime("%I:%M %p"),
+                    'end_time': show.end_time.strftime("%I:%M %p"),
                     'facebook_event': show.facebook_event,
                     'city': show.venue.city,
                     'state': show.venue.state,
@@ -385,9 +388,9 @@ class ManagerShowView(APIView):
                 data.append({
                     'id': show.id,
                     'name': show.name,
-                    'date': show.date.strftime('%m-%d-%Y'),
-                    'start_time': show.start_time,
-                    'end_time': show.end_time,
+                    'date': show.date,
+                    'start_time': show.start_time.strftime("%I:%M %p"),
+                    'end_time': show.end_time.strftime("%I:%M %p"),
                     'facebook_event': show.facebook_event,
                     'city': show.venue.city,
                     'state': show.venue.state,

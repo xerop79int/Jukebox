@@ -12,7 +12,7 @@
   }
 
   .admin-show-schedule-sub-main {
-    width: 90vw;
+    width: 95vw;
     height: auto;
     /* display: flex;
     justify-content: space-evenly;
@@ -126,7 +126,7 @@
     align-items: flex-start;
   }
   .admin-show-schedule-element p{
-    width: 98%;
+    width: 100%;
     font-size: 1.5rem;
     color: #8f8d8d;
     margin-top: 5px;
@@ -147,13 +147,12 @@
     align-items: flex-start;
   }
   .show-schedule-sub-p{
-    width: 75% !important;
+    width: 50% !important;
     font-size: 1.5rem;
     color: #8f8d8d;
     margin-top: 5px;
     margin-right: 5px;
     background-color: #303030;
-    padding: 3px;
   }
   .admin-show-schedule-publish-button-container{
     position: absolute;

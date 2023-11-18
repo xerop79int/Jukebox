@@ -183,7 +183,65 @@ const AddVenue = () => {
                     <input onChange={e => setVenueName(e.target.value)} placeholder='Venue Name' className="admin-venue-input-field" />
                     <input onChange={e => setVenueAddress(e.target.value)} placeholder='Venue Address' className="admin-venue-input-field" />
                     <input onChange={e => setVenueCity(e.target.value)} placeholder='City' className="admin-venue-input-field" />
-                    <input onChange={e => setVenueState(e.target.value)} placeholder='State' className="admin-venue-input-field" />
+                    <select onChange={e => setVenueState(e.target.value)} placeholder='State' className="admin-venue-input-field">
+                        <option value="">Select State</option>
+                        <option value="Alabama">AL</option>
+                        <option value="Alaska">AK</option>
+                        <option value="Arizona">AZ</option>
+                        <option value="Arkansas">AR</option>
+                        <option value="California">CA</option>
+                        <option value="Colorado">CO</option>
+                        <option value="Connecticut">CT</option>
+                        <option value="Delaware">DE</option>
+                        <option value="District of Columbia">DC</option>
+                        <option value="Florida">FL</option>
+                        <option value="Georgia">GA</option>
+                        <option value="Guam">GU</option>
+                        <option value="Hawaii">HI</option>
+                        <option value="Idaho">ID</option>
+                        <option value="Illinois">IL</option>
+                        <option value="Indiana">IN</option>
+                        <option value="Iowa">IA</option>
+                        <option value="Kansas">KS</option>
+                        <option value="Kentucky">KY</option>
+                        <option value="Louisiana">LA</option>
+                        <option value="Maine">ME</option>
+                        <option value="Maryland">MD</option>
+                        <option value="Massachusetts">MA</option>
+                        <option value="Michigan">MI</option>
+                        <option value="Minnesota">MN</option>
+                        <option value="Mississippi">MS</option>
+                        <option value="Missouri">MO</option>
+                        <option value="Montana">MT</option>
+                        <option value="Nebraska">NE</option>
+                        <option value="Nevada">NV</option>
+                        <option value="New Hampshire">NH</option>
+                        <option value="New Jersey">NJ</option>
+                        <option value="New Mexico">NM</option>
+                        <option value="New York">NY</option>
+                        <option value="North Carolina">NC</option>
+                        <option value="North Dakota">ND</option>
+                        <option value="Northern Mariana Islands">MP</option>
+                        <option value="Ohio">OH</option>
+                        <option value="Oklahoma">OK</option>
+                        <option value="Oregon">OR</option>
+                        <option value="Pennsylvania">PA</option>
+                        <option value="Puerto Rico">PR</option>
+                        <option value="Rhode Island">RI</option>
+                        <option value="South Carolina">SC</option>
+                        <option value="South Dakota">SD</option>
+                        <option value="Tennessee">TN</option>
+                        <option value="Texas">TX</option>
+                        <option value="Trust Territories">TT</option>
+                        <option value="Utah">UT</option>
+                        <option value="Vermont">VT</option>
+                        <option value="Virgin Islands">VI</option>
+                        <option value="Virginia">VA</option>
+                        <option value="Washington">WA</option>
+                        <option value="West Virginia">WV</option>
+                        <option value="Wisconsin">WI</option>
+                        <option value="Wyoming">WY</option>
+                    </select>
                     <input onChange={e => setVenueZipCode(e.target.value)} placeholder='Zip Code' className="admin-venue-input-field" />
                     <input onChange={e => setVenueContactName(e.target.value)} placeholder='Contact Name (Optional)' className="admin-venue-input-field" />
                     <input onChange={e => setVenuePhoneNumber(e.target.value)} placeholder='Phone Number (Optional)' className="admin-venue-input-field" />

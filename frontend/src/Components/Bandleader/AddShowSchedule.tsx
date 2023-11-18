@@ -224,7 +224,7 @@ const ShowSchedule = () => {
                             <p>{show.venue}</p>
                             <p>{show.name}</p>
                             <p>{show.date}</p>
-                            <p>{show.city}</p>
+                            <p className='show-schedule-sub-p'>{show.city}</p>
                             
                             <p className='show-schedule-sub-p'>{show.state}</p>
                             <p className='show-schedule-sub-p'>{show.start_time}</p>

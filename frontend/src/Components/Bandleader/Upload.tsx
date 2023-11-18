@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Upload.css';
 import axios from 'axios';
+import Navbar from './NavbarAdminPortal';
 
 const Upload: React.FC = () => {
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
@@ -53,18 +54,21 @@ const Upload: React.FC = () => {
 
 
     return(
-        <div className="upload">
-            <p className="upload-list-heading">Upload The Songs List</p>
-            <div className="main-upload-div">
-                <p className="file-select">Select a file</p>
-                <i className="fa-solid fa-download fa-3x"></i>
-                <label className="uplaod-file-lable">Select file(s) <br/>(Instructions: First upload the data file of the songs After they have been uploaded then upload all the PDFs)</label>
-                <input onChange={handleFileChange} type="file" multiple className="uplaod-file" required />
-            </div>
-            <div className='upload-button-container'>
-            <button onClick={e => window.location.href = '/addsinglesong'} className="submit-file">Return</button>
-            <button onClick={handlesubmitdatafile} className="submit-file">Submit Data File</button>
-            <button onClick={handlesubmitPDFs} className="submit-file">Submit PDFs</button>
+        <div>
+            <Navbar />
+            <div className="upload">
+                <p className="upload-list-heading">Upload The Songs List</p>
+                <div className="main-upload-div">
+                    <p className="file-select">Select a file</p>
+                    <i className="fa-solid fa-download fa-3x"></i>
+                    <label className="uplaod-file-lable">Select file(s) <br/>(Instructions: First upload the data file of the songs After they have been uploaded then upload all the PDFs)</label>
+                    <input onChange={handleFileChange} type="file" multiple className="uplaod-file" required />
+                </div>
+                <div className='upload-button-container'>
+                <button onClick={e => window.location.href = '/addsinglesong'} className="submit-file">Return</button>
+                <button onClick={handlesubmitdatafile} className="submit-file">Submit Data File</button>
+                <button onClick={handlesubmitPDFs} className="submit-file">Submit PDFs</button>
+                </div>
             </div>
         </div>
     )

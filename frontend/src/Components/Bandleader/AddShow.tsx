@@ -251,27 +251,27 @@ const Show = () => {
     const handleDate = (e: any) => {
         setShowDate(e.target.value)
         const date = e.target.value
-        const hasTwoDashes = date.split('-').length === 3;
-        if (hasTwoDashes) {
-            const [month, day, year] = date.split('-');
-            const isDateValid = !isNaN(Date.parse(`${year}-${month}-${day}`));
-            console.log(isDateValid)
-            if (isDateValid) {      
-                const date_data = new Date(date);
-                const dayOfMonth = date_data.getDate();
+        console.log(date);
+        const [year, month, day] = date.split('-');
+        const isDateValid = !isNaN(Date.parse(`${year}-${month}-${day}`));
+        console.log(isDateValid);
+        if (isDateValid) {      
+            console.log('valid date');
+            const date_data = new Date(date);
+            const dayOfMonth = date_data.getDate();
 
-                const month_short = date_data.toLocaleString('default', { month: 'short' });
-                const dayOfWeek = date_data.toLocaleString('default', { weekday: 'long' });
+            const month_short = date_data.toLocaleString('default', { month: 'short' });
+            const dayOfWeek = date_data.toLocaleString('default', { weekday: 'long' });
 
-                let suffix = dayOfMonth > 0
-                ? ["th", "st", "nd", "rd"][
-                    (dayOfMonth > 3 && dayOfMonth < 21) || dayOfMonth % 10 > 3 ? 0 : dayOfMonth % 10
-                ]
-                : "";
-                
-                const date_obj = document.getElementById('admin-day-date-format') as HTMLInputElement
-                date_obj.textContent = `${dayOfWeek} ${month_short} ${day}${suffix}, ${year}`
-            }
+            let suffix = dayOfMonth > 0
+            ? ["th", "st", "nd", "rd"][
+                (dayOfMonth > 3 && dayOfMonth < 21) || dayOfMonth % 10 > 3 ? 0 : dayOfMonth % 10
+            ]
+            : "";
+            
+            const date_obj = document.getElementById('admin-day-date-format') as HTMLInputElement
+            date_obj.textContent = `${dayOfWeek} ${month_short} ${day}${suffix}, ${year}`
+        
         }
     }
 
@@ -298,7 +298,7 @@ const Show = () => {
                         })}
                     </select>
                     <input onChange={e => setShowName(e.target.value)}  placeholder='Show Name' className="admin-show-input-field" />
-                    <input onChange={e => handleDate(e)} className="admin-show-input-field" placeholder='Date(mm-dd-yyyy)' type='text' />
+                    <input onChange={e => handleDate(e)} className="admin-show-input-field" type='date' />
                     
                     <p className='admin-day-date-format' id='admin-day-date-format'>Date</p>
                     <div className='admin-show-city-state-container'>
@@ -307,9 +307,9 @@ const Show = () => {
                     </div>
 
                     <label className="admin-show-input-label">Start Time</label>
-                    <input onChange={e => setShowStartTime(e.target.value)}  placeholder='State Time' className="admin-show-input-field" type='time' />
+                    <input onChange={e => setShowStartTime(e.target.value)}  placeholder='State Time' className="admin-show-input-field" type='time' step="900" />
                     <label className="admin-show-input-label">End Time</label>
-                    <input onChange={e => setShowEndTime(e.target.value)}   placeholder='State Time' className="admin-show-input-field" type='time' />
+                    <input onChange={e => setShowEndTime(e.target.value)}   placeholder='State Time' className="admin-show-input-field" type='time' step="900" />
                     <input onChange={e => setFacebookEventName(e.target.value)} placeholder='Facebook Event Name (Optional)' className="admin-show-input-field" />
                     <button onClick={handleSubmitShow} className="admin-show-dropdown-button">Submit</button>
                     </div>
@@ -363,7 +363,7 @@ const Show = () => {
                         })}
                     </select>
                     <input onChange={e => setShowName(e.target.value)} id='show_name' placeholder='Show Name' className="admin-show-input-field" />
-                    <input onChange={e => setShowDate(e.target.value)} id='show_date' className="admin-show-input-field" placeholder='Date(mm-dd-yyyy)' type='text' />
+                    <input onChange={e => setShowDate(e.target.value)} id='show_date' className="admin-show-input-field" type='date' />
                     
                     <p className='admin-day-date-format' id='admin-day-date-format-update'>Date</p>
                     <div className='admin-show-city-state-container'>

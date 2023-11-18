@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import axios from "axios";
 import './Backup.css'
-
+import Navbar from "./NavbarAdminPortal";
 
 
 const Backup = () => {
@@ -85,7 +85,7 @@ const Backup = () => {
 
     return(
         <div className="bandleader-backup-container">
-            
+            <Navbar />
             <div className="bandleader-backup">
             <div className="bandleader-backup-child">
             <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="green" className="success-icon bi bi-check-circle-fill" viewBox="0 0 16 16">

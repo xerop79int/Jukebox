@@ -1053,7 +1053,7 @@ const SongList: React.FC = () => {
                 </div>
 
                 <div className="bandleader-dropdown-submenu bandleader-dropdown-submenu-4">
-                  <a href="/addsinglesong">Admin Portal</a>
+                  <a href="/showschedule">Admin Portal</a>
                 </div>
                 
                 

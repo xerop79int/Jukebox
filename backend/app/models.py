@@ -99,7 +99,6 @@ class LikedBandSongsListInAllVenues(models.Model):
     
 class Sets(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE, null=True, blank=True)
-    # venue = models.ForeignKey(Venue, on_delete=models.CASCADE, null=True, blank=True)
     Setname = models.CharField(max_length=200)
 
     def __str__(self):
