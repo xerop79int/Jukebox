@@ -14,6 +14,7 @@ interface Show {
     facebook_event_name: string,
     city: string,
     state: string,
+    check: boolean,
 }
 
 const ShowSchedule = () => {
@@ -54,7 +55,7 @@ const ShowSchedule = () => {
             headers: { Authorization: `Token ${localStorage.getItem('token')}` },
         })
         .then(res => {
-            window.location.href = `/bandleader`
+            window.location.reload();
             // if(res.data.show.length > 0)
             // {
             // setShowList(res.data.show)
@@ -64,6 +65,30 @@ const ShowSchedule = () => {
             console.log(err)
         })
     }
+
+    const handleShowStop = (id: any) => {
+            
+            let URL = `http://${backendURL}/show`
+    
+            const data = {
+                'show_id': id,
+                'stop': true
+            }
+    
+            axios.put(URL, data, {
+                headers: { Authorization: `Token ${localStorage.getItem('token')}` },
+            })
+            .then(res => {
+                window.location.reload();
+                // if(res.data.show.length > 0)
+                // {
+                // setShowList(res.data.show)
+                // }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
 
     const handlePastShow = () => {
 
@@ -222,14 +247,16 @@ const ShowSchedule = () => {
                         <div key={show.id} id='shows' className='admin-show-schedule-details-container'>
                             <input type="checkbox" className='show-schedule-classbox' />
                             <p>{show.venue}</p>
-                            <p>{show.name}</p>
+                            {/* <p>{show.name}</p> */}
                             <p>{show.date}</p>
                             <p className='show-schedule-sub-p'>{show.city}</p>
                             
                             <p className='show-schedule-sub-p'>{show.state}</p>
                             <p className='show-schedule-sub-p'>{show.start_time}</p>
                             <p className='show-schedule-sub-p'>{show.end_time}</p>
-                            <button id='start-button' onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button>
+                            { show.check ? <button id='start-button' onClick={e => handleShowStop(show.id)} className='admin-show-schedule-input-button stop-button'>Stop</button> 
+                            : <button id='start-button' onClick={e => handleShowStart(show.name)} className='admin-show-schedule-input-button start-button'>Start</button> }
+                            
                         </div>
                         )
                         })}

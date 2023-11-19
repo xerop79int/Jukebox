@@ -102,6 +102,10 @@
     display: block;
     min-width: 100px;
   }
+  .stop-button{
+    display: block;
+    min-width: 100px;
+  }
   .geekmark {
     background-color: black;
 }

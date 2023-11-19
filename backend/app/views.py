@@ -218,13 +218,17 @@ class ManagerShowView(APIView):
         except:
             return Response({'error': 'You are not a band leader.'})
 
-        show_name = req.data.get('show_name')
         show_date = req.data.get('show_date')
         show_start_time = req.data.get('show_start_time')
         show_end_time = req.data.get('show_end_time')
         show_facebook = req.data.get('show_facebook_event_name')
         show_venue = req.data.get('show_venue')
         sets = req.data.get('sets')
+
+        day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
+        show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
+        formatted_date = show_date_obj.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+        show_name = f"{show_venue} - {formatted_date}"
         
         show_venue = Venue.objects.get(name=show_venue)
 
@@ -255,6 +259,7 @@ class ManagerShowView(APIView):
             return Response({'error': 'You are not a band leader.'})
         
         start = req.data.get('start')
+        stop = req.data.get('stop')
         if start:
             if Show.objects.filter(is_selected=True).exists():
                 show = Show.objects.get(is_selected=True)
@@ -274,9 +279,16 @@ class ManagerShowView(APIView):
             venue.is_selected = True
             venue.save()
             return Response({'success': 'Show has been activated successfully.'})
+        elif stop:
+            show = Show.objects.get(is_selected=True)
+            show.is_selected = False
+            show.save()
+            venue = Venue.objects.get(name=show.venue.name)
+            venue.is_selected = False
+            venue.save()
+            return Response({'success': 'Show has been deactivated successfully.'})
         else:
             selected_show = req.data.get('selected_show')
-            show_name = req.data.get('show_name')
             show_date = req.data.get('show_date')
             show_start_time = req.data.get('show_start_time')
             show_end_time = req.data.get('show_end_time')
@@ -305,7 +317,10 @@ class ManagerShowView(APIView):
                     song = SongsInSet(number=song.number, set=new_set, song=song.song, is_locked=song.is_locked)
                     song.save()
             
-            
+            day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
+            show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
+            formatted_date = show_date_obj.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+            show_name = f"{show_venue.name} - {formatted_date}"
 
             show.name = show_name     
             show.date = show_date
@@ -348,8 +363,8 @@ class ManagerShowView(APIView):
                 'name': show.name,
                 'date': show.date,
                 'formatted_date': formatted_date,
-                'start_time': show.start_time,
-                'end_time': show.end_time,
+                'start_time': show.start_time.strftime("%I:%M"),
+                'end_time': show.end_time.strftime("%I:%M"),
                 'facebook_event_name': show.facebook_event,
                 'sets': sets_data,
                 'venue': {
@@ -368,6 +383,7 @@ class ManagerShowView(APIView):
             for show in shows:
                 day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
                 formatted_date = show.date.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+                check = show.is_selected
                 data.append({
                     'id': show.id,
                     'name': show.name,
@@ -377,7 +393,8 @@ class ManagerShowView(APIView):
                     'facebook_event': show.facebook_event,
                     'city': show.venue.city,
                     'state': show.venue.state,
-                    'venue': show.venue.name
+                    'venue': show.venue.name,
+                    'check': check
                 })
             return Response({'show': data})
 
