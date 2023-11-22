@@ -60,18 +60,14 @@
   .admin-show-container{
     background-color: #1c1c1c;
     /* width: 100%; */
-    height: 30rem;
+    /* height: 30rem; */
     overflow-y: auto;
-    margin-top: 1.5rem;
+    padding-top: 2rem;
     scrollbar-color: black; /* Firefox */
     scrollbar-width: 20px;
   }
   .admin-show-schedule-details-container{
     width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    
   }
   .admin-show-container::-webkit-scrollbar {
     width: 5px;
@@ -95,7 +91,8 @@
     margin-right: 5px;
     /* border: 1px solid #303030; */
     background-color: #303030;
-    padding: 3px;
+    /* margin-left: 10px; */
+    padding: 3px 0;
   }
   
   .start-button{
@@ -151,7 +148,7 @@
     align-items: flex-start;
   }
   .show-schedule-sub-p{
-    width: 50% !important;
+    /* width: 50% !important; */
     font-size: 1.5rem;
     color: #8f8d8d;
     margin-top: 5px;
@@ -175,7 +172,31 @@
     color: white;
     margin: 10px;
   }
-  /* .show-schedule-classbox:checked{
-    background-color: black;
-  } */
+
+  .admin-show-schedule-screenshot-heading{
+    width: 100%;
+    color: white;
+    font-size: 1.2rem;
+    /* display: flex;
+    justify-content: space-between; */
+  }
+  .admin-show-schedule-screenshot-heading-tr th{
+    text-align: left;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    /* padding-right: 6rem; */
+  }
+
+  .admin-show-schedule-screenshot-tbody-td{
+    width: 20% !important;
+    padding-right: 0.2rem;
+  }
+
+  .admin-show-schedule-screenshot-tbody-td-sub{
+    padding-right: 0.2rem;
+  }
+  .admin-show-schedule-screenshot-tbody-td-button{
+    width: 10px;
+  }
+
   
