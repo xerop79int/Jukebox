@@ -21,7 +21,7 @@ const ShowSchedule = () => {
 
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [showList, setShowList] = useState<Show[]>([]);
-    const myTableRef: MutableRefObject<HTMLTableElement | null> = useRef(null);
+    const myTableRef: MutableRefObject<HTMLTableSectionElement | null> = useRef(null);
     useEffect(() => {
 
         let URL = `http://${backendURL}/show?future=true`
@@ -156,6 +156,15 @@ const ShowSchedule = () => {
             })
         })
 
+        checkedShows.forEach(show => {
+            // remove the start and stop buttons
+            const button = show.querySelector<HTMLButtonElement>('#start-button');
+            if(button)
+                button.style.display = 'none';
+        }
+        )
+
+
         // Capture all the canvases, each with a different part of the page
         let headingcanvas = await html2canvas(heading, { scrollY: -window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  });
 
@@ -173,15 +182,15 @@ const ShowSchedule = () => {
 
 
         combinedCanvas.width = myTableRef.current?.offsetWidth as number;
-        combinedCanvas.height = myTableRef.current?.offsetHeight as number;
+        combinedCanvas.height = myTableRef.current?.offsetHeight as number + headingcanvas.height;
 
         // Draw each captured canvas onto the combined canvas
         let yOffset = 0;
-        ctx?.drawImage(headingcanvas, 120, yOffset);
+        ctx?.drawImage(headingcanvas, 0, yOffset);
         yOffset += headingcanvas.height;
         canvases.forEach((canvas) => {
             if (ctx) {
-                ctx.drawImage(canvas, 120, yOffset);
+                ctx.drawImage(canvas, 0, yOffset);
                 yOffset += canvas.height;
             }
         });
@@ -215,6 +224,14 @@ const ShowSchedule = () => {
                 p.style.color = '#8f8d8d';
             })
         })
+
+        checkedShows.forEach(show => {
+            // remove the start and stop buttons
+            const button = show.querySelector<HTMLButtonElement>('#start-button');
+            if(button)
+                button.style.display = 'block';
+        }
+        )
     }
 
     const handleSelectAll = () => {
@@ -253,7 +270,7 @@ const ShowSchedule = () => {
                         <button onClick={handlePastShow} className='admin-show-schedule-input-button past-show'>Past</button>
                         <button onClick={handleFutureShow} className='admin-show-schedule-input-button future-show'>Future</button>
                     </div>
-                    <table className='admin-show-schedule-screenshot-heading' ref={myTableRef}>
+                    <table className='admin-show-schedule-screenshot-heading' >
                         <thead>
                             <tr className='admin-show-schedule-screenshot-heading-tr'>
                                 <th><input type="checkbox" className='show-schedule-classbox' onClick={handleSelectAll} /></th>
@@ -267,7 +284,7 @@ const ShowSchedule = () => {
                             </tr>
                         </thead>
                         {/* <div ref={containerRef}> */}
-                        <tbody className='admin-show-container' >
+                        <tbody className='admin-show-container' ref={myTableRef}>
                             {showList.map((show, index) => {
                             return(
                                 <tr key={show.id} id='shows'
