@@ -21,7 +21,7 @@ const ShowSchedule = () => {
 
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [showList, setShowList] = useState<Show[]>([]);
-    const myTableRef: MutableRefObject<HTMLTableSectionElement | null> = useRef(null);
+    const myTableRef: MutableRefObject<HTMLTableElement | null> = useRef(null);
     useEffect(() => {
 
         let URL = `http://${backendURL}/show?future=true`
@@ -127,9 +127,14 @@ const ShowSchedule = () => {
 
     const handlePNG = async () => {
 
+        // get the container element
+        if (myTableRef.current === null) {
+            return;
+        }
+
         // get al the admin-show-schedule-details-container elements and filter out the ones that are checked
         const showScheduleDetailsContainer = document.querySelectorAll('#shows') as NodeListOf<HTMLInputElement>;
-        const container = document.querySelector('.admin-show-container') as HTMLTableElement;
+        // const container = document.querySelector('.admin-show-container') as HTMLTableElement;
         const heading = document.querySelector('.admin-show-schedule-screenshot-heading-tr') as HTMLTableElement;
         console.log(showScheduleDetailsContainer)
         const checkedShows = Array.from(showScheduleDetailsContainer).filter(show => {
@@ -167,8 +172,8 @@ const ShowSchedule = () => {
         // get the width and height of the combined canvas
 
 
-        combinedCanvas.width = container.offsetWidth;
-        combinedCanvas.height = container.offsetHeight + heading.offsetHeight;
+        combinedCanvas.width = myTableRef.current?.offsetWidth as number;
+        combinedCanvas.height = myTableRef.current?.offsetHeight as number;
 
         // Draw each captured canvas onto the combined canvas
         let yOffset = 0;
@@ -248,7 +253,7 @@ const ShowSchedule = () => {
                         <button onClick={handlePastShow} className='admin-show-schedule-input-button past-show'>Past</button>
                         <button onClick={handleFutureShow} className='admin-show-schedule-input-button future-show'>Future</button>
                     </div>
-                    <table className='admin-show-schedule-screenshot-heading'>
+                    <table className='admin-show-schedule-screenshot-heading' ref={myTableRef}>
                         <thead>
                             <tr className='admin-show-schedule-screenshot-heading-tr'>
                                 <th><input type="checkbox" className='show-schedule-classbox' onClick={handleSelectAll} /></th>
@@ -262,7 +267,7 @@ const ShowSchedule = () => {
                             </tr>
                         </thead>
                         {/* <div ref={containerRef}> */}
-                        <tbody className='admin-show-container' ref={myTableRef}>
+                        <tbody className='admin-show-container' >
                             {showList.map((show, index) => {
                             return(
                                 <tr key={show.id} id='shows'
