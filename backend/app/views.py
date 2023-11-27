@@ -225,9 +225,11 @@ class ManagerShowView(APIView):
         show_venue = req.data.get('show_venue')
         sets = req.data.get('sets')
 
-        day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
         show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-        formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+        suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+                ]
+        formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
         show_name = f"{show_venue} - {formatted_date}"
         
         show_venue = Venue.objects.get(name=show_venue)
@@ -315,9 +317,11 @@ class ManagerShowView(APIView):
                     song = SongsInSet(number=song.number, set=new_set, song=song.song, is_locked=song.is_locked)
                     song.save()
             
-            day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
             show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-            formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+            suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+                ]
+            formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
             show_name = f"{show_venue.name} - {formatted_date}"
 
             show.name = show_name     
@@ -347,8 +351,10 @@ class ManagerShowView(APIView):
         past = req.GET.get('past')
         if show:
             show = Show.objects.get(id=show)
-            day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
-            formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+            suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+                ]
+            formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
             sets = Sets.objects.filter(show=show)
             sets_data = []
             for set in sets:
@@ -379,8 +385,11 @@ class ManagerShowView(APIView):
             data = []
             
             for show in shows:
-                day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
-                formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+
+                suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+                ]
+                formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
                 check = show.is_selected
                 data.append({
                     'id': show.id,
