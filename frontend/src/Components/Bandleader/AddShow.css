@@ -150,7 +150,8 @@
 
   .admin-day-date-format{
     width: 95%;
-    font-size: 1.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
     color: #8f8d8d;
     margin-top: 5px;
     margin-right: 5px;
@@ -170,7 +171,8 @@
 
   .admin-show-city-state-container p{
     width: 100%;
-    font-size: 1.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
     color: #8f8d8d;
     margin-top: 5px;
     margin-right: 5px;
@@ -178,6 +180,9 @@
     border: 1px solid #303030;
     background-color: #303030;
     padding: 3px;
+  }
+  .admin-show-state{
+    max-width: 25%;
   }
 
 

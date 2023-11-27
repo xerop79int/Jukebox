@@ -298,7 +298,7 @@ const Show = () => {
                     <p className='admin-day-date-format' id='admin-day-date-format'>Date</p>
                     <div className='admin-show-city-state-container'>
                         <p id='admin-show-city'>City</p>
-                        <p id='admin-show-state'>State</p>
+                        <p className='admin-show-state' id='admin-show-state'>State</p>
                     </div>
 
                     <label className="admin-show-input-label">Start Time</label>
@@ -558,7 +558,7 @@ const Show = () => {
                     <p className='admin-day-date-format' id='admin-day-date-format-update'>Date</p>
                     <div className='admin-show-city-state-container'>
                         <p id='admin-show-city-update'>City</p>
-                        <p id='admin-show-state-update'>State</p>
+                        <p className='admin-show-state' id='admin-show-state-update'>State</p>
                     </div>
 
                     <label className="admin-show-input-label">Start Time</label>

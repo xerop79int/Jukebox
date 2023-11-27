@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, MutableRefObject } from 'react';
 import './AddShowSchedule.css'
 import axios from 'axios';
 import NavbarAdminPortal from './NavbarAdminPortal';
@@ -21,7 +21,7 @@ const ShowSchedule = () => {
 
     const [backendURL, setBackendURL] = useState<string>(((window.location.href).split("/")[2]).split(":")[0] + ":5000");
     const [showList, setShowList] = useState<Show[]>([]);
-    const containerRef = useRef<HTMLDivElement | null>(null);
+    const myTableRef: MutableRefObject<HTMLTableSectionElement | null> = useRef(null);
     useEffect(() => {
 
         let URL = `http://${backendURL}/show?future=true`
@@ -213,7 +213,6 @@ const ShowSchedule = () => {
     }
 
     const handleSelectAll = () => {
-        console.log('select all')
         const showScheduleDetailsContainer = document.querySelectorAll('#shows') as NodeListOf<HTMLInputElement>;
         const checkbox = document.querySelector<HTMLInputElement>('.show-schedule-classbox');
         if(checkbox?.checked)
@@ -263,7 +262,7 @@ const ShowSchedule = () => {
                             </tr>
                         </thead>
                         {/* <div ref={containerRef}> */}
-                        <tbody className='admin-show-container'>
+                        <tbody className='admin-show-container' ref={myTableRef}>
                             {showList.map((show, index) => {
                             return(
                                 <tr key={show.id} id='shows'
@@ -298,26 +297,9 @@ const ShowSchedule = () => {
                             )
                         })}
                             </tbody>
-                        {/* </div> */}
+
                     </table>
-                    {/* <div>
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        <input type="checkbox" className='show-schedule-classbox' />
-                        
-                    </div> */}
-                    {/* <div >
-                        
-                        <div >
-                            
-                            
-                        </div>
-                        
-                    </div> */}
+                    
                     <div className='admin-show-schedule-publish-button-container'>
                         <button onClick={handlePNG} className='admin-show-schedule-publish-Button'>Publish as .png</button>
                         {/* <button className='admin-show-schedule-publish-Button'>Publish to Email List</button>
