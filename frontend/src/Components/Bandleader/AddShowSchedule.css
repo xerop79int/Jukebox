@@ -191,9 +191,15 @@
     width: 20% !important;
     padding-right: 0.2rem;
   }
+  .admin-show-schedule-screenshot-tbody-td p{
+    padding-left: 0.2rem;
+  }
 
   .admin-show-schedule-screenshot-tbody-td-sub{
     padding-right: 0.2rem;
+  }
+  .admin-show-schedule-screenshot-tbody-td-sub p{
+    padding-left: 0.2rem;
   }
   .admin-show-schedule-screenshot-tbody-td-button{
     width: 10px;

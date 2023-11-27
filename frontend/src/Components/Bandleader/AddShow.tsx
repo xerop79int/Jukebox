@@ -265,7 +265,7 @@ const Show = () => {
             : "";
             
             const date_obj = document.getElementById('admin-day-date-format') as HTMLInputElement
-            date_obj.textContent = `${dayOfWeek} ${month_short} ${day}${suffix}, ${year}`
+            date_obj.textContent = `${dayOfWeek} ${month_short} ${parseInt(day)}${suffix}, ${year}`
         
         }
     }

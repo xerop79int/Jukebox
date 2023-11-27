@@ -212,6 +212,28 @@ const ShowSchedule = () => {
         })
     }
 
+    const handleSelectAll = () => {
+        console.log('select all')
+        const showScheduleDetailsContainer = document.querySelectorAll('#shows') as NodeListOf<HTMLInputElement>;
+        const checkbox = document.querySelector<HTMLInputElement>('.show-schedule-classbox');
+        if(checkbox?.checked)
+        {
+            showScheduleDetailsContainer.forEach(show => {
+                const checkbox = show.querySelector<HTMLInputElement>('.show-schedule-classbox');
+                if(checkbox)
+                    checkbox.checked = true;
+            })
+        }
+        else
+        {
+            showScheduleDetailsContainer.forEach(show => {
+                const checkbox = show.querySelector<HTMLInputElement>('.show-schedule-classbox');
+                if(checkbox)
+                    checkbox.checked = false;
+            })
+        }
+    }
+
 
 
 
@@ -230,7 +252,7 @@ const ShowSchedule = () => {
                     <table className='admin-show-schedule-screenshot-heading'>
                         <thead>
                             <tr className='admin-show-schedule-screenshot-heading-tr'>
-                                <th></th>
+                                <th><input type="checkbox" className='show-schedule-classbox' onClick={handleSelectAll} /></th>
                                 <th>Venue</th>
                                 <th>Date</th>
                                 <th>City</th>
@@ -263,10 +285,10 @@ const ShowSchedule = () => {
                                         <p className='show-schedule-sub-p'>{show.state}</p>
                                     </td>
                                     <td className='admin-show-schedule-screenshot-tbody-td-sub'>
-                                    <p className='show-schedule-sub-p'>{show.start_time}</p>
+                                    <p className='show-schedule-sub-p'>{parseInt(show.start_time.split(":")[0]).toString() + ":" + show.start_time.split(":")[1]}</p>
                                     </td>
                                     <td className='admin-show-schedule-screenshot-tbody-td-sub'>
-                                        <p className='show-schedule-sub-p'>{show.end_time}</p>
+                                        <p className='show-schedule-sub-p'>{parseInt(show.end_time.split(":")[0]).toString() + ":" + show.end_time.split(":")[1]}</p>
                                     </td>
                                     <td className='admin-show-schedule-screenshot-tbody-td-button'>
                                         { show.check ? <button id='start-button' onClick={e => handleShowStop(show.id)} className='admin-show-schedule-input-button stop-button'>Stop</button> 
@@ -298,8 +320,8 @@ const ShowSchedule = () => {
                     </div> */}
                     <div className='admin-show-schedule-publish-button-container'>
                         <button onClick={handlePNG} className='admin-show-schedule-publish-Button'>Publish as .png</button>
-                        <button className='admin-show-schedule-publish-Button'>Publish to Email List</button>
-                        <button className='admin-show-schedule-publish-Button'>Publish to Facebook Post</button>
+                        {/* <button className='admin-show-schedule-publish-Button'>Publish to Email List</button>
+                        <button className='admin-show-schedule-publish-Button'>Publish to Facebook Post</button> */}
                     </div>
                 </div>
             </div>

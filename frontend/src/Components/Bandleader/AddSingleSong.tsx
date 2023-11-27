@@ -112,7 +112,7 @@ const AddSingleSong = () => {
                     <input type="text" value={songDuration} className="admin-song-request-input-song-duration" onChange={e => setSongDuration(e.target.value)} placeholder="Song Duration" />
                     <input type="text" value={songYear} className="admin-song-request-input-song-year" onChange={e => setSongYear(e.target.value)} placeholder="Song Year" />
                     <div className="admin-song-request-input-song-cover">
-                        <label>Song Cover : </label>
+                        <label>Album Cover : </label>
                         <input type="file" onChange={e => setSongCover(e.target.files?.[0] || null)} id="admin-song-request-input-song-cover"/ >
                     </div>
                     <input type="text" value={songCortes} className="admin-song-request-input-song-cortes" onChange={e => setSongCortes(e.target.value)} placeholder="Keys" />
@@ -126,7 +126,7 @@ const AddSingleSong = () => {
             </div>
         </div>
         <div className="admin-song-request-input-form-submit">
-            <input type='submit' className="admin-song-request-input-song-submit" onClick={handleSongSubmit} placeholder="Submit" />
+            <input type='submit' className="admin-song-request-input-song-submit" onClick={handleSongSubmit} />
         </div>
     </div>
     )

@@ -227,12 +227,10 @@ class ManagerShowView(APIView):
 
         day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
         show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-        formatted_date = show_date_obj.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+        formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
         show_name = f"{show_venue} - {formatted_date}"
         
         show_venue = Venue.objects.get(name=show_venue)
-
-        # show_date = datetime.strptime(show_date, '%m-%d-%Y').strftime('%Y-%m-%d')
 
         show = Show(name=show_name, date=show_date, start_time=show_start_time, end_time=show_end_time, facebook_event=show_facebook, venue=show_venue)
         show.save()
@@ -319,7 +317,7 @@ class ManagerShowView(APIView):
             
             day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
             show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-            formatted_date = show_date_obj.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
+            formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show_date_obj.day])
             show_name = f"{show_venue.name} - {formatted_date}"
 
             show.name = show_name     
@@ -350,7 +348,7 @@ class ManagerShowView(APIView):
         if show:
             show = Show.objects.get(id=show)
             day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
-            formatted_date = show.date.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+            formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
             sets = Sets.objects.filter(show=show)
             sets_data = []
             for set in sets:
@@ -382,7 +380,7 @@ class ManagerShowView(APIView):
             
             for show in shows:
                 day_suffixes = ['th', 'st', 'nd', 'rd'] + ['th'] * 16 + ['st', 'nd', 'rd'] + ['th'] * 7 + ['st']
-                formatted_date = show.date.strftime("%A %h %d{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
+                formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=day_suffixes[show.date.day])
                 check = show.is_selected
                 data.append({
                     'id': show.id,
@@ -1017,7 +1015,7 @@ class ManagerSetsView(APIView):
             name = req.data.get('name') + str(count + 1)
             sets = Sets(Setname=name)
             sets.save()
-            return Response({'success': 'Major Set created successfully.'}, status=200)
+            return Response({'success': 'Master Set created successfully.'}, status=200)
     
     def delete(self, req):
         try:
