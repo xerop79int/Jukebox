@@ -226,8 +226,8 @@ class ManagerShowView(APIView):
         sets = req.data.get('sets')
 
         show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-        suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
-                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+        suffix = "" if show_date_obj.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show_date_obj.day > 3 and show_date_obj.day < 21) or show_date_obj.day % 10 > 3 else show_date_obj.day % 10
                 ]
         formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
         show_name = f"{show_venue} - {formatted_date}"
@@ -318,8 +318,8 @@ class ManagerShowView(APIView):
                     song.save()
             
             show_date_obj = datetime.strptime(show_date, '%Y-%m-%d')
-            suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
-                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+            suffix = "" if show_date_obj.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show_date_obj.day > 3 and show_date_obj.day < 21) or show_date_obj.day % 10 > 3 else show_date_obj.day % 10
                 ]
             formatted_date = show_date_obj.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
             show_name = f"{show_venue.name} - {formatted_date}"
