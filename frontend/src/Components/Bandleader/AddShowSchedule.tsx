@@ -181,8 +181,8 @@ const ShowSchedule = () => {
         // get the width and height of the combined canvas
 
 
-        combinedCanvas.width = myTableRef.current?.offsetWidth as number;
-        combinedCanvas.height = myTableRef.current?.offsetHeight as number + headingcanvas.height + headingcanvas.height + myTableRef.current?.offsetHeight as number;
+        combinedCanvas.width = myTableRef.current?.offsetWidth as number + myTableRef.current?.offsetWidth;
+        combinedCanvas.height = myTableRef.current?.offsetHeight as number + myTableRef.current?.offsetHeight as number;
 
         // Draw each captured canvas onto the combined canvas
         let yOffset = 0;

@@ -381,7 +381,7 @@ class ManagerShowView(APIView):
             return Response({'success': 'Show has been activated successfully.', 'show': show})
         
         if future:
-            shows = Show.objects.filter(date__gte=datetime.today())
+            shows = Show.objects.filter(date__gte=datetime.today()).order_by('date')
             data = []
             
             for show in shows:
@@ -406,7 +406,7 @@ class ManagerShowView(APIView):
             return Response({'show': data})
 
         if past:
-            shows = Show.objects.filter(date__lte=datetime.today())
+            shows = Show.objects.filter(date__lte=datetime.today()).order_by('date')
             data = []
             for show in shows:
                 data.append({
