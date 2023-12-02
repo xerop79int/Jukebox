@@ -9,11 +9,11 @@ const NavbarAdminPortal = () => {
                 <a href="/addsinglesong">Add Song</a>
                 <a href="/editsong">Edit Song</a>
                 <a href="/addvenue">Venues</a>
-                <a href="/upload">Upload Master File</a>
+                <a className='navbar-a-with-span' href="/upload">Upload <br/>Master File</a>
                 <a href="/backup">Backup</a>
                 <a href="/load">Load</a>
                 <a href="/show">Shows</a>
-                <a href="/showschedule">Show Schedule</a>
+                <a className='navbar-a-with-span' href="/showschedule">Show <br/>Schedule</a>
             </div>
             <div className="admin-song-request-nav-logout">
                 <button>

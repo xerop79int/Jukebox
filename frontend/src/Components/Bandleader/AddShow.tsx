@@ -303,6 +303,7 @@ const Show = () => {
 
                     <label className="admin-show-input-label">Start Time</label>
                     <select className="admin-show-input-field" onChange={e => setShowStartTime(e.target.value)}>
+                        <option value="">Start Time</option>
                         <option value="00:00">12:00 AM</option>
                         <option value="00:15">12:15 AM</option>
                         <option value="00:30">12:30 AM</option>
@@ -402,7 +403,8 @@ const Show = () => {
                     </select>
                     {/* <input onChange={e => setShowStartTime(e.target.value)}  placeholder='State Time' className="admin-show-input-field" type='time' step="900" /> */}
                     <label className="admin-show-input-label">End Time</label>
-                    <select className="admin-show-input-field" onChange={e => setShowEndTime(e.target.value)} >
+                    <select className="admin-show-input-field" onChange={e => setShowEndTime(e.target.value)} required>
+                        <option value="">End Time</option>
                         <option value="00:00">12:00 AM</option>
                         <option value="00:15">12:15 AM</option>
                         <option value="00:30">12:30 AM</option>
@@ -563,6 +565,7 @@ const Show = () => {
 
                     <label className="admin-show-input-label">Start Time</label>
                     <select onChange={e => setShowStartTime(e.target.value)} id='show_start_time' className="admin-show-input-field" >
+                        <option value="">Start Time</option>
                         <option value="00:00">12:00 AM</option>
                         <option value="00:15">12:15 AM</option>
                         <option value="00:30">12:30 AM</option>
@@ -662,6 +665,7 @@ const Show = () => {
                     </select>
                     <label className="admin-show-input-label">End Time</label>
                     <select onChange={e => setShowEndTime(e.target.value)} id='show_end_time' className="admin-show-input-field" >
+                        <option value="">End Time</option>
                         <option value="00:00">12:00 AM</option>
                         <option value="00:15">12:15 AM</option>
                         <option value="00:30">12:30 AM</option>
