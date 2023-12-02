@@ -166,10 +166,10 @@ const ShowSchedule = () => {
 
 
         // Capture all the canvases, each with a different part of the page
-        let headingcanvas = await html2canvas(heading, { scrollY: -window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  });
+        let headingcanvas = await html2canvas(heading, { scrollY: window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  });
 
         const canvasPromises = Array.from(checkedShows).map((div) =>
-            html2canvas(div, { scrollY: -window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  })
+            html2canvas(div, { scrollY: window.scrollY, useCORS: true,   backgroundColor: '#1c1c1c'  })
         );
 
 
@@ -194,6 +194,15 @@ const ShowSchedule = () => {
                 yOffset += canvas.height;
             }
         });
+
+        // append 10px of white space with background color to the bottom of the canvas
+        // ctx?.fillStyle = 'white';
+        if (ctx) {
+            ctx.fillStyle = '#1c1c1c';
+            ctx.fillRect(0, yOffset, combinedCanvas.width, combinedCanvas.height);
+        }
+
+    
 
         // Convert the combined canvas to a data URL
         const dataUrl = combinedCanvas.toDataURL('image/png');
