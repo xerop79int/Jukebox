@@ -409,10 +409,14 @@ class ManagerShowView(APIView):
             shows = Show.objects.filter(date__lte=datetime.today()).order_by('date')
             data = []
             for show in shows:
+                suffix = "" if show.date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (show.date.day > 3 and show.date.day < 21) or show.date.day % 10 > 3 else show.date.day % 10
+                ]
+                formatted_date = show.date.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
                 data.append({
                     'id': show.id,
                     'name': show.name,
-                    'date': show.date,
+                    'date': formatted_date,
                     'start_time': show.start_time.strftime("%I:%M %p"),
                     'end_time': show.end_time.strftime("%I:%M %p"),
                     'facebook_event': show.facebook_event,
