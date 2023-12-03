@@ -100,6 +100,18 @@ const Show = () => {
       }
 
     const handleSubmitShow = () => {
+        if (selectVenue === "" || showdate === "" || showStartTime === "" || showEndTime === ""){
+            const alert = document.querySelector('.show-alert-box') as HTMLElement;
+            const alertMessage = document.querySelector('.show-alert-message') as HTMLElement;
+            alertMessage.innerHTML = "Complete the option to add a show"
+            alert.style.display = "block";
+
+            setTimeout(function() {
+                alert.style.display = 'none';
+            }
+            , 2000);
+            return;
+        }
         const URL = `http://${backendURL}/show`
         const setList = [set1, set2, set3, set4]
         const data = {
@@ -278,6 +290,9 @@ const Show = () => {
     return(
         <div className="admin-show-main">
         <NavbarAdminPortal />
+            <div className="show-alert-box bandleader-green">
+                    <p className='show-alert-message'></p>
+            </div>
         <div className="admin-show-sub-main">
         <div className="admin-edit-delete-container">
                 <p className="admin-show-dropdown-headiung">
@@ -292,7 +307,6 @@ const Show = () => {
                             return <option key={venue.id} value={venue.name}>{venue.name}</option>
                         })}
                     </select>
-                    {/* <input onChange={e => setShowName(e.target.value)}  placeholder='Show Name' className="admin-show-input-field" /> */}
                     <input onChange={e => handleDate(e)} className="admin-show-input-field" type='date' />
                     
                     <p className='admin-day-date-format' id='admin-day-date-format'>Date</p>
@@ -401,7 +415,6 @@ const Show = () => {
                         <option value="23:30">11:30 PM</option>
                         <option value="23:45">11:45 PM</option>
                     </select>
-                    {/* <input onChange={e => setShowStartTime(e.target.value)}  placeholder='State Time' className="admin-show-input-field" type='time' step="900" /> */}
                     <label className="admin-show-input-label">End Time</label>
                     <select className="admin-show-input-field" onChange={e => setShowEndTime(e.target.value)} required>
                         <option value="">End Time</option>
@@ -502,7 +515,6 @@ const Show = () => {
                         <option value="23:30">11:30 PM</option>
                         <option value="23:45">11:45 PM</option>
                     </select>
-                    {/* <input    placeholder='State Time' className="admin-show-input-field" type='time' step="900" /> */}
                     <input onChange={e => setFacebookEventName(e.target.value)} placeholder='Facebook Event Name (Optional)' className="admin-show-input-field" />
                     <button onClick={handleSubmitShow} className="admin-show-dropdown-button">Submit</button>
                     </div>
@@ -547,12 +559,6 @@ const Show = () => {
                         <option value="">Select Show</option>
                         { showList.map((show) => {
                             return <option key={show.id} value={show.id}>{show.name}</option>
-                        })}
-                    </select>
-                    <select className="admin-show-dropdown-menu" id='venue' onChange={e => setSelectVenue(e.target.value)}>
-                        <option value="">Select Venue</option>
-                        { venuelist.map((venue) => {
-                            return <option key={venue.id} value={venue.name}>{venue.name}</option>
                         })}
                     </select>
                     <input onChange={e => setShowDate(e.target.value)} id='show_date' className="admin-show-input-field" type='date' />

@@ -199,7 +199,7 @@ const ShowSchedule = () => {
         // ctx?.fillStyle = 'white';
         if (ctx) {
             ctx.fillStyle = '#1c1c1c';
-            ctx.fillRect(0, yOffset, combinedCanvas.width, combinedCanvas.height);
+            ctx.fillRect(0, yOffset, myTableRef.current?.offsetWidth, combinedCanvas.height);
         }
 
     
