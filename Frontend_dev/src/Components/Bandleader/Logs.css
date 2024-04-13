@@ -1,0 +1,221 @@
+.admin-logs-main {
+    /* position: relative; */
+    background-color: #303030;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 100px;
+  }
+
+  .admin-logs-sub-main {
+    width: 95vw;
+    height: auto;
+    /* display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap; */
+  }
+
+  .admin-logs-input {
+    width: 100%;
+    margin-top: 2rem;
+    /* height: 45rem; */
+    background-color: #1c1c1c;
+    border-radius: 50px;
+    padding: 2rem;
+  }
+
+  .admin-logs-header {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: start;
+  }
+
+  .admin-logs-heading {
+    font-size: 2rem;
+    color: white;
+    margin-top: 5px;
+    margin-right: 10px;
+  }
+  .admin-logs-input-button {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    background-color: #606060;
+    color: white;
+    margin: 10px;
+  }
+  .admin-logs-input-button:hover {
+    cursor: pointer;
+  }
+
+  .admin-logs-screenshot-heading tbody{
+    width: 100%;
+    max-height: 5rem !important;
+  }
+  .admin-logs-details-container{
+    width: 100%;
+  }
+  .admin-logs-container::-webkit-scrollbar {
+    width: 5px;
+  }
+  .admin-logs-container::-webkit-scrollbar-track {
+    background-color: black;
+  }
+  .admin-logs-container::-webkit-scrollbar-thumb {
+    background-color: #303030;
+    border-radius: 2px;
+  }
+  .admin-logs-container::-webkit-scrollbar-thumb:hover {
+    background-color: #727272;
+  }
+
+  .admin-logs-type{
+    width: 6% !important;
+    padding-right: 0.2rem;
+    /* height: 10% !important; */
+  }
+  .admin-logs-date{
+    width: 12% !important;
+    padding-right: 0.2rem;
+  }
+
+
+  .admin-logs-details-container p {
+    width: 100%;
+    font-size: 1.5rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    /* border: 1px solid #303030; */
+    background-color: #303030;
+    /* margin-left: 10px; */
+    padding: 3px 0;
+  }
+  
+  .start-button{
+    display: block;
+    min-width: 100px;
+  }
+  .stop-button{
+    display: block;
+    min-width: 100px;
+  }
+  .geekmark {
+    background-color: black;
+}
+  .show-schedule-classbox{
+    min-width: 50px;
+    min-height: 25px;
+    cursor: pointer;
+    opacity: 0.3;
+  }
+    .show-schedule-classbox:checked{
+        opacity: 1;
+    }
+  
+  .future-show{
+    display: none;
+  }
+
+  .admin-logs-element{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-logs-element p{
+    width: 100%;
+    font-size: 1.5rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    background-color: #303030;
+    padding: 3px;
+  }
+  .show-schedule-classbox-upper{
+    min-width: 50px;
+    min-height: 30px;
+    cursor: pointer;
+    opacity: 0.3;
+  }
+  .admin-logs-element-sub{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .show-schedule-sub-p{
+    /* width: 50% !important; */
+    font-size: 1.5rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    background-color: #303030;
+  }
+  .admin-logs-publish-button-container{
+    position: absolute;
+    /* width: 100%; */
+    height: 10rem;
+    bottom: 0;
+  }
+  .admin-logs-publish-Button {
+    width: 15rem;
+    height: 3rem;
+    border-radius: 25px;
+    outline: none;
+    border: none;
+    font-weight: 500;
+    background-color: #606060;
+    color: white;
+    margin: 10px;
+  }
+
+  .admin-logs-screenshot-heading{
+    width: 100%;
+    color: white;
+    font-size: 1.2rem;
+    /* display: flex;
+    justify-content: space-between; */
+  }
+  .admin-logs-screenshot-heading-tr th{
+    text-align: left;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+    /* padding-right: 6rem; */
+  }
+
+  /* .admin-logs-screenshot-tbody-td{
+    /* width: 20% !important;
+    padding-right: 0.2rem;
+  } */
+  .admin-logs-screenshot-tbody-td p{
+    padding-left: 0.2rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  .admin-logs-screenshot-tbody-td-sub{
+    padding-right: 0.2rem;
+  }
+  .admin-logs-screenshot-tbody-td-sub p{
+    padding-left: 0.2rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  .admin-logs-screenshot-tbody-td-button{
+    width: 10px;
+  }
+
+  

@@ -1,0 +1,117 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: "Poppins", sans-serif; */
+}
+.upload{
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    background-color: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 220px;
+}
+.upload-list-heading{
+    color: lightgrey;
+    font-size: 1.7rem;
+    font-weight: 500;
+    margin-bottom: 50px;
+}
+.main-upload-div{
+    position: relative;
+    min-width: 500px;
+    width: 50%;
+    height: 300px;
+    background-color: #23242a;
+    border-radius: 10px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.fa-download{
+    color: white;
+}
+.file-select{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    text-align: center;
+    color: white;
+    font-size: 14px;
+    top: 245px;
+    cursor: pointer;
+    border: white 1px solid;
+    border-radius: 20px;
+    padding: 10px;
+    z-index: 1;
+}
+.uplaod-file-lable{
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+.uplaod-file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.uplaod-file{
+    z-index: 9;
+    height: 40px;
+    width: 100px;
+    display: inline-block;
+    border: white 1px solid;
+    border-radius: 20px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+}
+.submit-file{
+    width: 150px;
+    height: 40px;
+    margin-top: 50px;
+    margin-right: 1.2rem;
+    background-color: #727272;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 10px;
+}
+.submit-file:active{
+    opacity: 0.5;
+}
+
+
+
+.upload-alert-box {
+    display: none;
+    /* margin: 3rem auto; */
+    width: 23rem;
+    top: 8rem;
+    left: 40%;
+    position: absolute;
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 4px;
+    z-index: 9999;
+  }
+  
+  .upload-green {
+    background-color: #DFF2BF;
+    border-color: #B2D3C2;
+    color: #4F8A10;
+  }
+  
+  .upload-alert-message {
+    margin: 0;
+    /* padding-right: 30px; */
+  }
