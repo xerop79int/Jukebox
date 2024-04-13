@@ -92,7 +92,7 @@ const Upload: React.FC = () => {
                 <div className="main-upload-div">
                     <p className="file-select">Select a file(s)</p>
                     <i className="fa-solid fa-download fa-3x"></i>
-                    <label className="uplaod-file-lable">Select file(s) <br/>(Instructions: First upload the data file of the songs After they have been uploaded then upload all the PDFs)</label>
+                    <label className="uplaod-file-lable">Select file(s) <br/>Step1: Upload the master_data_file.txt for the library. <br/> Step 2: Upload the all of the pdfs.</label>
                     <input onChange={handleFileChange} type="file" multiple className="uplaod-file" required />
                 </div>
                 <div className='upload-button-container'>

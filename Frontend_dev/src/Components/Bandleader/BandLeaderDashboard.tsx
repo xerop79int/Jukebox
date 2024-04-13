@@ -251,7 +251,6 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
     .then(res => {
-      console.log (res.data)
       if(res.data.sets.length > 0)
       {
       setSets(res.data.sets);
@@ -270,7 +269,6 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
     .then(res => {
-      console.log(res.data)
       // check if the status code is 401
       if(res.data.status === 401){
         window.location.href = '/login';
@@ -296,7 +294,6 @@ const SongList: React.FC = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
         .then(res => {
-          console.log(res.data)
           setNowSong(res.data.playlist[0])
           setNextSong(res.data.playlist[1])
           if (res.data.playlist[0].lyric === null){
@@ -886,7 +883,7 @@ const SongList: React.FC = () => {
       <div className="bandleader-about">
         <div className="bandleader-about-child">
           <h1>Jukebox Cover Band System</h1>
-          <p>Version 0.8<br/>Release Date: 22/11/2023<br/> Copyright Steven Rock (c) 2023</p>
+          <p>Version 0.9<br/>Release Date: 22/11/2023<br/> Copyright Steven Rock (c) 2023</p>
         </div>
         <button className="bandleader-about-button" onClick={handleAbout}>Close</button>
       </div>
@@ -1099,7 +1096,7 @@ const SongList: React.FC = () => {
                 <div className="bandleader-song-title-queue">
                   <div className="bandleader-songtitle-queue">
                     <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>
-                    <p style={{textTransform: 'capitalize'}}>{song.song_artist} </p>
+                    <p style={{textTransform: 'capitalize', marginLeft: '2px'}}>{song.song_artist} </p>
                   </div>
                   <div className="bandleader-songdetail">
                   <h5 className="bandleader-songdetail-queue"> - {song.song_year} - {song.song_genre} </h5>
@@ -1119,7 +1116,7 @@ const SongList: React.FC = () => {
                 <div className="bandleader-song-title-queue">
                   <div className="bandleader-songtitle-queue">
                     <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>
-                    <p style={{textTransform: 'capitalize'}}>{song.song_artist} </p>
+                    <p style={{textTransform: 'capitalize', marginLeft: '2px'}}>{song.song_artist} </p>
                   </div>
                   <div className="bandleader-songdetail">
                   <h5 className="bandleader-songdetail-queue"> - {song.song_year} - {song.song_genre} </h5>
@@ -1142,8 +1139,8 @@ const SongList: React.FC = () => {
               <h3>{song.numbering}</h3>
               <div className="bandleader-song-title-queue">
                 <div className="bandleader-songtitle-queue">
-                  <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} -</h4>
-                  <p style={{textTransform: 'capitalize'}}>{song.song_artist} </p>
+                  <h4 style={{textTransform: 'capitalize'}}>{song.song_number} - {song.song_name} - </h4>
+                  <p style={{textTransform: 'capitalize', marginLeft: '2px'}}> {song.song_artist} </p>
                 </div>
                 <div className="bandleader-songdetail">
                 <h5 className="bandleader-songdetail-queue"> - {song.song_year} - {song.song_genre} </h5>

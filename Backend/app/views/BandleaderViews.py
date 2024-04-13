@@ -1,5 +1,5 @@
 from .ModuleFile import *
-#from .pdf_to_text import *
+from .pdf_to_text import *
 
 Customer_Requests = []
 class ManagerCustomerRequestView(APIView):
@@ -313,6 +313,7 @@ class ManagerUploadSongsListView(APIView):
                     data = line.strip().split(' - ')
                     try:
                         [number, name, artist, cortes, year, genre, _, bpm, _, duration, cover] = [item.strip() for item in data[:11]]
+                        print(number, name, artist, cortes, year, genre, bpm, duration, cover)
 
                         video_id = cover.split("=")[-1]
                         thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
@@ -350,7 +351,8 @@ class ManagerUploadSongsListView(APIView):
                         Response({'success': f"Successfully Uploaded {count} out of {line_count}"}, status=200)
                         
                     except Exception as e:
-                        log = Logs.objects.create(log=f"Song ID: {number}, Song Name: {name}, Error: {e}", type='Data File')
+
+                        log = Logs.objects.create(log=f"Song ID: {number}, Song Name: {name}, Error: {e}, data: {data}, line: {line}", type='Data File')
                         log.save()
                         print(e)
                         pass
@@ -1075,6 +1077,8 @@ class ManagerSongsInSetView(APIView):
                 'song_number': song.song_number,
                 'song_name': song.song_name,
                 'song_artist': song.song_artist,
+                'song_year': song.song_year,
+                'cortes': song.cortes,
                 'song_genre': song.song_genre,
                 'song_durations': song.song_durations,
                 'is_locked': song_in_set.is_locked

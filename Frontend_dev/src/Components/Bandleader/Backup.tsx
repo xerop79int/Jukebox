@@ -53,7 +53,9 @@ const Backup = () => {
                 console.log(response.data);
                 if(response.data.success){
                     let url = "http://localhost:5000/backup";
-                    axios.get(url)
+                    axios.get(url, {
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                })
                         .then((response) => {
                             if(response.data.success){
                                 const container = document.querySelector('.bandleader-backup-container') as HTMLElement;
