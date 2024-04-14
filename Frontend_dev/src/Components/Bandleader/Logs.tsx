@@ -86,7 +86,7 @@ const ShowSchedule = () => {
                             <tr className='admin-logs-screenshot-heading-tr'>
                                 <th>Type</th>
                                 <th>Date</th>
-                                <th>Log</th>
+                                <th>Description</th>
                                 <th></th>
                             </tr>
                         </thead>

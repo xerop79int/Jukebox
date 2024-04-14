@@ -322,9 +322,10 @@ class ManagerUploadSongsListView(APIView):
                         thumbnail = response.content
 
                         
-                        if BandSongsList.objects.filter(song_name=name).exists():
-                            band_song = BandSongsList.objects.get(song_name=name)
-                            band_song.song_number = number
+                        if BandSongsList.objects.filter(song_number=number).exists():
+                            print(f'exists {number}')
+                            band_song = BandSongsList.objects.get(song_number=number)
+                            band_song.song_name = name
                             band_song.song_artist = artist
                             band_song.song_genre = genre
                             band_song.song_durations = duration
