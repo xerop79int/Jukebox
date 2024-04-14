@@ -43,6 +43,34 @@ const Backup = () => {
             })
     }, [])
 
+
+    const CreateNewBackup = () => {
+        let url = "http://localhost:5000/backup";
+        axios.get(url, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+            .then((response) => {
+                if(response.data.success){
+                    const container = document.querySelector('.bandleader-backup-container') as HTMLElement;
+                    container.style.display = 'flex';
+                    const message = document.querySelector('.message') as HTMLHeadingElement;
+                    message.textContent = response.data.success
+                    const successIcon = document.querySelector('.success-icon') as HTMLElement;
+                    successIcon.style.display = 'block';
+                    const buttons = document.querySelector('.bandleader-backup-buttons') as HTMLElement;
+                    buttons.style.display = 'none';
+                    
+
+                    setTimeout(() => {
+                        window.location.href = '/addsinglesong';
+                    }, 2000);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     const handleUpdateBackup = () => {
         let url = "http://localhost:5000/backup";
 
@@ -52,30 +80,7 @@ const Backup = () => {
             .then((response) => {
                 console.log(response.data);
                 if(response.data.success){
-                    let url = "http://localhost:5000/backup";
-                    axios.get(url, {
-                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                })
-                        .then((response) => {
-                            if(response.data.success){
-                                const container = document.querySelector('.bandleader-backup-container') as HTMLElement;
-                                container.style.display = 'flex';
-                                const message = document.querySelector('.message') as HTMLHeadingElement;
-                                message.textContent = response.data.success
-                                const successIcon = document.querySelector('.success-icon') as HTMLElement;
-                                successIcon.style.display = 'block';
-                                const buttons = document.querySelector('.bandleader-backup-buttons') as HTMLElement;
-                                buttons.style.display = 'none';
-                                
-
-                                setTimeout(() => {
-                                    window.location.href = '/addsinglesong';
-                                }, 2000);
-                            }
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        })
+                    CreateNewBackup();
                 }
             })
             .catch((error) => {

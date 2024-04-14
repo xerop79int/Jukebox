@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.fdd58452.css",
-    "main.js": "/static/js/main.acf3bc05.js",
+    "main.js": "/static/js/main.acb94979.js",
     "static/media/dejavu-sans-latin-400-normal.woff": "/static/media/dejavu-sans-latin-400-normal.b76733190548c9c4da04.woff",
     "static/media/dejavu-sans-latin-400-normal.woff2": "/static/media/dejavu-sans-latin-400-normal.648e7de7118e6706b4b6.woff2",
     "index.html": "/index.html",
     "main.fdd58452.css.map": "/static/css/main.fdd58452.css.map",
-    "main.acf3bc05.js.map": "/static/js/main.acf3bc05.js.map"
+    "main.acb94979.js.map": "/static/js/main.acb94979.js.map"
   },
   "entrypoints": [
     "static/css/main.fdd58452.css",
-    "static/js/main.acf3bc05.js"
+    "static/js/main.acb94979.js"
   ]
 }
