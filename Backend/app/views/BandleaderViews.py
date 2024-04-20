@@ -1,5 +1,5 @@
 from .ModuleFile import *
-from .pdf_to_text import *
+#from .pdf_to_text import *
 
 Customer_Requests = []
 class ManagerCustomerRequestView(APIView):
@@ -310,53 +310,55 @@ class ManagerUploadSongsListView(APIView):
                 # find the number of lines in the file
                 line_count = sum(1 for line in file)
                 for line in file_content.split('\n'):
-                    data = line.strip().split(' - ')
-                    try:
-                        [number, name, artist, cortes, year, genre, _, bpm, _, duration, cover] = [item.strip() for item in data[:11]]
-                        print(number, name, artist, cortes, year, genre, bpm, duration, cover)
+                    if not line:
+                        continue
+                    else:
+                        data = line.strip().split(' - ')
+                        try:
+                            [number, name, artist, cortes, year, genre, _, bpm, _, duration, cover] = [item.strip() for item in data[:11]]
+                            print(number, name, artist, cortes, year, genre, bpm, duration, cover)
 
-                        video_id = cover.split("=")[-1]
-                        thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
-                        response = requests.get(thumbnail_url)
-                        response.raise_for_status()
-                        thumbnail = response.content
+                            video_id = cover.split("=")[-1]
+                            thumbnail_url = f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+                            response = requests.get(thumbnail_url)
+                            response.raise_for_status()
+                            thumbnail = response.content
+                            
+                            if BandSongsList.objects.filter(song_number=number).exists():
+                                print(f'exists {number}')
+                                band_song = BandSongsList.objects.get(song_number=number)
+                                band_song.song_name = name
+                                band_song.song_artist = artist
+                                band_song.song_genre = genre
+                                band_song.song_durations = duration
+                                band_song.song_year = year
+                                band_song.cortes = cortes
+                                band_song.bpm = bpm
+                                band_song.song_cover.save(f"{video_id}.jpg", ContentFile(thumbnail), save=True)
+                                band_song.save()
+                            else:
+                                band_song = BandSongsList(band_leader=band_leader, song_number=number, song_name=name, cortes=cortes, bpm=bpm, song_artist=artist, song_year=year, song_genre=genre, song_durations=duration)
+                                band_song.song_cover.save(f"{video_id}.jpg", ContentFile(thumbnail), save=True)
+                                band_song.save()
+                            count += 1
 
+                            data = {
+                                'upload': f"Successfully Uploaded {count} out of {line_count}."
+                            }
+                            
+                            async_to_sync(channel_layer.group_send)('bandleader_upload', {
+                                'type': 'sending_data_file_response',
+                                'data': data,
+                            })
+
+                            Response({'success': f"Successfully Uploaded {count} out of {line_count}"}, status=200)
                         
-                        if BandSongsList.objects.filter(song_number=number).exists():
-                            print(f'exists {number}')
-                            band_song = BandSongsList.objects.get(song_number=number)
-                            band_song.song_name = name
-                            band_song.song_artist = artist
-                            band_song.song_genre = genre
-                            band_song.song_durations = duration
-                            band_song.song_year = year
-                            band_song.cortes = cortes
-                            band_song.bpm = bpm
-                            band_song.song_cover.save(f"{video_id}.jpg", ContentFile(thumbnail), save=True)
-                            band_song.save()
-                        else:
-                            band_song = BandSongsList(band_leader=band_leader, song_number=number, song_name=name, cortes=cortes, bpm=bpm, song_artist=artist, song_year=year, song_genre=genre, song_durations=duration)
-                            band_song.song_cover.save(f"{video_id}.jpg", ContentFile(thumbnail), save=True)
-                            band_song.save()
-                        count += 1
+                        except Exception as e:
 
-                        data = {
-                            'upload': f"Successfully Uploaded {count} out of {line_count}."
-                        }
-                        
-                        async_to_sync(channel_layer.group_send)('bandleader_upload', {
-                            'type': 'sending_data_file_response',
-                            'data': data,
-                        })
-
-                        Response({'success': f"Successfully Uploaded {count} out of {line_count}"}, status=200)
-                        
-                    except Exception as e:
-
-                        log = Logs.objects.create(log=f"Song ID: {number}, Song Name: {name}, Error: {e}, data: {data}, line: {line}", type='Data File')
-                        log.save()
-                        print(e)
-                        pass
+                            log = Logs.objects.create(log=f"Song ID: {number}, Song Name: {name}, Error: {e}, data: {data}, line: {line}", type='Data File')
+                            log.save()
+                            print(e)
+                            pass
             return Response({'success': 'Successfully Uploaded files.'}, status=200)
 
         elif type == 'pdf':
@@ -396,6 +398,8 @@ class ManagerUploadSongsListView(APIView):
                                     'data': data,
                                 })
                                 log_check = False
+                            # else:
+                            #     log = Logs.objects.create(log=f"Song Name: {song.song_name}, Error: Pdf is missing.", type='PDF File')
 
                         
                         if log_check:
@@ -1457,7 +1461,7 @@ class ManagerBackupView(APIView):
         
         # check if the backup folder exists
         if(os.path.join(prev_django_dir, 'JukeBox_backup')):
-            os.system(f'rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup')}')
+            #os.system(f'rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup')}')
             #shutil.rmtree(os.path.join(prev_django_dir, 'JukeBox_backup'))
         
             return Response({'success': 'Backup deleted successfully'})
