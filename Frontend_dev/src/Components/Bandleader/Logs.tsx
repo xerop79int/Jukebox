@@ -67,6 +67,32 @@ const ShowSchedule = () => {
     }
     , [])
 
+    const handleDeleteLogs = () => {
+        let URL = `http://${backendURL}/logs`
+
+        axios.delete(URL, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            setLogs([])
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    const handleExportLogs = () => {
+        const header = document.querySelector('.admin-logs-screenshot-heading') as HTMLElement;
+        html2canvas(header, {
+            backgroundColor: "#303030",
+        }).then(function(canvas) {
+            var link = document.createElement('a');
+            link.download = 'logs.png';
+            link.href = canvas.toDataURL()
+            link.click();
+        });
+    }
+
 
 
 
@@ -104,7 +130,7 @@ const ShowSchedule = () => {
                                         <p>{log.date}</p>
                                     </td>
                                     <td className='admin-logs-screenshot-tbody-td-sub admin-logs-log'>
-                                        <p className='show-schedule-sub-p'>{log.log}</p>
+                                        <p className='logs-sub-p'>{log.log}</p>
                                     </td>
                                 </tr>
                             )
@@ -112,6 +138,13 @@ const ShowSchedule = () => {
                             </tbody>
 
                     </table>
+
+                    <div className='admin-logs-publish-button-container'>
+                        <button onClick={handleDeleteLogs} className='admin-logs-publish-Button'>Delete all logs</button>
+                        <button onClick={handleExportLogs} className='admin-logs-publish-Button'>Export logs</button>
+                        {/* <button className='admin-logs-publish-Button'>Publish to Email List</button>
+                        <button className='admin-logs-publish-Button'>Publish to Facebook Post</button> */}
+                    </div>
                 </div>
             </div>
         </div>

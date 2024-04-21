@@ -1513,3 +1513,8 @@ class ManagerLogsView(APIView):
                 'log': log.log,
             })
         return Response({'logs': data, 'success': 'Logs fetched successfully'})
+
+    def delete(self, req):
+        # delete all the logs in one go
+        Logs.objects.all().delete()
+        return Response({'success': 'Log deleted successfully'})
