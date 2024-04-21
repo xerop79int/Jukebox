@@ -1,0 +1,141 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Poppins", sans-serif; */
+}
+.backup{
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  background-color: #1c1c1c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 220px;
+}
+.backup-list-heading{
+  color: lightgrey;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+.main-backup-div{
+  position: relative;
+  min-width: 500px;
+  width: 40%;
+  height: 275px;
+  background-color: #23242a;
+  border-radius: 10px;
+  border: 1px black solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.fa-download{
+  color: white;
+}
+
+.backup-file-lable{
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-size: 30px;
+}
+/* .backup::-webkit-file-backup-button {
+  visibility: hidden;
+} */
+.backup-file{
+  z-index: 9;
+  padding: 8px;
+  height: 40px;
+  width: 500px;
+  display: inline-block;
+  border: white 1px solid;
+  border-radius: 10px;
+  background-color: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 1;
+}
+
+
+
+.backup-alert-box {
+  display: none;
+  width: 23rem;
+  top: 8rem;
+  left: 40%;
+  position: absolute;
+  padding: 20px;
+  border: 1px solid;
+  border-radius: 4px;
+  z-index: 9999;
+}
+
+.backup-green {
+  background-color: #DFF2BF;
+  border-color: #B2D3C2;
+  color: #4F8A10;
+}
+
+.backup-alert-message {
+  margin: 0;
+  /* padding-right: 30px; */
+}
+
+
+
+
+
+.bandleader-backup-container{
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(34, 34, 34, 0.5);
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+.bandleader-backup{
+  position: absolute;
+  width: 50rem;
+  height: 30rem;
+  background-color: white;
+  border-radius: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+.bandleader-backup h1{
+  color: black;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.bandleader-backup svg{
+  display: none;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+  margin-left: 170px;
+}
+
+.fa-upload{
+  color: white;
+}

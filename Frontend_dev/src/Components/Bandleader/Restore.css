@@ -1,0 +1,118 @@
+.bandleader-restore-container{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(34, 34, 34, 0.5);
+    top: 0;
+    left: 0;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+.bandleader-restore{
+    position: absolute;
+    width: 50rem;
+    height: 30rem;
+    background-color: white;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  
+  }
+  .bandleader-restore h1{
+    color: black;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .bandleader-restore svg{
+
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+    margin-left: 170px;
+  }
+
+
+
+  .restore{
+    width: 100%;
+    min-height: 100vh;
+    height: auto;
+    background-color: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 220px;
+  }
+  .restore-list-heading{
+    color: lightgrey;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 50px;
+  }
+  .main-restore-div{
+    position: relative;
+    min-width: 500px;
+    width: 40%;
+    height: 275px;
+    background-color: #23242a;
+    border-radius: 10px;
+    border: 1px black solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+  .fa-download{
+    color: white;
+  }
+  
+  .restore-file-lable{
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    font-size: 30px;
+  }
+  /* .restore::-webkit-file-restore-button {
+    visibility: hidden;
+  } */
+  .restore-file{
+    z-index: 9;
+    /* padding: 8px; */
+    /* margin-right: 12px; */
+    /* height: 40px;
+    width: 500px; */
+    display: inline-block;
+    border: white 1px solid;
+    border-radius: 10px;
+    background-color: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  .restore-data-container{
+    display: flex;
+    color: white;
+    width: 80%;
+  }
+
+  .restore-filename{
+    color: rgb(30, 173, 230);
+    /* color: rgb(131, 131, 131); */
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 20px;
+  }

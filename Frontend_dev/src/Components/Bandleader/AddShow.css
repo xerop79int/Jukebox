@@ -1,0 +1,227 @@
+.admin-show-main {
+    position: relative;
+    background-color: #303030;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 100px;
+  }
+  .admin-show-sub-main {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .admin-show-input {
+    width: 550px;
+    height: 700px;
+    background-color: #1c1c1c;
+    margin: 20px;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .admin-show-sub-input {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .admin-show-input-headiung {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin: 10px;
+  }
+  .admin-show-input-field {
+    /* background-color: #332e58; */
+    width: 450px;
+    height: 40px;
+    margin: 10px;
+    outline: none;
+    border: none;
+    background-color: #23242a;
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 5px;
+  }
+  .admin-show-input-field::placeholder {
+    color: white;
+    font-size: 1rem;
+  }
+  .admin-show-input-button {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    background-color: #606060;
+    color: white;
+    margin: 10px;
+  }
+  .admin-show-input-button:hover {
+    cursor: pointer;
+  }
+  .admin-show-input-button:active {
+    background-color: wheat;
+    color: black;
+  }
+
+  .admin-edit-delete-container{
+    width: 700px;
+    height: 600px;
+    background-color: #1c1c1c;
+    border-radius: 50px;
+    margin: 20px;
+    padding-top: 15px;
+  }
+  .admin-show-dropdown {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 100px;
+  }
+  .admin-show-sub-dropdown {
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  .admin-show-dropdown-headiung {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin: 10px;
+    text-align: center;
+  }
+  .admin-show-dropdown-menu {
+    width: 450px;
+    height: 40px;
+    margin: 10px;
+    outline: none;
+    border: none;
+    background-color: #23242a;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 5px;
+  }
+  .admin-show-dropdown-button {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-weight: 700;
+    background-color: #606060;
+    color: white;
+    margin: 10px;
+  }
+  .admin-show-dropdown-button:hover {
+    cursor: pointer;
+  }
+  .admin-show-dropdown-button:active {
+    background-color: wheat;
+    color: black;
+  }
+
+  .admin-show-input-label{
+    color: white;
+    font-weight: 700;
+  }
+
+  .admin-day-date-format{
+    width: 95%;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    border: 1px solid #303030;
+    background-color: #303030;
+    padding: 3px;
+  }
+
+  .admin-show-city-state-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 95%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .admin-show-city-state-container p{
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #8f8d8d;
+    margin-top: 5px;
+    margin-right: 5px;
+    /* margin-left: 5px; */
+    border: 1px solid #303030;
+    background-color: #303030;
+    padding: 3px;
+  }
+  .admin-show-state{
+    max-width: 25%;
+  }
+
+
+  .admin-show-dropdown-sets {
+    width: 120px;
+    height: 40px;
+    margin: 10px;
+    outline: none;
+    border: none;
+    background-color: #303030;
+    color: white;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 5px;
+  }
+
+  .show-alert-box {
+    display: none;
+    position: absolute;
+    top: 9%;
+
+    margin: 3rem auto;
+    width: 20rem;
+    /* position: relative; */
+    padding: 20px;
+    border: 1px solid;
+    border-radius: 4px;
+    z-index: 9999;
+  }
+  
+  .show-green {
+    background-color: #DFF2BF;
+    border-color: #B2D3C2;
+    color: #4F8A10;
+  }
+  
+  .show-alert-box p {
+    margin: 0;
+    /* padding-right: 30px; */
+  }
+  
