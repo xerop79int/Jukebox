@@ -1430,7 +1430,7 @@ class ManagerBackupView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, req):
-
+        name = req.GET.get('name')
         # get the directory of the django project
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
@@ -1441,14 +1441,8 @@ class ManagerBackupView(APIView):
             
             if not os.path.exists(os.path.join(prev_django_dir, 'JukeBox_backup')):
                 os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup'))
-            
-            # check if the backup folder has more any file in it
-            if len(os.listdir(os.path.join(prev_django_dir, 'JukeBox_backup'))) > 0:
-                # delete all the files in the backup folder
-                return Response({'error': 'Backup already exists.'})
-            # create a backup file with the current date and time
 
-            shutil.copyfile(django_main_directory + '/db.sqlite3', os.path.join(prev_django_dir, 'JukeBox_backup') + '/backup_' + datetime.now().strftime("%d-%m-%Y_%H-%M-%S") + '.sqlite3')
+            shutil.copyfile(django_main_directory + '/db.sqlite3', f"{os.path.join(prev_django_dir, 'JukeBox_backup')}/{name}_{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.sqlite3")
         else:
             return Response({'error': 'No database file found.'})
         return Response({'success': 'Backup created successfully'})
@@ -1456,13 +1450,14 @@ class ManagerBackupView(APIView):
     
     def delete(self, req):
         
+        filename = req.GET.get('filename')
+        
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
         
         # check if the backup folder exists
         if(os.path.join(prev_django_dir, 'JukeBox_backup')):
-            #os.system(f'rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup')}')
-            #shutil.rmtree(os.path.join(prev_django_dir, 'JukeBox_backup'))
+            #os.system(f'rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup', filename)}')
         
             return Response({'success': 'Backup deleted successfully'})
         else:
@@ -1482,13 +1477,24 @@ class ManagerRestoreView(APIView):
         if os.path.exists(os.path.join(prev_django_dir, 'JukeBox_backup')):
             # check if the backup folder has more any file in it
             if len(os.listdir(os.path.join(prev_django_dir, 'JukeBox_backup'))) > 0:
-                # delete all the files in the backup folder
-                restore_file = os.path.join(restore_dir, os.listdir(restore_dir)[0])
-                shutil.copyfile(restore_file, django_main_directory + '/db.sqlite3')
+                # get all the files in the backup folder
+                restore_files = os.listdir(restore_dir)
+                # restore_files = os.path.join(restore_dir, os.listdir(restore_dir))
+                return Response({'restore_files': restore_files})
+                # shutil.copyfile(restore_file, django_main_directory + '/db.sqlite3')
             else:
                 return Response({'error': 'No backup file found.'})
         else:
             return Response({'error': 'No backup file found.'})
+
+    def post(self, req):
+
+        file_name = req.data.get('restore_file')
+        django_main_directory = str(settings.BASE_DIR)
+        prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
+        restore_dir = os.path.join(prev_django_dir, 'JukeBox_backup')
+        shutil.copyfile(f"{restore_dir}/{file_name}", django_main_directory + '/db.sqlite3')
+
         return Response({'success': 'Backup restored successfully'})
 
 class ManagerLogsView(APIView):
