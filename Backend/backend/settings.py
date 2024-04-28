@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import socket
+from datetime import timedelta
 
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -52,15 +53,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'app',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ROTATE_REFRESH_TOKENS': False,
 }
 
 MIDDLEWARE = [
@@ -190,7 +198,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-TOKEN_COOKIE_NAME = 'Token'
-TOKEN_COOKIE_AGE = 60 * 60 * 24 * 7
+# TOKEN_COOKIE_NAME = 'Token'
+# TOKEN_COOKIE_AGE = 60 * 60 * 24 * 7
 
 DATA_UPLOAD_MAX_NUMBER_FILES = 5000
+
+ASYNCIO_TASK_KILL_SECONDS = 3600

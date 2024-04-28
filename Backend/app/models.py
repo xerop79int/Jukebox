@@ -122,3 +122,11 @@ class Playlist(models.Model):
 
 class ShowStatus(models.Model):
     has_show_started = models.BooleanField(default=False)
+
+class Logs(models.Model):
+    log = models.TextField()
+    type = models.CharField(max_length=200, null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.log

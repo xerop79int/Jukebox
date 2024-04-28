@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import *
+from app.views import *
 
 urlpatterns = [
     path('login', ManagerSigninView.as_view()),
@@ -20,4 +20,5 @@ urlpatterns = [
     path('displaymetronome', ManagerDisplayMetronomeView.as_view()),
     path('backup', ManagerBackupView.as_view()),
     path('restore', ManagerRestoreView.as_view()),
+    path('logs', ManagerLogsView.as_view()),
 ]

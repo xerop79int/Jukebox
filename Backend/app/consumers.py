@@ -23,6 +23,29 @@ class BandLeaderConsumer(AsyncWebsocketConsumer):
         # Send data to the group
         data = event['data']
         await self.send(text_data=json.dumps(data))
+    
+    async def sending_data_file_response(self, event):
+        data =  event['data']
+        await self.send(text_data=json.dumps(data))
+
+class BandLeaderUploadConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        # Join the group for the consumer
+        await self.channel_layer.group_add('bandleader_upload', self.channel_name)
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Leave the group when the WebSocket connection is closed
+        await self.channel_layer.group_discard('bandleader_upload', self.channel_name)
+
+    async def receive(self, text_data):
+        print(text_data)
+        pass
+    
+    async def sending_data_file_response(self, event):
+        data =  event['data']
+        await self.send(text_data=json.dumps(data))
+
 
 class BandMemberConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -86,3 +109,4 @@ class CustomerConsumer(AsyncWebsocketConsumer):
     async def send_playlist(self, event):
         playlist = {'playlist': event['playlist']}
         await self.send(text_data=json.dumps(playlist))
+    
