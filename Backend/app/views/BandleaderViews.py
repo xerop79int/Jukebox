@@ -1450,7 +1450,7 @@ class ManagerBackupView(APIView):
     
     def delete(self, req):
         
-        filename = req.GET.get('filename')
+        filename = req.GET.get('file')
         
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
