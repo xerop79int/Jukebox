@@ -16,7 +16,9 @@ const Restore = () => {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
             .then((response) => {
-                setFiles(response.data.restore_files);
+                if(response.data.restore_files){
+                    setFiles(response.data.restore_files);
+                }
                 // const container = document.querySelector('.bandleader-restore-container') as HTMLElement;
                 // container.style.display = 'flex';
                 // const message = document.querySelector('.message') as HTMLHeadingElement;
