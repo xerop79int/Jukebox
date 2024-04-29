@@ -883,7 +883,7 @@ const SongList: React.FC = () => {
       <div className="bandleader-about">
         <div className="bandleader-about-child">
           <h1>Jukebox Cover Band System</h1>
-          <p>Version 0.9<br/>Release Date: 22/11/2023<br/> Copyright Steven Rock (c) 2023</p>
+          <p>Version 0.10<br/>Release Date: 22/11/2023<br/> Copyright Steven Rock (c) 2023</p>
         </div>
         <button className="bandleader-about-button" onClick={handleAbout}>Close</button>
       </div>

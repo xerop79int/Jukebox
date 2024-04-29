@@ -120,7 +120,7 @@ const Restore = () => {
                 <p className="restore-list-heading">Load Library</p>
                 <div className="main-restore-div">
                     <i className="fa-solid fa-download fa-3x"></i>
-                    <label className="restore-file-lable">Choice the Backup to Load</label>
+                    <label className="restore-file-lable">Choose the Library to Load</label>
                     {files.map((file) => {
                         const fileString = JSON.stringify(file);
                         const filename = fileString.slice(1, -1);
