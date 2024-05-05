@@ -1,5 +1,5 @@
 from .ModuleFile import *
-#from .pdf_to_text import *
+from .pdf_to_text import *
 
 Customer_Requests = []
 class ManagerCustomerRequestView(APIView):
