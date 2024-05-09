@@ -1431,18 +1431,26 @@ class ManagerBackupView(APIView):
 
     def get(self, req):
         name = req.GET.get('name')
+        name = f"{name}_{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}"
         # get the directory of the django project
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
 
         # check if the db.sqlite3 file exists
         if os.path.isfile(django_main_directory + '/db.sqlite3'):
-            # create a backup folder if it does not exist
             
             if not os.path.exists(os.path.join(prev_django_dir, 'JukeBox_backup')):
                 os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup'))
+            
+            os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup', name))
+            if os.path.exists(os.path.join(django_main_directory, 'media')):
+                shutil.copytree(django_main_directory + '/media', f"{os.path.join(prev_django_dir, 'JukeBox_backup', name)}/media")
+                shutil.copyfile(django_main_directory + '/db.sqlite3', f"{os.path.join(prev_django_dir, 'JukeBox_backup', name)}/{name}.sqlite3")
 
-            shutil.copyfile(django_main_directory + '/db.sqlite3', f"{os.path.join(prev_django_dir, 'JukeBox_backup')}/{name}_{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.sqlite3")
+            # # if os.path.exists(os.path.join(django_main_directory, 'media')):
+            # #     shutil.copytree(django_main_directory + '/media', f"{os.path.join(prev_django_dir, 'JukeBox_backup')}/media")
+
+            # shutil.copyfile(django_main_directory + '/db.sqlite3', f"{os.path.join(prev_django_dir, 'JukeBox_backup')}/{name}_{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.sqlite3")
         else:
             return Response({'error': 'No database file found.'})
         return Response({'success': 'Backup created successfully'})
@@ -1492,8 +1500,13 @@ class ManagerRestoreView(APIView):
         file_name = req.data.get('restore_file')
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))
-        restore_dir = os.path.join(prev_django_dir, 'JukeBox_backup')
-        shutil.copyfile(f"{restore_dir}/{file_name}", django_main_directory + '/db.sqlite3')
+
+        restore_dir = os.path.join(prev_django_dir, 'JukeBox_backup', file_name)
+
+        file = os.path.join(restore_dir, f"{file_name}.sqlite3")
+        shutil.copyfile(file, django_main_directory + '/db.sqlite3')
+        shutil.rmtree(django_main_directory + '/media')
+        shutil.copytree(f"{restore_dir}/media", django_main_directory + '/media')
 
         return Response({'success': 'Backup restored successfully'})
 
