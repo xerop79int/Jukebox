@@ -82,15 +82,17 @@ const ShowSchedule = () => {
     }
 
     const handleExportLogs = () => {
-        const header = document.querySelector('.admin-logs-screenshot-heading') as HTMLElement;
-        html2canvas(header, {
-            backgroundColor: "#303030",
-        }).then(function(canvas) {
-            var link = document.createElement('a');
-            link.download = 'logs.png';
-            link.href = canvas.toDataURL()
-            link.click();
-        });
+
+        let logsString = ''
+        logs.forEach(log => {
+            logsString += `${log.type} ${log.date.replace(' ', "_")} ${log.log}\n`
+        })
+        const element = document.createElement("a");
+        const file = new Blob([logsString], {type: 'text/plain'});
+        element.href = URL.createObjectURL(file);
+        element.download = "logs.txt";
+        document.body.appendChild(element); // Required for this to work in FireFox
+        element.click();
     }
 
 
