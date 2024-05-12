@@ -1430,7 +1430,7 @@ class ManagerBackupView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, req):
-        name = req.GET.get('name')
+        name = req.GET.get('name').replace(' ', '_')
         name = f"{name}_{datetime.now().strftime('%m-%d-%Y-%H-%M-%S')}"
         # get the directory of the django project
         django_main_directory = str(settings.BASE_DIR)
