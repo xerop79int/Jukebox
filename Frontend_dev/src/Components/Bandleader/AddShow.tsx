@@ -258,17 +258,16 @@ const Show = () => {
     const handleDate = (e: any) => {
         setShowDate(e.target.value)
         const date = e.target.value
-        console.log(date);
         const [year, month, day] = date.split('-');
         const isDateValid = !isNaN(Date.parse(`${year}-${month}-${day}`));
         console.log(isDateValid);
         if (isDateValid) {      
-            console.log('valid date');
             const date_data = new Date(date);
             const dayOfMonth = date_data.getDate();
 
             const month_short = date_data.toLocaleString('default', { month: 'short' });
-            const dayOfWeek = date_data.toLocaleString('default', { weekday: 'long' });
+            // const options = { weekday: 'long', month: 'short', timeZone: 'UTC' };
+            const dayOfWeek = date_data.toLocaleString('en-US');
 
             let suffix = dayOfMonth > 0
             ? ["th", "st", "nd", "rd"][
