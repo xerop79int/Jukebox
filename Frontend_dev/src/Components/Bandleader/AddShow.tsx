@@ -266,8 +266,7 @@ const Show = () => {
             const dayOfMonth = date_data.getDate();
 
             const month_short = date_data.toLocaleString('default', { month: 'short' });
-            // const options = { weekday: 'long', month: 'short', timeZone: 'UTC' };
-            const dayOfWeek = date_data.toLocaleString('en-US');
+            const dayOfWeek = date_data.toLocaleString('en-US', { weekday: 'long' });
 
             let suffix = dayOfMonth > 0
             ? ["th", "st", "nd", "rd"][
