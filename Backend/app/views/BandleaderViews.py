@@ -1,5 +1,5 @@
 from .ModuleFile import *
-from .pdf_to_text import *
+#from .pdf_to_text import *
 
 Customer_Requests = []
 class ManagerCustomerRequestView(APIView):
@@ -1431,7 +1431,7 @@ class ManagerBackupView(APIView):
 
     def get(self, req):
         name = req.GET.get('name')
-        name = f"{name}_{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}"
+        name = f"{name}_{datetime.now().strftime('%m-%d-%Y-%H-%M-%S')}"
         # get the directory of the django project
         django_main_directory = str(settings.BASE_DIR)
         prev_django_dir = os.path.abspath(os.path.join(django_main_directory, os.pardir))

@@ -170,26 +170,26 @@ const Show = () => {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
         .then(res => {
-            console.log(res.data.show)
+            // console.log(res.data.show)
             const show_date = document.getElementById('show_date') as HTMLInputElement
             const show_start_time = document.getElementById('show_start_time') as HTMLInputElement
             const show_end_time = document.getElementById('show_end_time') as HTMLInputElement
             const facebook_event_name = document.getElementById('facebook_event_name') as HTMLInputElement
-            const venue = document.getElementById('venue') as HTMLInputElement
             const city = document.getElementById('admin-show-city-update') as HTMLInputElement
             const state = document.getElementById('admin-show-state-update') as HTMLInputElement
             const date = document.getElementById('admin-day-date-format-update') as HTMLInputElement
             const sets = document.querySelectorAll('#sets') as NodeListOf<HTMLInputElement>;
             
+            console.log(res.data.show)
 
             show_date.value = res.data.show.date
             show_start_time.value = res.data.show.start_time
             show_end_time.value = res.data.show.end_time
             facebook_event_name.value = res.data.show.facebook_event_name
-            venue.value = res.data.show.venue.name
             city.textContent = res.data.show.venue.city
             state.textContent = res.data.show.venue.state
             date.textContent = res.data.show.formatted_date
+
 
 
             let i = 0
