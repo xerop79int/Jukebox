@@ -1,0 +1,63 @@
+{
+  "ignition": {
+    "version": "3.2.0"
+  },
+  "storage": {
+    "files": [
+      {
+        "path": "/etc/systemd/system/docker-compose.service",
+        "contents": {
+          "source": "data:,W1VuaXRdDQpEZXNjcmlwdGlvbj1Eb2NrZXIgQ29tcG9zZSBBcHBsaWNhdGlvbiBTZXJ2aWNlDQpSZXF1aXJlcz1kb2NrZXIuc2VydmljZQ0KQWZ0ZXI9ZG9ja2VyLnNlcnZpY2UNCg0KW1NlcnZpY2VdDQpXb3JraW5nRGlyZWN0b3J5PS9vcHQvbXlfcHJvamVjdA0KRXhlY1N0YXJ0PS91c3IvbG9jYWwvYmluL2RvY2tlci1jb21wb3NlIHVwIC0tYnVpbGQNCkV4ZWNTdG9wPWJpbmQNCg0KW0luc3RhbGxdDQpXYW50ZWRCeT1tdWx0aS11c2VyLnRhcmdldA==",
+          "verification": {}
+        },
+        "mode": 420,
+        "user": {
+          "name": "root"
+        },
+        "group": {
+          "name": "root"
+        }
+      },
+      {
+        "path": "/opt/JukeBox/setup.sh",
+        "contents": {
+          "source": "data:;base64,IyEvYmluL2Jhc2gKCmluc3RhbGwgcGFja2FnZXMKcnBtLW9zdHJlIGluc3RhbGwga2l0IHB5dGhvbjMKCiMgRW5hYmxlIGFuZCBzdGFydCBEb2NrZXIgc2VydmljZQpzeXN0ZW1jdGwgZW5hYmxlIC0tbm93IGRvY2tlcgoKIyBJbnN0YWxsIERvY2tlciBDb21wb3NlCmN1cmwgLUwgImh0dHBzOi8vZ2l0aHViLmNvbS9kb2NrZXIvY29tcG9zZS9yZWxlYXNlcy9kb3dubG9hZC92Mi4zLjMvZG9ja2VyLWNvbXBvc2UtJCh1bmFtZSAtcyktJCh1bmFtZSAtbSkiIC1vIC91c3IvbG9jYWwvYmluL2RvY2tlci1jb21wb3NlCmNobW9kICt4IC91c3IvbG9jYWwvYmluL2RvY2tlci1jb21wb3NlCgojIENsb25lIHRoZSByZXBvc2l0b3J5CmdpdCBjbG9uZSBodHRwczovL2dpdGh1Yi5jb20veGVyb3A3OkludC9KdWtlYm94LmdpdCAvb3B0L215X3Byb2plY3QvSnVrZWJveAoKIyBDaGFuZ2UgZGlyZWN0b3J5IHRvIHRoZSBjbG9uZWQgcmVwb3NpdG9yeQpjZCAvb3B0L215X3Byb2plY3QvSnVrZWJveAoKIyBSdW4gdGhlIGluc3RhbGwucHkgc2NyaXB0CnB5dGhvbiBzZXJ2aWNlIGluc3RhbGwKCiMgTW92ZSB0aGUgZG9ja2VyLWNvbXBvc2UueW1sIGZpbGUgdG8gdGhlIGNvcnJlY3QgbG9jYXRpb24gaWYgbmVjZXNzYXJ5Cm1zdm5kb2NrZXJjb21wb3NlLnltbCAvb3B0L215X3Byb2plY3QvZG9ja2VyLWNvbXBvc2UueW1sCgojIFN0YXJ0IHRoZSBkb2NrZXItY29tcG9zZSBzZXJ2aWNlCnN5c3RlbWN0bCBzdGFydCAtLWxvZyBkb2NrZXItY29tcG9zZSBzZXJ2aWNlCmNhdCBzZXR1cC5zaCkgfCB4Y2xpcCAtc2VsZWN0aW9uIGNsaXBib2FyZA==",
+          "verification": {}
+        },
+        "mode": 493,
+        "user": {
+          "name": "root"
+        },
+        "group": {
+          "name": "root"
+        }
+      }
+    ],
+    "directories": [
+      {
+        "path": "/opt/JukeBox",
+        "mode": 493,
+        "user": {
+          "name": "root"
+        },
+        "group": {
+          "name": "root"
+        }
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "name": "docker-compose.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Docker Compose Application Service\nRequires=docker.service\nAfter=docker.service\n\n[Service]\nWorkingDirectory=/opt/my_project\nExecStart=/usr/local/bin/docker-compose up --build\nExecStop=/usr/local/bin/docker-compose down\n\n[Install]\nWantedBy=multi-user.target"
+      },
+      {
+        "name": "setup.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Setup Jukebox\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=oneshot\nExecStart=/opt/my_project/setup.sh\n\n[Install]\nWantedBy=multi-user.target"
+      }
+    ]
+  }
+}
