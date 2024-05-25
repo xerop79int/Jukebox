@@ -21,4 +21,5 @@ urlpatterns = [
     path('backup', ManagerBackupView.as_view()),
     path('restore', ManagerRestoreView.as_view()),
     path('logs', ManagerLogsView.as_view()),
+    path('date', ManagerDateView.as_view()),
 ]

@@ -1532,3 +1532,15 @@ class ManagerLogsView(APIView):
         # delete all the logs in one go
         Logs.objects.all().delete()
         return Response({'success': 'Log deleted successfully'})
+
+class ManagerDateView(APIView):
+
+    def get(self, req):
+
+        date = req.GET.get('date')
+        date = datetime.strptime(date, '%Y-%m-%d')
+        suffix = "" if date.day <= 0 else ["th", "st", "nd", "rd"][
+                    0 if (date.day > 3 and date.day < 21) or date.day % 10 > 3 else date.day % 10
+                ]
+        formatted_date = date.strftime("%A %h %e{suffix}, %Y").format(suffix=suffix)
+        return Response({'date': formatted_date})

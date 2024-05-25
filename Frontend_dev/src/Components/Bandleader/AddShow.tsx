@@ -256,28 +256,24 @@ const Show = () => {
 
 
     const handleDate = (e: any) => {
+
         setShowDate(e.target.value)
         const date = e.target.value
-        const [year, month, day] = date.split('-');
-        const isDateValid = !isNaN(Date.parse(`${year}-${month}-${day}`));
-        console.log(isDateValid);
-        if (isDateValid) {      
-            const date_data = new Date(date);
-            const dayOfMonth = date_data.getDate();
+        console.log(date)
 
-            const month_short = date_data.toLocaleString('default', { month: 'short' });
-            const dayOfWeek = date_data.toLocaleString('en-US', { weekday: 'long' });
+        const url = `http://${backendURL}/date?date=${date}`
 
-            let suffix = dayOfMonth > 0
-            ? ["th", "st", "nd", "rd"][
-                (dayOfMonth > 3 && dayOfMonth < 21) || dayOfMonth % 10 > 3 ? 0 : dayOfMonth % 10
-            ]
-            : "";
-            
-            const date_obj = document.getElementById('admin-day-date-format') as HTMLInputElement
-            date_obj.textContent = `${dayOfWeek} ${month_short} ${parseInt(day)}${suffix}, ${year}`
-        
-        }
+        axios.get(url, {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        .then(res => {
+            console.log(res.data)
+            const day = document.getElementById('admin-day-date-format') as HTMLInputElement
+            day.textContent = res.data.date
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 
 
