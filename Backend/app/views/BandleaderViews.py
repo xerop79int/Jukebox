@@ -1442,7 +1442,8 @@ class ManagerBackupView(APIView):
             if not os.path.exists(os.path.join(prev_django_dir, 'JukeBox_backup')):
                 os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup'))
             
-            os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup', name))
+            if not os.path.exists(os.path.join(prev_django_dir, 'JukeBox_backup', name)):
+                os.makedirs(os.path.join(prev_django_dir, 'JukeBox_backup', name))
             if os.path.exists(os.path.join(django_main_directory, 'media')):
                 shutil.copytree(django_main_directory + '/media', f"{os.path.join(prev_django_dir, 'JukeBox_backup', name)}/media")
                 shutil.copyfile(django_main_directory + '/db.sqlite3', f"{os.path.join(prev_django_dir, 'JukeBox_backup', name)}/{name}.sqlite3")
