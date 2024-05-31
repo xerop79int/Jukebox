@@ -1466,8 +1466,7 @@ class ManagerBackupView(APIView):
         
         # check if the backup folder exists
         if(os.path.join(prev_django_dir, 'JukeBox_backup')):
-            print("HEllo")
-            os.system(f'sudo rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup', filename)}')
+            os.system(f'rm -rf {os.path.join(prev_django_dir, 'JukeBox_backup', filename)}')
         
             return Response({'success': 'Backup deleted successfully'})
         else:
